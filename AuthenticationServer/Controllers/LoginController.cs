@@ -20,11 +20,11 @@ namespace AuthenticationServer.Controllers
             _loginManager = new LoginManager();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/login/register")] //v
-        public IHttpActionResult Register()
+        public IHttpActionResult Register([FromBody] UserLoginDTO userLoginDTO)
         {
-            UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test4@gmail.com", Password = "123456" }; //for testing
+            //UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test4@gmail.com", Password = "123456" }; //for testing
 
             string token;
 

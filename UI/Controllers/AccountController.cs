@@ -209,7 +209,7 @@ namespace UI.Controllers
                 
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50178");
+                    client.BaseAddress = new Uri("http://localhost:49884");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
