@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationService", "AuthenticationService", "{2D8A57AD-5733-4C69-A4E3-1C4D818AC43F}"
 EndProject
@@ -13,12 +13,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationCommon", "Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationRepository", "AuthenticationRepository\AuthenticationRepository.csproj", "{DD31D8CD-4AE2-4037-BFE8-002E07BAD710}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{DCC29DEC-C45A-4251-A122-93EC9032CD4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{880A3439-66D8-477E-A9A7-3D0CE0B17670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880A3439-66D8-477E-A9A7-3D0CE0B17670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880A3439-66D8-477E-A9A7-3D0CE0B17670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880A3439-66D8-477E-A9A7-3D0CE0B17670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCC29DEC-C45A-4251-A122-93EC9032CD4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC29DEC-C45A-4251-A122-93EC9032CD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC29DEC-C45A-4251-A122-93EC9032CD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC29DEC-C45A-4251-A122-93EC9032CD4A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAD6DC32-DD18-40FF-AF82-C56058E437EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAD6DC32-DD18-40FF-AF82-C56058E437EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAD6DC32-DD18-40FF-AF82-C56058E437EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
