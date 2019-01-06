@@ -18,6 +18,8 @@ namespace AuthenticationServer.Controllers
             _tokenManager = new TokenManager();
         }
 
+        [HttpGet]
+        [Route("api/token/validateManualToken")]
         public IHttpActionResult ValidateManualToken()
         {
             string token = "token";
@@ -41,6 +43,8 @@ namespace AuthenticationServer.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/token/validateFacebookToken")]
         public IHttpActionResult ValidateFacebookToken()
         {
             throw new NotImplementedException();
