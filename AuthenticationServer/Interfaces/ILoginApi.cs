@@ -11,9 +11,8 @@ namespace AuthenticationServer.Interfaces
     public interface ILoginApi
     {
         IHttpActionResult Register(UserLoginDTO UserLoginDTO);
-        IHttpActionResult LoginManual();
+        IHttpActionResult LoginManual(UserLoginDTO UserLoginDTO);
         IHttpActionResult LoginFacebook();
-        IHttpActionResult Logout();
-        IHttpActionResult ResetPassword();
+        IHttpActionResult ResetPassword(ResetPasswordDTO resetPasswordDTO);
     }
 }
