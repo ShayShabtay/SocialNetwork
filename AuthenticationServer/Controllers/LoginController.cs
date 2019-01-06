@@ -24,8 +24,6 @@ namespace AuthenticationServer.Controllers
         [Route("api/login/register")] //v
         public IHttpActionResult Register([FromBody] UserLoginDTO userLoginDTO)
         {
-            //UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test4@gmail.com", Password = "123456" }; //for testing
-
             string token;
 
             try
@@ -56,12 +54,10 @@ namespace AuthenticationServer.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/login/loginManual")] //v
-        public IHttpActionResult LoginManual()
+        public IHttpActionResult LoginManual([FromBody] UserLoginDTO userLoginDTO)
         {
-            UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test1@gmail.com", Password = "123456" }; //for testing
-
             string token;
 
             try
@@ -99,25 +95,10 @@ namespace AuthenticationServer.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpGet]
-        [Route("api/login/logout")]
-        public IHttpActionResult Logout()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        [HttpGet]
+        [HttpPost]
         [Route("api/login/resetPassword")] //v
-        public IHttpActionResult ResetPassword()
+        public IHttpActionResult ResetPassword([FromBody]ResetPasswordDTO resetPasswordDTO)
         {
-            ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO()
-            {
-                Email = "test1@gmail.com",
-                OldPassword = "111111",
-                NewPassword = "1111112"
-            };
-
             try
             {
                 _loginManager.ResetPassword(resetPasswordDTO);
