@@ -10,8 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using UI.Models;
 using System.Net.Http.Headers;
-using System.Net.Http;
 using AuthenticationCommon.Models;
+using static System.Net.WebRequestMethods;
+using System.Net.Http;
 
 namespace UI.Controllers
 {
@@ -79,7 +80,6 @@ namespace UI.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
@@ -87,7 +87,6 @@ namespace UI.Controllers
 
                 string token;
                 var res = client.PostAsJsonAsync($"/api/login/loginManual", model).Result;
-
                 if (res.IsSuccessStatusCode == true)
                 {
                     token = res.Content.ReadAsAsync<string>().Result;

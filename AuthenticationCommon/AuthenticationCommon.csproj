@@ -47,6 +47,7 @@
     <Compile Include="Execeptions\AlreadyExistException.cs" />
     <Compile Include="Execeptions\FaildToConnectDbException.cs" />
     <Compile Include="Execeptions\NotMatchException.cs" />
+    <Compile Include="ModelsDTO\FacebookUserDTO.cs" />
     <Compile Include="ModelsDTO\ResetPasswordDTO.cs" />
     <Compile Include="ModelsDTO\UserLoginDTO.cs" />
     <Compile Include="Models\TokenHistory.cs" />
