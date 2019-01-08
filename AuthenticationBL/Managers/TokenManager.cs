@@ -1,11 +1,13 @@
 ﻿using AuthenticationCommon.Execeptions;
 using AuthenticationCommon.Models;
+using AuthenticationCommon.ModelsDTO;
 using AuthenticationRepository.DynamoDb;
 using Jose;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,7 +78,26 @@ namespace AuthenticationBL.Managers
 
         }
 
+        public FacebookUserDTO ValidateAuthToken(string facebookToken)
+        {
+            string url = "https://graph.facebook.com/v2.5/me?fields=id,email,name&access_token=" + facebookToken;
 
+            using (var client = new HttpClient())
+            {
+                var res = client.GetAsync(url).Result;
+                if (res.IsSuccessStatusCode)
+                {
+                    var json = res.Content.ReadAsStringAsync().Result;
+                    dynamic payload = JObject.Parse(json);
+                    FacebookUserDTO userDTO = CreateFacebookUserDTO(payload);
+
+                    return userDTO;
+                }
+            }
+            return null;
+        }
+
+      
         //Private Methods
         private void AddToTokenHistory(string userId, string token)
         {
@@ -96,5 +117,40 @@ namespace AuthenticationBL.Managers
                 throw new FaildToConnectDbException();
             }
         }
+
+        private FacebookUserDTO CreateFacebookUserDTO(dynamic payload)
+        {
+            FacebookUserDTO facebookUser = new FacebookUserDTO
+            {
+                FacebookId = payload.id
+            };
+
+            if (IsPropertyExist(payload,"email"))
+            {
+                facebookUser.Email = payload.email;
+            }
+            if (IsPropertyExist(payload, "name"))
+            {
+                facebookUser.UserName = payload.name;
+            }
+
+            return facebookUser;
+        }
+
+        private bool IsPropertyExist(dynamic settings, string name)
+        {
+            try
+            {
+                var x = settings[name];
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+        }
     }
+
 }
+

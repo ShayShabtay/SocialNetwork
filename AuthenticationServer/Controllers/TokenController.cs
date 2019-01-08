@@ -20,9 +20,10 @@ namespace AuthenticationServer.Controllers
 
         [HttpGet]
         [Route("api/token/validateManualToken")]
-        public IHttpActionResult ValidateManualToken()
+        public IHttpActionResult ValidateToken()
         {
-            string token = "token";
+            string token = Request.Headers.GetValues("x-token").First();
+
             bool isValidToken;
             try
             {
@@ -41,13 +42,6 @@ namespace AuthenticationServer.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        [HttpGet]
-        [Route("api/token/validateFacebookToken")]
-        public IHttpActionResult ValidateFacebookToken()
-        {
-            throw new NotImplementedException();
         }
     }
 }

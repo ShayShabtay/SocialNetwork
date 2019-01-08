@@ -21,7 +21,7 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/login/register")] //v
+        [Route("api/login/register")]
         public IHttpActionResult Register([FromBody] UserLoginDTO userLoginDTO)
         {
             string token;
@@ -55,7 +55,7 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/login/loginManual")] //v
+        [Route("api/login/loginManual")]
         public IHttpActionResult LoginManual([FromBody] UserLoginDTO userLoginDTO)
         {
             string token;
@@ -92,11 +92,40 @@ namespace AuthenticationServer.Controllers
         [Route("api/login/loginFacebook")]
         public IHttpActionResult LoginFacebook()
         {
-            throw new NotImplementedException();
+            string facebookToken = Request.Headers.GetValues("x-auth-token").First();
+
+            if(string.IsNullOrEmpty(facebookToken))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
+            }
+
+            string customToken;
+
+            try
+            {
+                customToken = _loginManager.LoginFacebook(facebookToken);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            if (string.IsNullOrEmpty(customToken))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Token is invalid"));
+            }
+            else
+            {
+                return Ok(customToken);
+            }
         }
 
         [HttpPost]
-        [Route("api/login/resetPassword")] //v
+        [Route("api/login/resetPassword")]
         public IHttpActionResult ResetPassword([FromBody]ResetPasswordDTO resetPasswordDTO)
         {
             try

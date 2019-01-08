@@ -53,5 +53,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityCommon\IdentityCommon.csproj">
+      <Project>{872e6b69-f7bb-4649-9151-a02badc74b2d}</Project>
+      <Name>IdentityCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -44,10 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Managers\IdentityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityCommon\IdentityCommon.csproj">
+      <Project>{872e6b69-f7bb-4649-9151-a02badc74b2d}</Project>
+      <Name>IdentityCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IdentityRepository\IdentityRepository.csproj">
+      <Project>{c169c709-6bd0-403b-8062-23b2a33823f5}</Project>
+      <Name>IdentityRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -68,15 +68,38 @@ namespace AuthenticationBL.Managers
             return token;
         }
 
+        public string LoginFacebook(string facebookToken)
+        {
+            FacebookUserDTO facebookUser = _tokenManager.ValidateAuthToken(facebookToken);
+
+            if (facebookUser != null)
+            {
+                User user = GetUser(facebookUser.FacebookId);
+                string customToken;
+
+                if (user == null)
+                {
+                    customToken = Register(new UserLoginDTO() { Email = facebookUser.FacebookId });
+                    return customToken;
+                }
+                else
+                {
+                    customToken = _tokenManager.GenerateToken(user.UserId, user.Email);
+                    return customToken;
+                }
+            }
+            return null;
+        }
+
         public void ResetPassword(ResetPasswordDTO resetPasswordDTO)
         {
             User foundUser = GetUser(resetPasswordDTO.Email);
 
-            if(foundUser == null)
+            if (foundUser == null)
             {
                 throw new NotMatchException("Email");
             }
-            if(foundUser.Password != resetPasswordDTO.OldPassword)
+            if (foundUser.Password != resetPasswordDTO.OldPassword)
             {
                 throw new NotMatchException("Old password");
             }
