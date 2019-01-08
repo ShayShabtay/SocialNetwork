@@ -75,7 +75,7 @@ namespace UI.Controllers
             {
                 return View(model);
             }
-
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -111,6 +111,29 @@ namespace UI.Controllers
                             ModelState.AddModelError("", "Invalid login attempt.");
                             return View(model);
                     }
+                }
+                else
+                    return Content("res.StatusCode = false :/");
+            }
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult LoginFacebook(string token)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:49884");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                 
+                var res = client.PostAsJsonAsync($"/api/login/loginFacebook", token).Result;
+
+                if (res.IsSuccessStatusCode == true)
+                {
+                    token = res.Content.ReadAsAsync<string>().Result;
+                    return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else
                     return Content("res.StatusCode = false :/");
