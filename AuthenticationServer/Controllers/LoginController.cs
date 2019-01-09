@@ -103,13 +103,13 @@ namespace AuthenticationServer.Controllers
 
             try
             {
-                customToken = _loginManager.LoginFacebook(facebookToken);
+                customToken =_loginManager.LoginFacebook(facebookToken);
             }
             catch (FaildToConnectDbException)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
             }

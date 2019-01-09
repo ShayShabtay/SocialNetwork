@@ -84,10 +84,11 @@ namespace AuthenticationBL.Managers
 
             using (var client = new HttpClient())
             {
-                var res = client.GetAsync(url).Result;
-                if (res.IsSuccessStatusCode)
+                var task =  client.GetAsync(url);
+                task.Wait();
+                if (task.Result.IsSuccessStatusCode)
                 {
-                    var json = res.Content.ReadAsStringAsync().Result;
+                    var json = task.Result.Content.ReadAsStringAsync().Result;
                     dynamic payload = JObject.Parse(json);
                     FacebookUserDTO userDTO = CreateFacebookUserDTO(payload);
 

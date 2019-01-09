@@ -16,7 +16,6 @@ using System.Net.Http;
 
 namespace UI.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -117,17 +116,16 @@ namespace UI.Controllers
         }
 
 
-        [HttpGet]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public ActionResult LoginFacebook(string token)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                 
-                var res = client.PostAsJsonAsync($"/api/login/loginFacebook", token).Result;
+                client.DefaultRequestHeaders.Add("x-auth-token", token);
+
+                var res = client.GetAsync($"/api/login/loginFacebook").Result;
 
                 if (res.IsSuccessStatusCode == true)
                 {

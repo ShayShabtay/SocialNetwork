@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IdentityCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace IdentityServer.Interfaces
     public interface IIdentityApi
     {
         IHttpActionResult GetUserProfile();
-        IHttpActionResult UpdateUserProfile();
+        IHttpActionResult UpdateUserProfile(UserIdentity userIdentity);
     }
 }

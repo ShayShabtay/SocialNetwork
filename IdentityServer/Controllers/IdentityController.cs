@@ -1,4 +1,6 @@
 ﻿using IdentityBL.Managers;
+using IdentityCommon.Execeptions;
+using IdentityCommon.Models;
 using IdentityServer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,14 +20,84 @@ namespace IdentityServer.Controllers
             _identityManager = new IdentityManager();
         }
 
+        [HttpGet]
+        [Route("api/identity/getUserProfile")]
         public IHttpActionResult GetUserProfile()
         {
-            throw new NotImplementedException();
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
+            }
+
+            bool isValidToken = _identityManager.ValidateToken(token);
+            if (!isValidToken)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
+            }
+
+            UserIdentity foundUserIdentity;
+            try
+            {
+                foundUserIdentity = _identityManager.GetUserIdentity(token);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
+            }
+            catch (NotMatchException e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, e.Message));
+            }
+            catch (NotFoundException e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, e.Message));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            return Ok(foundUserIdentity);
         }
 
-        public IHttpActionResult UpdateUserProfile()
+        [HttpPost]
+        [Route("api/identity/updateUserProfile")]
+        public IHttpActionResult UpdateUserProfile([FromBody]UserIdentity userIdentity)
         {
-            throw new NotImplementedException();
+            string token = Request.Headers.GetValues("x-token").First(); 
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
+            }
+
+            bool isValidToken = _identityManager.ValidateToken(token);
+            if (!isValidToken)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
+            }
+
+            UserIdentity updatedUser;
+
+            try
+            {
+                updatedUser = _identityManager.UpdateUserIdentity(token, userIdentity);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
+            }
+            catch(NotMatchException e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, e.Message));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(updatedUser);
         }
     }
 }
