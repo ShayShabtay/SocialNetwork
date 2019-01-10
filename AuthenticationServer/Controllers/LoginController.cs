@@ -20,12 +20,10 @@ namespace AuthenticationServer.Controllers
             _loginManager = new LoginManager();
         }
 
-        [HttpGet]
-        [Route("api/login/register")] //v
-        public IHttpActionResult Register()
+        [HttpPost]
+        [Route("api/login/register")]
+        public IHttpActionResult Register([FromBody] UserLoginDTO userLoginDTO)
         {
-            UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test4@gmail.com", Password = "123456" }; //for testing
-
             string token;
 
             try
@@ -56,12 +54,10 @@ namespace AuthenticationServer.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("api/login/loginManual")] //v
-        public IHttpActionResult LoginManual()
+        [HttpPost]
+        [Route("api/login/loginManual")]
+        public IHttpActionResult LoginManual([FromBody] UserLoginDTO userLoginDTO)
         {
-            UserLoginDTO userLoginDTO = new UserLoginDTO() { Email = "test1@gmail.com", Password = "123456" }; //for testing
-
             string token;
 
             try
@@ -96,28 +92,42 @@ namespace AuthenticationServer.Controllers
         [Route("api/login/loginFacebook")]
         public IHttpActionResult LoginFacebook()
         {
-            throw new NotImplementedException();
-        }
+            string facebookToken = Request.Headers.GetValues("x-auth-token").First();
 
-        [HttpGet]
-        [Route("api/login/logout")]
-        public IHttpActionResult Logout()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        [HttpGet]
-        [Route("api/login/resetPassword")] //v
-        public IHttpActionResult ResetPassword()
-        {
-            ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO()
+            if(string.IsNullOrEmpty(facebookToken))
             {
-                Email = "test1@gmail.com",
-                OldPassword = "111111",
-                NewPassword = "1111112"
-            };
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
+            }
 
+            string customToken;
+
+            try
+            {
+                customToken =_loginManager.LoginFacebook(facebookToken);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
+            }
+            catch (Exception e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            if (string.IsNullOrEmpty(customToken))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Token is invalid"));
+            }
+            else
+            {
+                return Ok(customToken);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/login/resetPassword")]
+        public IHttpActionResult ResetPassword([FromBody]ResetPasswordDTO resetPasswordDTO)
+        {
             try
             {
                 _loginManager.ResetPassword(resetPasswordDTO);

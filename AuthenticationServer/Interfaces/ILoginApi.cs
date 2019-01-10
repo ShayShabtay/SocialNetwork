@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuthenticationCommon.ModelsDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,9 @@ namespace AuthenticationServer.Interfaces
 {
     public interface ILoginApi
     {
-        IHttpActionResult Register();
-        IHttpActionResult LoginManual();
+        IHttpActionResult Register(UserLoginDTO UserLoginDTO);
+        IHttpActionResult LoginManual(UserLoginDTO UserLoginDTO);
         IHttpActionResult LoginFacebook();
-        IHttpActionResult Logout();
-        IHttpActionResult ResetPassword();
+        IHttpActionResult ResetPassword(ResetPasswordDTO resetPasswordDTO);
     }
 }

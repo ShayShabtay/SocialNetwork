@@ -15,6 +15,7 @@ namespace AuthenticationCommon.Models
             UserId = Guid.NewGuid().ToString();
         }
 
+        public static object Identity { get; set; }
         [DynamoDBHashKey]
         public string Email { get; set; }
 

@@ -10,11 +10,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using UI.Models;
 using System.Net.Http.Headers;
+using AuthenticationCommon.Models;
+using static System.Net.WebRequestMethods;
 using System.Net.Http;
 
 namespace UI.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -24,7 +25,7 @@ namespace UI.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -36,9 +37,9 @@ namespace UI.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -74,25 +75,68 @@ namespace UI.Controllers
             {
                 return View(model);
             }
-
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            using (var client = new HttpClient())
             {
-                case SignInStatus.Success:
-                    return RedirectToAction("MainPageAfterLogin", "Home");
-                    //return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                client.BaseAddress = new Uri("http://localhost:49884");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string token;
+                var res = client.PostAsJsonAsync($"/api/login/loginManual", model).Result;
+                if (res.IsSuccessStatusCode == true)
+                {
+                    token = res.Content.ReadAsAsync<string>().Result;
+
+                    //set token  in cookie
+                    HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                    userTokenCookie.Value = token.ToString();
+                    Response.Cookies.Add(userTokenCookie);///
+
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            return RedirectToAction("MainPageAfterLogin", "Home");
+                        //return RedirectToLocal(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.RequiresVerification:
+                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
+                }
+                else
+                    return Content("res.StatusCode = false :/");
             }
         }
+
+
+        [HttpPost]
+        public ActionResult LoginFacebook(string token)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:49884");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("x-auth-token", token);
+
+                var res = client.GetAsync($"/api/login/loginFacebook").Result;
+
+                if (res.IsSuccessStatusCode == true)
+                {
+                    token = res.Content.ReadAsAsync<string>().Result;
+                    return RedirectToAction("MainPageAfterLogin", "Home");
+                }
+                else
+                    return Content("res.StatusCode = false :/");
+            }
+        }
+
 
         //
         // GET: /Account/VerifyCode
@@ -123,7 +167,7 @@ namespace UI.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -145,53 +189,6 @@ namespace UI.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult HomeAndLogin(string userName, string password)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        using (var client = new HttpClient())
-        //        {
-        //            client.BaseAddress = new Uri("http://localhost:53035");
-        //            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
-        //            var res = client.GetAsync($"/api/UserLogin/Login/{userName}/{password}").Result;
-
-        //            if (res.IsSuccessStatusCode == true)
-        //            {
-        //                var json = res.Content.ReadAsStringAsync().Result;
-        //                UserLogin result = JsonConvert.DeserializeObject<UserLogin>(json);
-
-        //                if (result != null)
-        //                {
-        //                    switch (result.UserType)
-        //                    {
-        //                        case Common.Enum.UserType.admin:
-        //                            return RedirectToAction("AdminIndex", "AdminCRM", result);
-        //                        case Common.Enum.UserType.seller:
-        //                            return RedirectToAction("SellerIndex", "SellerCRM", result);
-        //                        case Common.Enum.UserType.client:
-        //                            return RedirectToAction("Index", "Client", result);
-        //                        default:
-        //                            break;
-        //                    }
-        //                }
-
-        //                return Content("result = null");
-        //            }
-        //            else
-        //            {
-        //                return Content("res.IsSuccessStatusCode != true");
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("HomeAndLogin");
-        //    }
-        //}
 
         //
         // POST: /Account/Register
@@ -200,25 +197,28 @@ namespace UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };// , LockoutEndDateUtc = };
+            var token = "";
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };//, Id = token };// , LockoutEndDateUtc = };
             var result = await UserManager.CreateAsync(user, model.Password);
 
             if (ModelState.IsValid)
             {
-                
+
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:50178");
+                    client.BaseAddress = new Uri("http://localhost:49884");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
 
                     if (res.IsSuccessStatusCode == true)
                     {
-                        //var json = res.Content.ReadAsStringAsync().Result;
-                        //UserLogin result = JsonConvert.DeserializeObject<UserLogin>(json);
-                        string token = res.Content.ReadAsAsync<string>().Result;
+                        token = res.Content.ReadAsAsync<string>().Result;
+                        //user.Id = token;
+                        HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                        userTokenCookie.Value = token.ToString();
+                        Response.Cookies.Add(userTokenCookie);
+
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                         if (result.Succeeded)
@@ -231,23 +231,9 @@ namespace UI.Controllers
                             // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                             // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                            return RedirectToAction("MainPageAfterLogin", "Home");
+                            return RedirectToAction("MainPageAfterLogin", "Home", user);
                         }
                         AddErrors(result);
-                        //if (result != null)
-                        //{
-                        //    switch (result.UserType)
-                        //    {
-                        //        case Common.Enum.UserType.admin:
-                        //            return RedirectToAction("AdminIndex", "AdminCRM", result);
-                        //        case Common.Enum.UserType.seller:
-                        //            return RedirectToAction("SellerIndex", "SellerCRM", result);
-                        //        case Common.Enum.UserType.client:
-                        //            return RedirectToAction("Index", "Client", result);
-                        //        default:
-                        //            break;
-                        //    }
-                        //}
 
                         return Content("result = null");
                     }
@@ -257,8 +243,8 @@ namespace UI.Controllers
                     }
                 }
             }
-               // If we got this far, something failed, redisplay form
-               return View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
 
@@ -503,6 +489,12 @@ namespace UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                var c = new HttpCookie("UserToken");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

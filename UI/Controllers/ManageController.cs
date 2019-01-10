@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using UI.Models;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace UI.Controllers
 {
@@ -32,9 +34,9 @@ namespace UI.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -230,18 +232,40 @@ namespace UI.Controllers
             {
                 return View(model);
             }
+
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
+            
+                using (var client = new HttpClient())
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    client.BaseAddress = new Uri("http://localhost:49884");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                ChangePasswordDTO changePasswordModel = new ChangePasswordDTO()
+                {
+                    Email = User.Identity.GetUserName(),
+                    OldPassword = model.OldPassword,
+                    NewPassword = model.NewPassword
+                };
+                    var res = client.PostAsJsonAsync($"/api/login/resetPassword", changePasswordModel).Result;
+
+                    if (res.IsSuccessStatusCode == true)
+                    {
+                        var ok = res.Content.ReadAsAsync<ChangePasswordViewModel>().Result;
+
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        return RedirectToAction("MainPageAfterLogin", "Home", ok);//, new { Message = ManageMessageId.ChangePasswordSuccess });
+                    }
+                    else
+                    {
+                        //AddErrors(result);
+                        return Content("result = null");
+                    }
+
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
-            }
-            AddErrors(result);
-            return View(model);
+            
+            
         }
 
         //
@@ -333,7 +357,7 @@ namespace UI.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -384,6 +408,6 @@ namespace UI.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

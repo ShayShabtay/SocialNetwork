@@ -9,7 +9,6 @@ namespace AuthenticationServer.Interfaces
 {
     public interface ITokenApi
     {
-        IHttpActionResult ValidateManualToken();
-        IHttpActionResult ValidateFacebookToken();
+        IHttpActionResult ValidateToken();
     }
 }
