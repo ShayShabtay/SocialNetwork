@@ -29,5 +29,11 @@ namespace SocialRepository.GraphDB
             session.Run(query);
         }
 
+        public void addPost()
+        {
+
+        }
+
+
     }
 }
