@@ -109,7 +109,7 @@ namespace AuthenticationServer.Controllers
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
             }
