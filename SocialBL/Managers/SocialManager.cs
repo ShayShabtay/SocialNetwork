@@ -16,6 +16,12 @@ namespace SocialBL.Managers
             graphDB = new neo4jDB();
         }
 
+        public void addPost(Post post,User user)
+        {
+            graphDB.addPost(post,user);
+          //  graphDB.creatConection(user,post,"publish");
+        }
+
         public void addUser(User user)
         {
             graphDB.addUser(user);

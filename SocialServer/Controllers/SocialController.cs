@@ -30,6 +30,14 @@ namespace SocialServer.Controllers
             socialManager.addUser(user);
             return Ok("good");
         }
+
+        [HttpPost]
+        [Route("api/Social/addPost")]
+        public IHttpActionResult addPost([FromBody]Post post)
+        {
+            socialManager.addPost(post,new User("omer","omer"));
+            return Ok("add post ok"); 
+        }
         
 
     }
