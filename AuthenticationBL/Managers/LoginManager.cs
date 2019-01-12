@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using AuthenticationCommon.Execeptions;
@@ -41,6 +42,8 @@ namespace AuthenticationBL.Managers
 
                 token = _tokenManager.GenerateToken(userToRegister.UserId, userToRegister.Email);
 
+                CreateUserNodeOnGraphDb(userToRegister.UserId,userToRegister.Email);
+
                 return token;
             }
             else
@@ -48,6 +51,8 @@ namespace AuthenticationBL.Managers
                 throw new AlreadyExistException("Email");
             }
         }
+
+
 
         public string LoginManual(UserLoginDTO userLoginDTO)
         {
@@ -146,5 +151,27 @@ namespace AuthenticationBL.Managers
             }
             return foundUser;
         }
+
+        private void CreateUserNodeOnGraphDb(string userId, string name)
+        {
+            UserGraphDTO userGraphDTO = new UserGraphDTO()
+            {
+                UserId =userId,
+                Name =name
+            };
+
+            string url = "http://localhost:52536/api/Social/addUser";
+
+            using (var client = new HttpClient())
+            {
+                var result = client.PostAsJsonAsync(url, userGraphDTO).Result;
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    throw new FaildToConnectDbException();
+                }
+            }
+        }
+
     }
 }
