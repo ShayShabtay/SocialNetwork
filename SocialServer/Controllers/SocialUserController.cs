@@ -34,10 +34,17 @@ namespace SocialServer.Controllers
         {
             string token = Request.Headers.GetValues("x-token").First();
 
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+
             string SourceUserId = _socialManager.ValidateToken(token);
 
-            if (SourceUserId != null)
+            if (SourceUserId == null)
             {
+
+            }
                 try
                 {
                 _socialManager.Follow(SourceUserId, targetUserId);
@@ -49,13 +56,11 @@ namespace SocialServer.Controllers
                     return BadRequest();
                     throw;
                 }
-            }
-            return null;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/SocialUser/unFollow")]
-        public IHttpActionResult UnFollow(string targetUserId)
+        public IHttpActionResult UnFollow([FromBody]string targetUserId)
         {
             string token = Request.Headers.GetValues("x-token").First();
             string SourceUserId = _socialManager.ValidateToken(token);
@@ -64,6 +69,46 @@ namespace SocialServer.Controllers
 
             }
             //_socialManager.UnFollow();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialUser/blockUser")]
+        public IHttpActionResult BlockUser()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = _socialManager.ValidateToken(token);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialUser/unblockUser")]
+        public IHttpActionResult UnblockUser()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = _socialManager.ValidateToken(token);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/SocialUser/getFollowers")]
+        public IHttpActionResult GetFollowers()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = _socialManager.ValidateToken(token);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/SocialUser/getFollowing")]
+        public IHttpActionResult GetFollowing()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = _socialManager.ValidateToken(token);
+
             return Ok();
         }
 
