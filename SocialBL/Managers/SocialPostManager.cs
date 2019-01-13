@@ -27,6 +27,26 @@ namespace SocialBL.Managers
             _graphDB.creatConection(userId, post.postID, "publish");
         }
 
+        public List<Post> getAllPosts(string userId)
+        {
+            return _graphDB.getAllPosts(userId);   
+
+        }
+
+        public List<Post> getMyPosts(string userId)
+        {
+           return _graphDB.getMyPosts(userId);
+        }
+
+        public void addComment(Comment comment,string userId)
+        {
+            //_graphDB.addComment(comment);
+
+            // _graphDB.creatConection(,);  ///for connect post and comment
+            // _graphDB.creatConection(,);  ///for connect user to comment that he wrote
+
+        }
+
         public string ValidateToken(string token)
         {
             string url = "http://localhost:49884/api/token/validateManualToken";
@@ -44,9 +64,5 @@ namespace SocialBL.Managers
             }
             return userId;
         }
-
-
-
-
     }
 }

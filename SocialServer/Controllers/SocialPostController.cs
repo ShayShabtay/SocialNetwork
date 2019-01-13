@@ -21,11 +21,11 @@ namespace SocialServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/SocialUser/addPost")]
+        [Route("api/SocialPost/addPost")]
         public IHttpActionResult AddPost([FromBody]Post post)
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = SocialPostManager.ValidateToken(token);
             if (SourceUserId != null)
             {
                 try
@@ -42,5 +42,49 @@ namespace SocialServer.Controllers
             return null;
 
         }
+        [HttpPost]
+        [Route("api/SocialPost/getPost")]
+        public IHttpActionResult getAllPosts()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            List<Post> Posts=null;
+            if (UserId != null)
+            {
+               Posts=SocialPostManager.getAllPosts(UserId);
+            }
+
+                return Ok(Posts);
+        }
+
+        public IHttpActionResult getMyPosts()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            List<Post> Posts = null;
+            if (UserId != null)
+            {
+                Posts = SocialPostManager.getMyPosts(UserId);
+            }
+
+            return null;
+        }
+
+        public IHttpActionResult addComment(Comment comment)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            if (UserId != null)
+            {
+                SocialPostManager.addComment(comment,UserId);
+            }
+            return Ok();
+        }
+        
+
+
+
+
+
     }
 }

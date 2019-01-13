@@ -1,4 +1,5 @@
 ﻿using Neo4j.Driver.V1;
+using Newtonsoft.Json;
 using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
@@ -53,8 +54,8 @@ namespace SocialRepository.GraphDB
 
         public void creatConection(string source, string target, string relation)
         {
-
-            string query = $"Merge (:User{{userID:\"{source}\"}}-[:{relation}]->(:Post{{postId:\"{target}\"}})";
+            Tuple<string,string,string,string> values=RelationsMap.map[relation];
+            string query = $"Merge (:{values.Item1}{{{values.Item2}:\"{source}\"}}-[:{relation}]->(:{values.Item3}{{{values.Item4}:\"{target}\"}})";
             session.Run(query);
 
         }
@@ -64,5 +65,47 @@ namespace SocialRepository.GraphDB
             string query = $"Merge (:User{{userID:\"{SourceUserId}\"}})-[:Follow]->(:User{{userID:\"{targetUserId}\"}})";
             session.Run(query);
         }
+
+        public List<Post> getAllPosts(string userId)
+        {
+
+            //whos im follow=> what post they published =>limit 20
+            //change the first line in query for better tuntimr
+
+            string query = $"Match (u:User)-[:Follow]->(u2:User) " +
+                           $"Where u.UserID=\"{userId}\" " +
+                           $"Match (u2)-[:Publish]->(p:Post)" +
+                           $"Return p";
+
+            IStatementResult posts=session.Run(query);
+            List<Post> postList = new List<Post>();
+            foreach (var item in posts)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                postList.Add(JsonConvert.DeserializeObject<Post>(props));    
+            }
+            return postList;
+        }
+
+        public List<Post> getMyPosts(string userId)
+        {
+            List<Post> postList = new List<Post>();
+
+            string query = $"Match (u:User)" +
+                           $"Where u.UserID=\"{userId}\"" +
+                           $"Match (u)-[:publish]->(p:Post)" +
+                           $"return p";
+
+            IStatementResult posts = session.Run(query);
+            foreach (var item in posts)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                postList.Add(JsonConvert.DeserializeObject<Post>(props));
+            }
+            return postList;
+        }
+
+        
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SocialCommon.Models;
+using System.Collections.Generic;
 
 namespace SocialRepository.GraphDB
 {
@@ -9,5 +10,7 @@ namespace SocialRepository.GraphDB
         void addPost(Post post);
         void creatConection(string source, string target, string type);
         void Follow(string SourceUserId, string targetUserId);
+        List<Post> getAllPosts(string userId);
+        List<Post> getMyPosts(string userId);
     }
 }
