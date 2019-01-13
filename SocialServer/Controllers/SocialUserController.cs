@@ -30,7 +30,7 @@ namespace SocialServer.Controllers
 
         [HttpPost]
         [Route("api/SocialUser/follow")]
-        public IHttpActionResult Follow([FromBody]string targetUserId)
+        public IHttpActionResult Follow([FromBody]string targetUserId) 
         {
             string token = Request.Headers.GetValues("x-token").First();
 
