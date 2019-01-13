@@ -58,5 +58,11 @@ namespace SocialRepository.GraphDB
             session.Run(query);
 
         }
+
+        public void Follow()
+        {
+            string query = "Merge (:User{userID:321})-[:Follow]->(:User{userID:1234})";
+            session.Run(query);
+        }
     }
 }

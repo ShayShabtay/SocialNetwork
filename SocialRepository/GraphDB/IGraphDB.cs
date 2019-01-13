@@ -8,5 +8,6 @@ namespace SocialRepository.GraphDB
         void addUser(User user);
         void addPost(Post post,User user);
         void creatConection(string source, string target, string type);
+        void Follow();
     }
 }

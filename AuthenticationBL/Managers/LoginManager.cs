@@ -157,7 +157,7 @@ namespace AuthenticationBL.Managers
             UserGraphDTO userGraphDTO = new UserGraphDTO()
             {
                 UserId =userId,
-                Name =name
+                Name = name
             };
 
             string url = "http://localhost:52536/api/Social/addUser";

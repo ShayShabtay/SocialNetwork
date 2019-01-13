@@ -12,33 +12,39 @@ namespace SocialServer.Controllers
 {
     public class SocialController : ApiController
     {
-        ISocialManager socialManager;
+        ISocialManager _socialManager;
 
      
         public SocialController()
         {
-            socialManager = new SocialManager();
-            //string uri = "bolt://ec2-34-244-123-17.eu-west-1.compute.amazonaws.com:7687";
-            //_driver = GraphDatabase.Driver(uri, AuthTokens.Basic("neo4j", "skay1414"));
-            
+            _socialManager = new SocialManager();
         }
+
         [HttpPost]
         [Route("api/Social/addUser")]
-        public IHttpActionResult addUser([FromBody] User user)
+        public IHttpActionResult AddUser([FromBody] User user)
         {
             
-            socialManager.addUser(user);
+            _socialManager.AddUser(user);
             return Ok("good");
         }
 
         [HttpPost]
         [Route("api/Social/addPost")]
-        public IHttpActionResult addPost([FromBody]Post post)
+        public IHttpActionResult AddPost([FromBody]Post post)
         {
-            socialManager.addPost(post,new User("omer","omer"));
+            _socialManager.AddPost(post,new User("omer","omer"));
             return Ok("add post ok"); 
         }
-        
+
+        [HttpGet]
+        [Route("api/Social/follow")]
+        public IHttpActionResult Follow()
+        {
+            _socialManager.Follow();
+            return Ok();
+        }
+
 
     }
         

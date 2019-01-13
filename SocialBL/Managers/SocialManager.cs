@@ -10,23 +10,26 @@ namespace SocialBL.Managers
 {
     public class SocialManager:ISocialManager
     {
-        IGraphDB graphDB;
+        IGraphDB _graphDB;
         public SocialManager()
         {
-            graphDB = new neo4jDB();
+            _graphDB = new neo4jDB();
         }
 
-        public void addPost(Post post,User user)
+        public void AddPost(Post post,User user)
         {
-            graphDB.addPost(post,user);
+            _graphDB.addPost(post,user);
           //  graphDB.creatConection(user,post,"publish");
         }
 
-        public void addUser(User user)
+        public void AddUser(User user)
         {
-            graphDB.addUser(user);
+            _graphDB.addUser(user);
         }
 
-
+        public void Follow()
+        {
+            _graphDB.Follow();
+        }
     }
 }

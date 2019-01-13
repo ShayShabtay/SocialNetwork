@@ -4,7 +4,8 @@ namespace SocialBL.Managers
 {
     public interface ISocialManager
     {
-        void addUser(User user);
-        void addPost(Post post, User user);
+        void AddUser(User user);
+        void AddPost(Post post, User user);
+        void Follow();
     }
 }
