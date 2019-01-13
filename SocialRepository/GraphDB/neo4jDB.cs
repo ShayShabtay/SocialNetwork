@@ -59,9 +59,9 @@ namespace SocialRepository.GraphDB
 
         }
 
-        public void Follow()
+        public void Follow(string SourceUserId, string targetUserId)
         {
-            string query = "Merge (:User{userID:321})-[:Follow]->(:User{userID:1234})";
+            string query = $"Merge (:User{{userID:\"{SourceUserId}\"}})-[:Follow]->(:User{{userID:\"{targetUserId}\"}})";
             session.Run(query);
         }
     }

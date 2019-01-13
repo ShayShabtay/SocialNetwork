@@ -6,6 +6,7 @@ namespace SocialBL.Managers
     {
         void AddUser(User user);
         void AddPost(Post post, User user);
-        void Follow();
+        void Follow(string SourceUserId, string targetUserId);
+        string ValidateToken(string token);
     }
 }

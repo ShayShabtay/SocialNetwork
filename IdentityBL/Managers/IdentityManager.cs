@@ -1,7 +1,6 @@
 ﻿using IdentityCommon.Execeptions;
 using IdentityCommon.Models;
 using IdentityRepository.DynamoDb;
-using Jose;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,10 +22,8 @@ namespace IdentityBL.Managers
         }
 
         //Public Methods
-        public UserIdentity UpdateUserIdentity(string token, UserIdentity updatedUserIdentity)
+        public UserIdentity UpdateUserIdentity(string userId, UserIdentity updatedUserIdentity)
         {
-            string userId = GetUserId(token);
-
             if (!string.IsNullOrEmpty(userId))
             {
                 updatedUserIdentity.UserId = userId;
@@ -57,7 +54,7 @@ namespace IdentityBL.Managers
             }
         }
 
-        public bool ValidateToken(string token)
+        public string ValidateToken(string token)
         {
             string url = "http://localhost:49884/api/token/validateManualToken";
 
@@ -68,15 +65,14 @@ namespace IdentityBL.Managers
                 task.Wait();
                 if (task.Result.IsSuccessStatusCode)
                 {
-                    return true;
+                    return task.Result.ToString();
                 }
             }
-            return false;
+            return null;
         }
 
-        public UserIdentity GetUserIdentity(string token)
+        public UserIdentity GetUserIdentity(string userId)
         {
-            string userId = GetUserId(token);
 
             if (!string.IsNullOrEmpty(userId))
             {
@@ -121,13 +117,6 @@ namespace IdentityBL.Managers
             }
         }
 
-        private string GetUserId(string token)
-        {
-            string secretKey = "vCryTxAz8mvMbamPvRseh7Hov425kVectcGStY_il87aOjP3JQd3vAGTajiIY_kAgydOCso9j4z4GzqIK4Zb6Kt495TiSrZEn1iwTzZB3oioa8UwO9gqWX_DqNIAak8hUsAexWpOpxUWwakwmKA74pEpwDcvGTnHsGTkHFpEatuNuhLr6_gDlp7tzR9eCCfwd7PpsUbItHHc83crRmZuOhuWA_vzDuxiuWhCJ6QrFyN1M9T4kal1GPvptGwsWT9ywoKUTTfsiBkbNowYdUv4ZqfuqQNUTYbuye6DEsuo3WjaTAsbmobse3_pQGptC08ipk4V4yK-HSeBfW0twTcunQ";
-            string payload = JWT.Decode(token, Encoding.ASCII.GetBytes(secretKey));
-            dynamic data = JObject.Parse(payload);
-
-            return data.sub;
-        }
+      
     }
 }

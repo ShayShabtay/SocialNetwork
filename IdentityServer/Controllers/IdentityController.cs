@@ -31,8 +31,8 @@ namespace IdentityServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
             }
 
-            bool isValidToken = _identityManager.ValidateToken(token);
-            if (!isValidToken)
+            string userId = _identityManager.ValidateToken(token);
+            if (userId == null)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
             }
@@ -40,7 +40,7 @@ namespace IdentityServer.Controllers
             UserIdentity foundUserIdentity;
             try
             {
-                foundUserIdentity = _identityManager.GetUserIdentity(token);
+                foundUserIdentity = _identityManager.GetUserIdentity(userId);
             }
             catch (FaildToConnectDbException)
             {
@@ -72,8 +72,8 @@ namespace IdentityServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the data"));
             }
 
-            bool isValidToken = _identityManager.ValidateToken(token);
-            if (!isValidToken)
+            string userId = _identityManager.ValidateToken(token);
+            if (userId == null)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
             }
@@ -82,7 +82,7 @@ namespace IdentityServer.Controllers
 
             try
             {
-                updatedUser = _identityManager.UpdateUserIdentity(token, userIdentity);
+                updatedUser = _identityManager.UpdateUserIdentity(userId, userIdentity);
             }
             catch (FaildToConnectDbException)
             {

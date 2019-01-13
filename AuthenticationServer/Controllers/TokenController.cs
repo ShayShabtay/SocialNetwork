@@ -24,19 +24,19 @@ namespace AuthenticationServer.Controllers
         {
             string token = Request.Headers.GetValues("x-token").First();
 
-            bool isValidToken;
+            string userId;
             try
             {
-                isValidToken = _tokenManager.ValidateManualToken(token);
+                userId = _tokenManager.ValidateManualToken(token);
             }
             catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
             }
 
-            if(isValidToken)
+            if(userId != null)
             {
-                return Ok();
+                return Ok(userId);
             }
             else
             {

@@ -160,7 +160,7 @@ namespace AuthenticationBL.Managers
                 Name = name
             };
 
-            string url = "http://localhost:52536/api/Social/addUser";
+            string url = "http://localhost:52536/api/SocialUser/addUser";
 
             using (var client = new HttpClient())
             {

@@ -47,7 +47,7 @@ namespace AuthenticationBL.Managers
             return token;
         }
 
-        public bool ValidateManualToken(string token)
+        public string ValidateManualToken(string token)
         {
             string secretKey = "vCryTxAz8mvMbamPvRseh7Hov425kVectcGStY_il87aOjP3JQd3vAGTajiIY_kAgydOCso9j4z4GzqIK4Zb6Kt495TiSrZEn1iwTzZB3oioa8UwO9gqWX_DqNIAak8hUsAexWpOpxUWwakwmKA74pEpwDcvGTnHsGTkHFpEatuNuhLr6_gDlp7tzR9eCCfwd7PpsUbItHHc83crRmZuOhuWA_vzDuxiuWhCJ6QrFyN1M9T4kal1GPvptGwsWT9ywoKUTTfsiBkbNowYdUv4ZqfuqQNUTYbuye6DEsuo3WjaTAsbmobse3_pQGptC08ipk4V4yK-HSeBfW0twTcunQ";
 
@@ -59,24 +59,26 @@ namespace AuthenticationBL.Managers
                 long now = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
                 if (data.iat > now || data.exp < now || data.aud != "facelook social")
                 {
-                    return false;
+                    return null;
                 }
-                return true;
+                return data.sub;
             }
             catch (InvalidAlgorithmException)
             {
-                return false;
+                return null;
             }
             catch (IntegrityException)
             {
-                return false;
+                return null;
             }
             catch (Exception)
             {
-                return false;
+                return null;
             }
 
         }
+
+
 
         public FacebookUserDTO ValidateAuthToken(string facebookToken)
         {
