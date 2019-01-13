@@ -11,7 +11,8 @@
 
 <!-- Trigger the modal with a button -->
 <div class="container">
-    <div class="panel panel-primary" data-toggle="modal" data-target="#myModal">
+    <div class="panel panel-primary" data-toggle="modal" data-target="#myModal"
+         style="width: 800px">
         <div class="panel-heading">Create Post</div>
 
         <div class="panel-body">
@@ -36,15 +37,25 @@
                 <h4 class="modal-title">Create Post</h4>
             </div>
             <div class="modal-body">
-                <textarea class="form-control" style="min-width: 100%; min-height: 80%" placeholder="What's on yout mind, @User.Identity.Name ?">
+                <textarea class="form-control" style="min-width: 90%; min-height: 80%" placeholder="What's on yout mind, @User.Identity.Name ?">
     
                 </textarea> 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Share</button>
-                <button type="button" class="btn btn-success">Add Photo</button>
-                <button type="button" class="btn btn-info">Tag Friends</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <div class="input-group">
+                    <button type="button" class="btn btn-primary">Share</button>
+                    @*<button type="button" class="btn btn-success"> Add Photo</button>*@
+                    @*<input class="custom-file-input" value="Add Photo input" />*@
+
+                    <button type="button" class="btn btn-info">Tag Friends</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile04">
+                        @*<label class="custom-file-label" for="inputGroupFile04">Choose file</label>*@
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -69,7 +69,7 @@ namespace UI.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace UI.Controllers
             
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
@@ -95,20 +95,21 @@ namespace UI.Controllers
                     userTokenCookie.Value = token.ToString();
                     Response.Cookies.Add(userTokenCookie);///
 
-                    switch (result)
-                    {
-                        case SignInStatus.Success:
-                            return RedirectToAction("MainPageAfterLogin", "Home");
-                        //return RedirectToLocal(returnUrl);
-                        case SignInStatus.LockedOut:
-                            return View("Lockout");
-                        case SignInStatus.RequiresVerification:
-                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                        case SignInStatus.Failure:
-                        default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
-                            return View(model);
-                    }
+                    //switch (result)
+                    //{
+                    //    case SignInStatus.Success:
+                    //        return RedirectToAction("MainPageAfterLogin", "Home");
+                    //    //return RedirectToLocal(returnUrl);
+                    //    case SignInStatus.LockedOut:
+                    //        return View("Lockout");
+                    //    case SignInStatus.RequiresVerification:
+                    //        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    //    case SignInStatus.Failure:
+                    //    default:
+                    //        ModelState.AddModelError("", "Invalid login attempt.");
+                    //        return View(model);
+                    //}
+                    return RedirectToAction("MainPageAfterLogin", "Home", model);
                 }
                 else
                     return Content("res.StatusCode = false :/");
@@ -130,6 +131,12 @@ namespace UI.Controllers
                 if (res.IsSuccessStatusCode == true)
                 {
                     token = res.Content.ReadAsAsync<string>().Result;
+
+                    //set token  in cookie
+                    HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                    userTokenCookie.Value = token.ToString();
+                    Response.Cookies.Add(userTokenCookie);///
+
                     return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else

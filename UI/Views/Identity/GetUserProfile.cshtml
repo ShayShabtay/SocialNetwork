@@ -1,0 +1,123 @@
+﻿@model UI.Models.UserIdentityModel
+
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+}
+
+<h2>User Profile - <b><span id="ModeFormID"> View Mode </span></b></h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div id="FormProfileID" class="form-horizontal">
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", id = "NameID" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" , id = "AgeID" } })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" , id = "AddressID" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.WorkPlace, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.WorkPlace, new { htmlAttributes = new { @class = "form-control", id = "WorkPlaceID" } })
+                @Html.ValidationMessageFor(model => model.WorkPlace, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="col-md-offset-4 col-md-6">
+                <input id="EditProfileID" onclick="EditMode()" type="button" value="Edit Profile" class="btn btn-info" />
+                <input id="SaveProfileID" type="submit" value="Save" class="btn btn-primary" />
+                <input id="clearProfileID" type="reset" value="Clear" class="btn btn-danger" />
+                <input id="onlyViewProfileID" onclick="ViewMode()" type="button" value="Back to View Mode" class="btn btn-success" />
+            </div>
+            @*<div id="clearProfileDetailsID" class="col-md-offset-4 col-md-6">
+                <input type="reset" value="Clear" class="btn btn-danger" />
+            </div>
+            <div id="onlyViewProfileID" class="col-md-offset-4 col-md-6">
+                <input type="submit" value="Only to View" class="btn btn-success" />
+            </div>
+            <div id="onlyViewProfileDetailsID" class="col-md-offset-4 col-md-6">
+                <input type="submit" value="Edit Profile" class="btn btn-info" />
+            </div>*@
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Main Page", "MainPageAfterLogin", "Home")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<script>
+    var name2 = document.getElementById("NameID");
+    var age = document.getElementById("AgeID");
+    var address = document.getElementById("AddressID");
+    var workPlace = document.getElementById("WorkPlaceID");
+
+    var saveButton = document.getElementById("SaveProfileID");
+    var resetButton = document.getElementById("clearProfileID");
+    var viewButton = document.getElementById("onlyViewProfileID");
+    var editButton = document.getElementById("EditProfileID");
+
+    var titleMode = document.getElementById("ModeFormID");
+
+    window.onload = ViewMode();
+
+    function ViewMode() {
+        titleMode.innerHTML = "View Mode";
+       
+        name2.readOnly = "true";
+        age.readOnly = "true";
+        address.readOnly = "true";
+        workPlace.readOnly = "true";
+        
+        saveButton.style.visibility = "hidden";
+        resetButton.style.visibility = "hidden";
+        viewButton.style.visibility = "hidden";
+        editButton.style.visibility = "visible";
+    }
+
+    function EditMode() {
+        titleMode.innerHTML = "Edit Mode";
+
+        name2.removeAttribute("readonly");
+        age.removeAttribute("readonly");
+        address.removeAttribute("readonly");
+        workPlace.removeAttribute("readonly");
+
+        saveButton.style.visibility = "visible";
+        resetButton.style.visibility = "visible";
+        viewButton.style.visibility = "visible";
+        editButton.style.visibility = "hidden";
+
+    }
+    
+</script>
