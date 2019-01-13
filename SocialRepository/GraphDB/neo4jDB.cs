@@ -34,15 +34,15 @@ namespace SocialRepository.GraphDB
 
        
 
-        public void addPost(Post post ,User user)
+        public void addPost(Post post)
         {
-            Post p = new Post("test post2");
-            User u = new User("omer","carmeli");
-            var jsonPost = DbHelper.ObjectToJson(p);
-            var jsonUser = DbHelper.ObjectToJson(u);
-            string query = $"Create (u:User{jsonUser}-[:Publish]->p:Post{jsonPost})";
-            string q1 = $"Create (p:Post{jsonPost})";
-            string q2 = $"Match (u:User),(p:Post) Where ((User u)=> u.Name=={u.Name}) AndWhere (Post p)=> p.postID=={p.postID} Create (u-[:publish]->p Return u)";
+            //Post p = new Post("test post2");
+            //User u = new User("omer","carmeli");
+            var jsonPost = DbHelper.ObjectToJson(post);
+            //var jsonUser = DbHelper.ObjectToJson(u);
+            //string query = $"Create (u:User{jsonUser}-[:Publish]->p:Post{jsonPost})";
+            string query = $"Create (p:Post{jsonPost})";
+            //string q2 = $"Match (u:User),(p:Post) Where ((User u)=> u.Name=={u.Name}) AndWhere (Post p)=> p.postID=={p.postID} Create (u-[:publish]->p Return u)";
             session.Run(query);
           //  Thread.Sleep(2000);
          //   session.Run(q2);
@@ -51,10 +51,10 @@ namespace SocialRepository.GraphDB
            // creatConection(user.Name,post.postID,"publish");
         }
 
-        public void creatConection(string source, string target, string type)
+        public void creatConection(string source, string target, string relation)
         {
 
-            string query = $"Create {source}-[:{type}]->{target}";
+            string query = $"Merge (:User{{userID:\"{source}\"}}-[:{relation}]->(:Post{{postId:\"{target}\"}})";
             session.Run(query);
 
         }

@@ -1,6 +1,4 @@
-﻿
-using Newtonsoft.Json.Linq;
-using SocialCommon.Models;
+﻿using SocialCommon.Models;
 using SocialRepository.GraphDB;
 using System;
 using System.Collections.Generic;
@@ -12,24 +10,21 @@ using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
-    public class SocialManager:ISocialManager
+    public class SocialPostManager
     {
+
         IGraphDB _graphDB;
-        public SocialManager()
+        public SocialPostManager()
         {
             _graphDB = new neo4jDB();
         }
 
-
-
-        public void AddUser(User user)
+        public void AddPost(Post post, string userId)
         {
-            _graphDB.addUser(user);
-        }
 
-        public void Follow(string SourceUserId,string targetUserId)
-        {
-            _graphDB.Follow(SourceUserId, targetUserId);
+            _graphDB.addPost(post);
+            Thread.Sleep(2000);
+            _graphDB.creatConection(userId, post.postID, "publish");
         }
 
         public string ValidateToken(string token)
@@ -44,12 +39,14 @@ namespace SocialBL.Managers
                 task.Wait();
                 if (task.Result.IsSuccessStatusCode)
                 {
-                    userId =  task.Result.ToString();
+                    userId = task.Result.ToString();
                 }
             }
             return userId;
         }
 
-       
+
+
+
     }
 }

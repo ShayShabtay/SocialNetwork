@@ -12,18 +12,35 @@ namespace SocialServer.Controllers
     public class SocialPostController : ApiController
     {
         ISocialManager _socialManager;
+        SocialPostManager SocialPostManager;
 
         public SocialPostController()
         {
             _socialManager = new SocialManager();
+            SocialPostManager = new SocialPostManager();
         }
 
         [HttpPost]
         [Route("api/SocialUser/addPost")]
         public IHttpActionResult AddPost([FromBody]Post post)
         {
-            _socialManager.AddPost(post, new User("omer", "omer"));
-            return Ok("add post ok");
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = _socialManager.ValidateToken(token);
+            if (SourceUserId != null)
+            {
+                try
+                {
+                    SocialPostManager.AddPost(post, SourceUserId);
+                    return Ok("add post ok");
+                }
+                catch (Exception)
+                {
+
+                    return BadRequest();
+                } 
+            }
+            return null;
+
         }
     }
 }
