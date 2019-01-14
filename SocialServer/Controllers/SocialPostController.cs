@@ -70,13 +70,24 @@ namespace SocialServer.Controllers
             return null;
         }
 
-        public IHttpActionResult addComment(Comment comment)
+        public IHttpActionResult addComment(Comment comment,string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
             string UserId = SocialPostManager.ValidateToken(token);
             if (UserId != null)
             {
-                SocialPostManager.addComment(comment,UserId);
+                try
+                {
+                SocialPostManager.addComment(comment,UserId,postId);
+
+
+
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
             }
             return Ok();
         }

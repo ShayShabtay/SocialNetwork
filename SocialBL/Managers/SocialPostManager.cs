@@ -38,12 +38,11 @@ namespace SocialBL.Managers
            return _graphDB.getMyPosts(userId);
         }
 
-        public void addComment(Comment comment,string userId)
+        public void addComment(Comment comment,string userId,string postId)
         {
             //_graphDB.addComment(comment);
-
-            // _graphDB.creatConection(,);  ///for connect post and comment
-            // _graphDB.creatConection(,);  ///for connect user to comment that he wrote
+            _graphDB.creatConection(userId,comment.CommentID, "UserComment");  ///for connect post and comment
+            _graphDB.creatConection(postId,comment.CommentID,"");  ///for connect user to comment that he wrote
 
         }
 
