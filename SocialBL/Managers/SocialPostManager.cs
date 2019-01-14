@@ -40,10 +40,12 @@ namespace SocialBL.Managers
 
         public void addComment(Comment comment,string userId,string postId)
         {
-            //_graphDB.addComment(comment);
+            var x=_graphDB.addComment(comment);
+            if (x.Result)
+            {
             _graphDB.creatConection(userId,comment.CommentID, "UserComment");  ///for connect post and comment
-            _graphDB.creatConection(postId,comment.CommentID,"");  ///for connect user to comment that he wrote
-
+            _graphDB.creatConection(postId,comment.CommentID,"PostComment");  ///for connect user to comment that he wrote
+            }
         }
 
         public string ValidateToken(string token)

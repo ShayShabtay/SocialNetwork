@@ -54,9 +54,22 @@ namespace SocialRepository.GraphDB
 
         public void creatConection(string source, string target, string relation)
         {
-            Tuple<string,string,string,string> values=RelationsMap.map[relation];
-            string query = $"Merge (:{values.Item1}{{{values.Item2}:\"{source}\"}})-[:{relation}]->(:{values.Item3}{{{values.Item4}:\"{target}\"}})";
-            session.Run(query);
+                        if (RelationsMap.map.ContainsKey(relation))
+            {
+                Tuple<string,string,string,string> values=RelationsMap.map[relation];
+                string q = $"Match (x:{values.Item1}{{{values.Item2}:\"{source}\"}})" +
+                           $"Match (y:{values.Item3}{{{values.Item4}:\"{target}\"}}" +
+                           $"Merge (x-[:{relation}]->y)";
+
+                string query = $"Merge (x:{values.Item1}{{{values.Item2}:\"{source}\"}})-[:{relation}]->(y:{values.Item3}{{{values.Item4}:\"{target}\"}})";
+                session.Run(q);
+
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
+
 
         }
 
@@ -87,6 +100,17 @@ namespace SocialRepository.GraphDB
             return postList;
         }
 
+        public  async Task<bool> addComment(Comment comment)
+        {
+            var jsonObj = DbHelper.ObjectToJson(comment);
+            string query = $"Create (c:Comment{jsonObj})";
+            var res= session.Run(query);
+            if (res != null) {
+                return true;
+            }
+            return false;
+        }
+
         public List<Post> getMyPosts(string userId)
         {
             List<Post> postList = new List<Post>();
@@ -104,8 +128,6 @@ namespace SocialRepository.GraphDB
             }
             return postList;
         }
-
-        
 
     }
 }

@@ -44,7 +44,7 @@ namespace SocialServer.Controllers
 
         }
         [HttpPost]
-        [Route("api/SocialPost/getPost")]
+        [Route("api/SocialPost/getPosts")]
         public IHttpActionResult getAllPosts()
         {
             string token = Request.Headers.GetValues("x-token").First();
@@ -57,7 +57,8 @@ namespace SocialServer.Controllers
 
                 return Ok(Posts);
         }
-
+        [HttpPost]
+        [Route("api/SocialPost/getMyPosts")]
         public IHttpActionResult getMyPosts()
         {
             string token = Request.Headers.GetValues("x-token").First();
@@ -70,7 +71,8 @@ namespace SocialServer.Controllers
 
             return null;
         }
-
+        [HttpPost]
+        [Route("api/SocialPost/addComment")]
         public IHttpActionResult addComment(Comment comment,string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
@@ -92,6 +94,16 @@ namespace SocialServer.Controllers
             }
             return Ok();
         }
+        [HttpPost]
+        [Route("api/SocialPost/saveImage")]
+        public IHttpActionResult SaveImage()
+        {
+
+
+            return null;
+        }
+
+
         
 
 
