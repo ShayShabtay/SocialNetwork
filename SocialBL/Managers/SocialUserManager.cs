@@ -30,8 +30,8 @@ namespace SocialBL.Managers
 
         public void Follow(string SourceUserId,string targetUserId)
         {
-            _graphDB.Follow(SourceUserId, targetUserId);
-            //_graphDB.creatConection(SourceUserId, targetUserId, "Follow");
+            //_graphDB.Follow(SourceUserId, targetUserId);
+            _graphDB.creatConection(SourceUserId, targetUserId, "Follow");
         }
 
         public string ValidateToken(string token)

@@ -58,8 +58,8 @@ namespace SocialRepository.GraphDB
             {
                 Tuple<string,string,string,string> values=RelationsMap.map[relation];
                 string q = $"Match (x:{values.Item1}{{{values.Item2}:\"{source}\"}})" +
-                           $"Match (y:{values.Item3}{{{values.Item4}:\"{target}\"}}" +
-                           $"Merge (x-[:{relation}]->y)";
+                           $"Match (y:{values.Item3}{{{values.Item4}:\"{target}\"}})" +
+                           $"Merge ((x)-[:{relation}]->(y))";
 
                 string query = $"Merge (x:{values.Item1}{{{values.Item2}:\"{source}\"}})-[:{relation}]->(y:{values.Item3}{{{values.Item4}:\"{target}\"}})";
                 session.Run(q);

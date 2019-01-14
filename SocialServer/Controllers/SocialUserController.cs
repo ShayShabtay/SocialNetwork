@@ -42,8 +42,8 @@ namespace SocialServer.Controllers
 
             //string SourceUserId = _sociaUserlManager.ValidateToken(token);
 
-            string SourceUserId = "1234";
-            string targetUserId = "12345";
+            string SourceUserId = "c74727fe-d410-4c50-ac78-cc01262a58b8";
+            string targetUserId = "5c05e797-fb5a-4ef8-b463-e32073f7e4da";
 
             if (SourceUserId == null)
             {
