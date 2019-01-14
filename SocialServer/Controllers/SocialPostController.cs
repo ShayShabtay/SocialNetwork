@@ -96,11 +96,11 @@ namespace SocialServer.Controllers
         }
         [HttpPost]
         [Route("api/SocialPost/saveImage")]
-        public IHttpActionResult SaveImage()
+        public IHttpActionResult SaveImage([FromBody] byte[] image)
         {
+            string imageUrl=SocialPostManager.SaveImage(image);
 
-
-            return null;
+            return Ok(imageUrl);
         }
 
 

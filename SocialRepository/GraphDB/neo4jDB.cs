@@ -54,7 +54,7 @@ namespace SocialRepository.GraphDB
 
         public void creatConection(string source, string target, string relation)
         {
-                        if (RelationsMap.map.ContainsKey(relation))
+           if (RelationsMap.map.ContainsKey(relation))
             {
                 Tuple<string,string,string,string> values=RelationsMap.map[relation];
                 string q = $"Match (x:{values.Item1}{{{values.Item2}:\"{source}\"}})" +

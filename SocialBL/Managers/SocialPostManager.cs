@@ -1,5 +1,6 @@
 ﻿using SocialCommon.Models;
 using SocialRepository.GraphDB;
+using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,13 @@ namespace SocialBL.Managers
                 }
             }
             return userId;
+        }
+
+        public string SaveImage(byte[] image)
+        {
+            StorgeHelper storgeHelper = new StorgeHelper();
+            storgeHelper.uploadTest(image);
+            return null;
         }
     }
 }
