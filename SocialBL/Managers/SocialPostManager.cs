@@ -15,6 +15,7 @@ namespace SocialBL.Managers
     {
 
         IGraphDB _graphDB;
+        const string bucketName = "omer-buckets";
         public SocialPostManager()
         {
             _graphDB = new neo4jDB();
@@ -67,11 +68,22 @@ namespace SocialBL.Managers
             return userId;
         }
 
-        public string SaveImage(byte[] image)
+        public string SaveImage(byte[] image,string userId)
         {
             StorgeHelper storgeHelper = new StorgeHelper();
-            storgeHelper.uploadTest(image);
+
+            string imageKey= Guid.NewGuid().ToString();
+            try
+            {
+            storgeHelper.uploadImageToS3(image,userId,imageKey);
+            return bucketName + "/" + userId + "/" + imageKey;
+            }
+            catch (Exception)
+            {
+
             return null;
+            
+            }
         }
     }
 }

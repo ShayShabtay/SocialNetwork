@@ -96,11 +96,18 @@ namespace SocialServer.Controllers
         }
         [HttpPost]
         [Route("api/SocialPost/saveImage")]
-        public IHttpActionResult SaveImage([FromBody] byte[] image)
+        public IHttpActionResult SaveImage([FromBody] string imageString)
         {
-            string imageUrl=SocialPostManager.SaveImage(image);
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            if ((UserId != null)&&(imageString!=null))
+            {
+                byte[] image = Convert.FromBase64String(imageString);
+                string imageUrl = SocialPostManager.SaveImage(image,UserId);
 
-            return Ok(imageUrl);
+                return Ok(imageUrl);
+            }
+            return BadRequest();
         }
 
 
