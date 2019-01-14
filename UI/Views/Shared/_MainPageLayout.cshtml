@@ -64,7 +64,7 @@
                     <li>@Html.ActionLink("Home", "MainPageAfterLogin", "Home", new { @id = "MenuNavbarID" })</li>
                     <li>@Html.ActionLink("About", "About", "Home", new { @id = "MenuNavbarID" })</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("Settings", "Settings", "Home", new {@id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Settings", "Settings", "Home", new { @id = "MenuNavbarID" })</li>
                     <li>@Html.ActionLink("Notifactions", "Notifactions", "Home", new { @id = "NotifactionsMenuNavbarID" })</li>
                     @*<i class="fas fa-cogs"></i>*@
                 </ul>
@@ -91,11 +91,15 @@
                     User Info
                 </h3><hr />
                 <p><b>UserName:</b>@User.Identity.Name</p>
+                <p><b>Name:</b>@Request.Cookies["UserProfile"].Name.FirstOrDefault();</p>
+                <p><b>Age:</b>@Request.Cookies["UserProfile"].Value;</p>
+                <p><b>Address:</b>@Request.Cookies["UserProfile"].Values.Keys;</p>
+                <p><b>WorkPlace:</b>@User.Identity.Name</p>
                 <p><b>Email:</b> @User.Identity.Name</p>
                 <p><b>Friends:</b> 55 @Profile.UserName</p>
                 <p><b>Iamges:</b> 10</p>
-                <p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
-                <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>
+                @*<p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
+                    <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>*@
                 <br />
                 <h4>@Html.ActionLink("To View/ Edit My Profile", "GetUserProfile", "Identity")</h4>
             </div>

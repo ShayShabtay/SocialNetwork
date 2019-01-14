@@ -20,12 +20,13 @@ namespace UI.Controllers
     {
         public ActionResult Index()
         {
-                return View();
+            return View();
         }
 
-        
+
         public ActionResult MainPageAfterLogin()
         {
+            string UserCookie = Request.Cookies["UserProfile"].Value;
             return View();
         }
 

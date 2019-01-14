@@ -17,7 +17,6 @@ namespace UI.Controllers
         public ActionResult GetUserProfile()
         {
             string token = Request.Cookies["UserToken"].Value;
-            //return View();
 
             using (var client = new HttpClient())
             {
@@ -42,7 +41,7 @@ namespace UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetUserProfile(UserIdentityModel model)//, FormCollection collection)
+        public ActionResult GetUserProfile(UserIdentityModel model)
         {
             string token = Request.Cookies["UserToken"].Value;
             if (!ModelState.IsValid)
@@ -62,9 +61,24 @@ namespace UI.Controllers
 
                     if (res.IsSuccessStatusCode == true)
                     {
-                        var res2  = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                        var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
 
-                        return RedirectToAction("MainPageAfterLogin", "Home");
+                        ////set token  in cookie
+                        //HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                        //userTokenCookie.Value = token.ToString();
+                        //Response.Cookies.Add(userTokenCookie);///
+
+                        //set token  in cookie
+                        HttpCookie userProfileCookie = new HttpCookie("UserProfile");
+                        IEnumerable<string> userDetailsList;// = new List<UserIdentityModel>();
+                        foreach (var item in res2.ToString())
+                        {
+                            //userDetailsList[item] = item.ToString();
+                        }
+                        //userProfileCookie.Values = userDetailsList;
+                        Response.Cookies.Add(userProfileCookie);///
+
+                        return RedirectToAction("MainPageAfterLogin", "Home", res2);
                     }
                     else
                         return Content("res.StatusCode = false :/");
