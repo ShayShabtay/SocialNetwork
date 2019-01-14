@@ -25,7 +25,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult AddUser([FromBody]User user)
         {
             _socialManager.AddUser(user);
-            return Ok("good");
+            return Ok();
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace SocialServer.Controllers
         {
             string token = Request.Headers.GetValues("x-token").First();
 
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(targetUserId))
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
             }
@@ -54,7 +54,6 @@ namespace SocialServer.Controllers
                 catch (Exception)
                 {
                     return BadRequest();
-                    throw;
                 }
         }
 
