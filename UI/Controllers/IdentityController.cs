@@ -14,15 +14,17 @@ namespace UI.Controllers
     {
         // GET: Identity
         [HttpGet]
-        public ActionResult GetUserProfile(string token)
+        public ActionResult GetUserProfile()
         {
-            return View(token);
+            string token = Request.Cookies["UserToken"].Value;
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetUserProfile(UserIdentityModel model, string token)//, FormCollection collection)
+        public ActionResult GetUserProfile(UserIdentityModel model)//, FormCollection collection)
         {
+            string token = Request.Cookies["UserToken"].Value;
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -34,13 +36,13 @@ namespace UI.Controllers
                 {
                     client.BaseAddress = new Uri("http://localhost:51639");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("x-auth-token", token);
+                    client.DefaultRequestHeaders.Add("x-token", token);
 
-                    var res = client.GetAsync($"/api/identity/updateUserProfile").Result;
+                    var res = client.PostAsJsonAsync($"/api/identity/updateUserProfile", model).Result;
 
                     if (res.IsSuccessStatusCode == true)
                     {
-                        token = res.Content.ReadAsAsync<string>().Result;
+                        var res2  = res.Content.ReadAsAsync<UserIdentityModel>().Result;
 
                         ////set token  in cookie
                         //HttpCookie userTokenCookie = new HttpCookie("UserToken");
