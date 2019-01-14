@@ -25,7 +25,7 @@ namespace SocialServer.Controllers
         [Route("api/SocialUser/addUser")]
         public IHttpActionResult AddUser([FromBody]User user)
         {
-            _socialManager.AddUser(user);
+            _sociaUserlManager.AddUser(user);
             return Ok();
         }
 
