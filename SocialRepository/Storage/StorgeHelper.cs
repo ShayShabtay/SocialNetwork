@@ -21,7 +21,7 @@ namespace SocialRepository.Storage
         private const string filePath = "test1";
         // Specify your bucket region (an example region is shown).
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast2;
-        private static IAmazonS3 s3Client;
+        private static IAmazonS3 s3Client { get; set; }
 
         public StorgeHelper()
         {
@@ -33,39 +33,44 @@ namespace SocialRepository.Storage
 
         }
 
-        public void uploadTest(byte[] bArray)
+        public void uploadImageToS3(byte[] bArray,string userId,string ImageKey)
         {
 
-            byte[] imageData = File.ReadAllBytes("C://‏‏darkstar.PNG");
-            bArray = imageData;
-            string base64String = Convert.ToBase64String(bArray);
+           // byte[] imageData = File.ReadAllBytes("C://‏‏darkstar.PNG");
+            //bArray = imageData;
+           // string base64String = Convert.ToBase64String(bArray);
 
             try
             {
-                byte[] bytes = Convert.FromBase64String(base64String);
+                //byte[] bytes = Convert.FromBase64String(base64String);
 
                 using (s3Client)
                 {
                     var request = new PutObjectRequest();
-                    request.BucketName = "omer-buckets";
+                    request.BucketName = bucketName+"/"+userId;
                     //request.ContentType = ;
-                    request.Key = keyName;
+                    request.Key = ImageKey;
                     //request.InputStream = file.InputStream;
 
-                    using (var ms = new MemoryStream(bytes))
+                    using (var ms = new MemoryStream(bArray))
                     {
                         request.InputStream = ms;
                        s3Client.PutObject(request);
-                      
+
                         //Debug.WriteLine(x.ToString());
-                       // var res=await s3Client.PutObjectAsync(request);
+                        // var res=await s3Client.PutObjectAsync(request);
+                        //return bucketName + "/" + userId + "/" + keyName;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("AWS Fail");
+                throw new Exception();
             }
+          
         }
+
+
+        
     }
 }
