@@ -17,7 +17,30 @@ namespace UI.Controllers
         public ActionResult GetUserProfile()
         {
             string token = Request.Cookies["UserToken"].Value;
+<<<<<<< HEAD
             return View();
+=======
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:51639");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("x-token", token);
+
+                var res = client.GetAsync($"/api/identity/getUserProfile").Result;
+
+                if (res.IsSuccessStatusCode == true)
+                {
+                    var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+
+
+                    return View(res2);
+                }
+                else
+                    return Content("res.StatusCode = false :/");
+            }
+
+>>>>>>> 38cd80a0fcf9d963e030be5c135324ecbc7280fb
         }
 
         [HttpPost]
@@ -43,11 +66,14 @@ namespace UI.Controllers
                     if (res.IsSuccessStatusCode == true)
                     {
                         var res2  = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+<<<<<<< HEAD
 
                         ////set token  in cookie
                         //HttpCookie userTokenCookie = new HttpCookie("UserToken");
                         //userTokenCookie.Value = token.ToString();
                         //Response.Cookies.Add(userTokenCookie);///
+=======
+>>>>>>> 38cd80a0fcf9d963e030be5c135324ecbc7280fb
 
                         return RedirectToAction("MainPageAfterLogin", "Home");
                     }
