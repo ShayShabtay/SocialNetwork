@@ -100,7 +100,7 @@ namespace SocialRepository.GraphDB
             return postList;
         }
 
-        public  async Task<bool> addComment(Comment comment)
+        public  async Task<bool> AddComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
