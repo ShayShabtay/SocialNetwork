@@ -26,7 +26,10 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+<<<<<<< HEAD
+=======
     <Use64BitIISExpress />
+>>>>>>> 38cd80a0fcf9d963e030be5c135324ecbc7280fb
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

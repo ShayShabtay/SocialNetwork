@@ -4,8 +4,10 @@
     ViewBag.Title = "UserProfile";
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
 }
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-<h2>User Profile - <b><span id="ModeFormID"> View Mode </span></b></h2>
+
+<h2>User Profile - <b><span id="ModeFormID"> View Mode  </span></b> &nbsp;<i id="iconStyleID" class="far fa-eye"></i></h2>
 
 
 @using (Html.BeginForm())
@@ -18,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", id = "NameID" } })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control is-valid", id = "NameID" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -26,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" , id = "AgeID" } })
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control is-valid", id = "AgeID" } })
                 @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -54,15 +56,6 @@
                 <input id="clearProfileID" type="reset" value="Clear" class="btn btn-danger" />
                 <input id="onlyViewProfileID" onclick="ViewMode()" type="button" value="Back to View Mode" class="btn btn-success" />
             </div>
-            @*<div id="clearProfileDetailsID" class="col-md-offset-4 col-md-6">
-                <input type="reset" value="Clear" class="btn btn-danger" />
-            </div>
-            <div id="onlyViewProfileID" class="col-md-offset-4 col-md-6">
-                <input type="submit" value="Only to View" class="btn btn-success" />
-            </div>
-            <div id="onlyViewProfileDetailsID" class="col-md-offset-4 col-md-6">
-                <input type="submit" value="Edit Profile" class="btn btn-info" />
-            </div>*@
         </div>
     </div>
 }
@@ -89,11 +82,15 @@
 
     var titleMode = document.getElementById("ModeFormID");
 
+    var iconStyle = document.getElementById("iconStyleID");
+
     window.onload = ViewMode();
 
     function ViewMode() {
         titleMode.innerHTML = "View Mode";
-       
+
+        iconStyle.className = "far fa-eye";
+
         name2.readOnly = "true";
         age.readOnly = "true";
         address.readOnly = "true";
@@ -107,6 +104,8 @@
 
     function EditMode() {
         titleMode.innerHTML = "Edit Mode";
+
+        iconStyle.className = "fas fa-user-edit";
 
         name2.removeAttribute("readonly");
         age.removeAttribute("readonly");
