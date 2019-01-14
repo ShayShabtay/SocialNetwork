@@ -17,9 +17,7 @@ namespace UI.Controllers
         public ActionResult GetUserProfile()
         {
             string token = Request.Cookies["UserToken"].Value;
-<<<<<<< HEAD
-            return View();
-=======
+            //return View();
 
             using (var client = new HttpClient())
             {
@@ -40,7 +38,6 @@ namespace UI.Controllers
                     return Content("res.StatusCode = false :/");
             }
 
->>>>>>> 38cd80a0fcf9d963e030be5c135324ecbc7280fb
         }
 
         [HttpPost]
@@ -66,14 +63,6 @@ namespace UI.Controllers
                     if (res.IsSuccessStatusCode == true)
                     {
                         var res2  = res.Content.ReadAsAsync<UserIdentityModel>().Result;
-<<<<<<< HEAD
-
-                        ////set token  in cookie
-                        //HttpCookie userTokenCookie = new HttpCookie("UserToken");
-                        //userTokenCookie.Value = token.ToString();
-                        //Response.Cookies.Add(userTokenCookie);///
-=======
->>>>>>> 38cd80a0fcf9d963e030be5c135324ecbc7280fb
 
                         return RedirectToAction("MainPageAfterLogin", "Home");
                     }
