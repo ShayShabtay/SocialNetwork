@@ -11,6 +11,7 @@ namespace SocialBL.Interfaces
     {
         void AddUser(User user);
         void Follow(string SourceUserId, string targetUserId);
+        void BlockUser(string SourceUserId,string targetUserId);
         string ValidateToken(string token);
     }
 }
