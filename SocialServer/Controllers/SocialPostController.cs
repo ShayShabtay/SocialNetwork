@@ -1,4 +1,5 @@
-﻿using SocialBL.Managers;
+﻿using SocialBL.Interfaces;
+using SocialBL.Managers;
 using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ namespace SocialServer.Controllers
 {
     public class SocialPostController : ApiController
     {
-        ISocialManager _socialManager;
+        ISocialUserManager _socialManager;
         SocialPostManager SocialPostManager;
 
         public SocialPostController()
         {
-            _socialManager = new SocialManager();
+            _socialManager = new SocialUserManager();
             SocialPostManager = new SocialPostManager();
         }
 

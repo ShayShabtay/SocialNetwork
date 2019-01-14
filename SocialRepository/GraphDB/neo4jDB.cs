@@ -55,14 +55,14 @@ namespace SocialRepository.GraphDB
         public void creatConection(string source, string target, string relation)
         {
             Tuple<string,string,string,string> values=RelationsMap.map[relation];
-            string query = $"Merge (:{values.Item1}{{{values.Item2}:\"{source}\"}}-[:{relation}]->(:{values.Item3}{{{values.Item4}:\"{target}\"}})";
+            string query = $"Merge (:{values.Item1}{{{values.Item2}:\"{source}\"}})-[:{relation}]->(:{values.Item3}{{{values.Item4}:\"{target}\"}})";
             session.Run(query);
 
         }
 
         public void Follow(string SourceUserId, string targetUserId)
         {
-            string query = $"Merge (:User{{userID:\"{SourceUserId}\"}})-[:Follow]->(:User{{userID:\"{targetUserId}\"}})";
+            string query = $"Merge (x:User{{userID:\"{SourceUserId}\"}})-[:Follow]->(y:User{{userID:\"{targetUserId}\"}})";
             session.Run(query);
         }
 
