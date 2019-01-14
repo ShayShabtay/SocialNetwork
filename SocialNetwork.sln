@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationCommon", "Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationRepository", "AuthenticationRepository\AuthenticationRepository.csproj", "{DD31D8CD-4AE2-4037-BFE8-002E07BAD710}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client_Side", "Client_Side", "{0C47267C-6588-49C2-B112-E60B2F5B396D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "IdentityService", "{B5ABF361-EF27-40C2-AA98-A604FEA0A06F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{00446827-0DB5-48BA-88BF-A1602D76BC57}"
@@ -35,7 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialCommon", "SocialCommo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialRepository", "SocialRepository\SocialRepository.csproj", "{C990DADC-7AD7-4082-83E3-0A1CB162CBE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "..\..\תיקיית גיבויים\גיבוי socialNetwork\SocialNetwork\UI\UI.csproj", "{DCC29DEC-C45A-4251-A122-93EC9032CD4A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client_Side", "Client_Side", "{FAFA8BB2-E336-42D9-90F2-D46D66967C00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{DCC29DEC-C45A-4251-A122-93EC9032CD4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,7 +112,7 @@ Global
 		{1700BFD1-D704-4846-A4A0-97AE9B1CBB13} = {58A41BE2-CBED-4FFB-8277-BD94F4449432}
 		{49E9F62A-B643-4FDB-B028-AD89D08227CC} = {58A41BE2-CBED-4FFB-8277-BD94F4449432}
 		{C990DADC-7AD7-4082-83E3-0A1CB162CBE0} = {58A41BE2-CBED-4FFB-8277-BD94F4449432}
-		{DCC29DEC-C45A-4251-A122-93EC9032CD4A} = {0C47267C-6588-49C2-B112-E60B2F5B396D}
+		{DCC29DEC-C45A-4251-A122-93EC9032CD4A} = {FAFA8BB2-E336-42D9-90F2-D46D66967C00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {487D8A8D-5B38-4EA4-B303-166606EB9224}
