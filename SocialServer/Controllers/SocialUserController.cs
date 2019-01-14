@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Neo4j.Driver.V1;
+using SocialBL.Interfaces;
 using SocialBL.Managers;
 using SocialCommon.Models;
 
@@ -12,12 +13,12 @@ namespace SocialServer.Controllers
 {
     public class SocialUserController : ApiController
     {
-        ISocialManager _socialManager;
+        ISocialUserManager _sociaUserlManager;
 
 
         public SocialUserController()
         {
-            _socialManager = new SocialManager();
+            _sociaUserlManager = new SocialUserManager();
         }
 
         [HttpPost]
@@ -28,18 +29,21 @@ namespace SocialServer.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpGet]//chenge to post
         [Route("api/SocialUser/follow")]
-        public IHttpActionResult Follow([FromBody]string targetUserId) 
+        public IHttpActionResult Follow() //[FromBody]string targetUserId
         {
-            string token = Request.Headers.GetValues("x-token").First();
+            //string token = Request.Headers.GetValues("x-token").First();
 
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(targetUserId))
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
-            }
+            //if (string.IsNullOrEmpty(token))
+            //{
+            //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            //}
 
-            string SourceUserId = _socialManager.ValidateToken(token);
+            //string SourceUserId = _sociaUserlManager.ValidateToken(token);
+
+            string SourceUserId = "c74727fe-d410-4c50-ac78-cc01262a58b8";
+            string targetUserId = "5c05e797-fb5a-4ef8-b463-e32073f7e4da";
 
             if (SourceUserId == null)
             {
@@ -47,7 +51,7 @@ namespace SocialServer.Controllers
             }
                 try
                 {
-                _socialManager.Follow(SourceUserId, targetUserId);
+                _sociaUserlManager.Follow(SourceUserId, targetUserId);
                 return Ok();
 
                 }
@@ -62,7 +66,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult UnFollow([FromBody]string targetUserId)
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = _sociaUserlManager.ValidateToken(token);
             if (SourceUserId != null)
             {
 
@@ -76,7 +80,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult BlockUser()
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = _sociaUserlManager.ValidateToken(token);
 
             return Ok();
         }
@@ -86,7 +90,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult UnblockUser()
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = _sociaUserlManager.ValidateToken(token);
 
             return Ok();
         }
@@ -96,7 +100,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult GetFollowers()
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = _sociaUserlManager.ValidateToken(token);
 
             return Ok();
         }
@@ -106,7 +110,7 @@ namespace SocialServer.Controllers
         public IHttpActionResult GetFollowing()
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _socialManager.ValidateToken(token);
+            string SourceUserId = _sociaUserlManager.ValidateToken(token);
 
             return Ok();
         }
