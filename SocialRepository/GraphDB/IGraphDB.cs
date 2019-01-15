@@ -15,5 +15,7 @@ namespace SocialRepository.GraphDB
         List<Post> getAllPosts(string userId);
         List<Post> getMyPosts(string userId);
         Task<bool> addComment(Comment comment);
+        List<Comment> getCommentsForPost(string postID);
+        List<User> getLikesForPost(string postID);
     }
 }

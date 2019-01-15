@@ -21,6 +21,9 @@ namespace SocialRepository.Storage
         private const string filePath = "test1";
         // Specify your bucket region (an example region is shown).
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast2;
+        //string hostURL = bucketRegion.GetEndpointForService("s3").Hostname;
+        string hostUrl= "https://s3.us-east-2.amazonaws.com";
+
         private static IAmazonS3 s3Client { get; set; }
 
         public StorgeHelper()
@@ -33,7 +36,7 @@ namespace SocialRepository.Storage
 
         }
 
-        public void uploadImageToS3(byte[] bArray,string userId,string ImageKey)
+        public string uploadImageToS3(byte[] bArray,string userId,string ImageKey)
         {
 
            // byte[] imageData = File.ReadAllBytes("C://‏‏darkstar.PNG");
@@ -50,6 +53,7 @@ namespace SocialRepository.Storage
                     request.BucketName = bucketName+"/"+userId;
                     //request.ContentType = ;
                     request.Key = ImageKey;
+                    request.CannedACL = S3CannedACL.PublicReadWrite;
                     //request.InputStream = file.InputStream;
 
                     using (var ms = new MemoryStream(bArray))
@@ -59,7 +63,7 @@ namespace SocialRepository.Storage
 
                         //Debug.WriteLine(x.ToString());
                         // var res=await s3Client.PutObjectAsync(request);
-                        //return bucketName + "/" + userId + "/" + keyName;
+                        return   hostUrl+"/"+bucketName + "/" + userId + "/" + ImageKey;
                     }
                 }
             }
