@@ -37,26 +37,48 @@
                 <h4 class="modal-title">Create Post</h4>
             </div>
             <div class="modal-body">
-                <textarea class="form-control" style="min-width: 90%; min-height: 80%" placeholder="What's on yout mind, @User.Identity.Name ?">
-    
-                </textarea>
+                <textarea rows="5" placeholder="Share everyone - What's on yout mind?" class="form-control" style="min-width: 90%; min-height: 80%"></textarea>
             </div>
             <div class="modal-footer">
-                <div class="input-group">
+                <div class="input-group-btn width100">
+                    <input type="file" class="custom-file-input">
                     <button type="button" class="btn btn-primary">Share</button>
-                    @*<button type="button" class="btn btn-success"> Add Photo</button>*@
-                    @*<input class="custom-file-input" value="Add Photo input" />*@
-
                     <button type="button" class="btn btn-info">Tag Friends</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile04">
-                        @*<label class="custom-file-label" for="inputGroupFile04">Choose file</label>*@
-                    </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="float:right;">Close</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<style>
+    .custom-file-input::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+
+    .custom-file-input::before {
+        content: 'Add Photo';
+        display: inline-block;
+        background-color: yellow;/*linear-gradient(top, #f9f9f9, #e3e3e3);*/
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px 8px;
+        outline: none;
+        white-space:nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;
+        font-weight: 700;
+        font-size: 11pt;
+        float:left;
+    }
+
+    .custom-file-input:hover::before {
+        border-color: black;
+    }
+
+    .custom-file-input:active::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+</style>

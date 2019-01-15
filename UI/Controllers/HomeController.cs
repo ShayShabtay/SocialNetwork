@@ -24,10 +24,10 @@ namespace UI.Controllers
         }
 
 
-        public ActionResult MainPageAfterLogin()
+        public ActionResult MainPageAfterLogin(UserIdentityModel userModel)
         {
-            string UserCookie = Request.Cookies["UserProfile"].Value;
-            return View();
+            //string UserCookie = Request.Cookies["UserProfile"].Value;
+            return View(userModel);
         }
 
         public ActionResult About()

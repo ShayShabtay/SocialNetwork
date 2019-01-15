@@ -1,5 +1,5 @@
 ﻿@using UI.Models
-
+@model UI.Models.UserIdentityModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +54,7 @@
 </head>
 <body>
 
-    <nav id="navID" class="navbar navbar-inverse">
+    <nav id="navID" class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 @Html.ActionLink("Facelook", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", id = "FacelookApplicationID" })
@@ -90,17 +90,19 @@
                     <i class="fas fa-info-circle" style="color:blue;"></i>
                     User Info
                 </h3><hr />
-                <p><b>UserName:</b>@User.Identity.Name</p>
-                <p><b>Name:</b>@Request.Cookies["UserProfile"].Name.FirstOrDefault();</p>
-                <p><b>Age:</b>@Request.Cookies["UserProfile"].Value;</p>
-                <p><b>Address:</b>@Request.Cookies["UserProfile"].Values.Keys;</p>
-                <p><b>WorkPlace:</b>@User.Identity.Name</p>
-                <p><b>Email:</b> @User.Identity.Name</p>
-                <p><b>Friends:</b> 55 @Profile.UserName</p>
+                @using (Html.BeginForm())
+                {
+                <p><b>Name:</b> @Model.Name </p>
+                <p><b>Age:</b> @Model.Age  </p>
+                <p><b>Address:</b> @Model.Address</p>
+                <p><b>WorkPlace:</b>@Model.WorkPlace</p>
+                <p><b>Email:</b>@*@Html.EditorFor(model => model.Name)*@ </p>
+                <p><b>Friends:</b> 55 @*@Model.UserId*@</p>
                 <p><b>Iamges:</b> 10</p>
                 @*<p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
                     <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>*@
                 <br />
+                }
                 <h4>@Html.ActionLink("To View/ Edit My Profile", "GetUserProfile", "Identity")</h4>
             </div>
             <div class="col-sm-8 text-left">
@@ -125,7 +127,7 @@
     </div>
 
 
-    <footer class="container-fluid text-center">
+    <footer class="container-fluid text-center navbar-fixed-bottom">
         <p>&copy; 2018 - Our Facelook Application - Develop by <mark>Shay Shabtay</mark>  & <mark>Ariel Halevi</mark> & <mark>Omer Carmeli</mark>  </p>
     </footer>
 

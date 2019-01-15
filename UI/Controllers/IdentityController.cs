@@ -68,17 +68,9 @@ namespace UI.Controllers
                         //userTokenCookie.Value = token.ToString();
                         //Response.Cookies.Add(userTokenCookie);///
 
-                        //set token  in cookie
-                        HttpCookie userProfileCookie = new HttpCookie("UserProfile");
-                        IEnumerable<string> userDetailsList;// = new List<UserIdentityModel>();
-                        foreach (var item in res2.ToString())
-                        {
-                            //userDetailsList[item] = item.ToString();
-                        }
-                        //userProfileCookie.Values = userDetailsList;
-                        Response.Cookies.Add(userProfileCookie);///
+                       
 
-                        return RedirectToAction("MainPageAfterLogin", "Home", res2);
+                        return RedirectToAction("MainPageAfterLogin", "Home", model);
                     }
                     else
                         return Content("res.StatusCode = false :/");

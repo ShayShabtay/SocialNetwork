@@ -9,7 +9,7 @@ namespace UI.Controllers
     public class SocialController : Controller
     {
         // GET: Social
-        public ActionResult Index()
+        public ActionResult FeedList()
         {
             return View();
         }
