@@ -3,6 +3,7 @@ using AuthenticationCommon.Models;
 using AuthenticationCommon.ModelsDTO;
 using AuthenticationRepository.DynamoDb;
 using Jose;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace AuthenticationBL.Managers
 {
@@ -47,7 +49,7 @@ namespace AuthenticationBL.Managers
             return token;
         }
 
-        public bool ValidateManualToken(string token)
+        public string ValidateManualToken(string token)
         {
             string secretKey = "vCryTxAz8mvMbamPvRseh7Hov425kVectcGStY_il87aOjP3JQd3vAGTajiIY_kAgydOCso9j4z4GzqIK4Zb6Kt495TiSrZEn1iwTzZB3oioa8UwO9gqWX_DqNIAak8hUsAexWpOpxUWwakwmKA74pEpwDcvGTnHsGTkHFpEatuNuhLr6_gDlp7tzR9eCCfwd7PpsUbItHHc83crRmZuOhuWA_vzDuxiuWhCJ6QrFyN1M9T4kal1GPvptGwsWT9ywoKUTTfsiBkbNowYdUv4ZqfuqQNUTYbuye6DEsuo3WjaTAsbmobse3_pQGptC08ipk4V4yK-HSeBfW0twTcunQ";
 
@@ -57,26 +59,30 @@ namespace AuthenticationBL.Managers
                 dynamic data = JObject.Parse(payload);
 
                 long now = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-                if (data.iat > now || data.exp < now || data.aud != "facelook social")
+                if ((long)data.iat > now || (long)data.exp < now || (string)data.aud != "facelook social")
                 {
-                    return false;
+                    return null;
                 }
-                return true;
+
+                string res = (string)data.sub;
+                return res;
             }
             catch (InvalidAlgorithmException)
             {
-                return false;
+                return null;
             }
             catch (IntegrityException)
             {
-                return false;
+                return null;
             }
             catch (Exception)
             {
-                return false;
+                return null;
             }
 
         }
+
+
 
         public FacebookUserDTO ValidateAuthToken(string facebookToken)
         {
@@ -84,7 +90,7 @@ namespace AuthenticationBL.Managers
 
             using (var client = new HttpClient())
             {
-                var task =  client.GetAsync(url);
+                var task = client.GetAsync(url);
                 task.Wait();
                 if (task.Result.IsSuccessStatusCode)
                 {
@@ -98,7 +104,7 @@ namespace AuthenticationBL.Managers
             return null;
         }
 
-      
+
         //Private Methods
         private void AddToTokenHistory(string userId, string token)
         {
@@ -126,7 +132,7 @@ namespace AuthenticationBL.Managers
                 FacebookId = payload.id
             };
 
-            if (IsPropertyExist(payload,"email"))
+            if (IsPropertyExist(payload, "email"))
             {
                 facebookUser.Email = payload.email;
             }

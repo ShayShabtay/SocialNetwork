@@ -56,6 +56,67 @@ namespace UI.Controllers
         }
 
         //
+        // GET: /Account/Register
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(RegisterViewModel model)
+        {
+            string token = "";
+            //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };//, Id = token };// , LockoutEndDateUtc = };
+            //var result = await UserManager.CreateAsync(user, model.Password);
+
+            if (ModelState.IsValid)
+            {
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:49884");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
+
+                    if (res.IsSuccessStatusCode == true)
+                    {
+                        token = res.Content.ReadAsAsync<string>().Result;
+
+                        // save to cookie
+                        HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                        userTokenCookie.Value = token.ToString();
+                        Response.Cookies.Add(userTokenCookie);//
+
+                        //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        //if (result.Succeeded)
+                        //{
+                        //    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        return RedirectToAction("MainPageAfterLogin", "Home", res);
+                        //}
+                        // AddErrors(result);
+
+                        // return Content("result = null");
+                    }
+                    else
+                    {
+                        return Content("res.IsSuccessStatusCode != true");
+                    }
+                }
+            }
+            else
+                return View(model);
+        }
+
+        //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -65,20 +126,41 @@ namespace UI.Controllers
         }
 
         //
+        // GetUserInfo
+        public UserIdentityModel GetUserInfo(string token)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:51639");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("x-token", token);
+
+                var res = client.GetAsync($"/api/identity/getUserProfile").Result;
+
+                if (res.IsSuccessStatusCode == true)
+                {
+                     return res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    
+
+                }
+                else
+                    return null;
+            };
+        }
+
+        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
@@ -95,20 +177,9 @@ namespace UI.Controllers
                     userTokenCookie.Value = token.ToString();
                     Response.Cookies.Add(userTokenCookie);///
 
-                    switch (result)
-                    {
-                        case SignInStatus.Success:
-                            return RedirectToAction("MainPageAfterLogin", "Home");
-                        //return RedirectToLocal(returnUrl);
-                        case SignInStatus.LockedOut:
-                            return View("Lockout");
-                        case SignInStatus.RequiresVerification:
-                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                        case SignInStatus.Failure:
-                        default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
-                            return View(model);
-                    }
+                    UserIdentityModel userIdentityModel = GetUserInfo(token);
+
+                    return RedirectToAction("MainPageAfterLogin", "Home", userIdentityModel);
                 }
                 else
                     return Content("res.StatusCode = false :/");
@@ -130,6 +201,12 @@ namespace UI.Controllers
                 if (res.IsSuccessStatusCode == true)
                 {
                     token = res.Content.ReadAsAsync<string>().Result;
+
+                    //set token  in cookie
+                    HttpCookie userTokenCookie = new HttpCookie("UserToken");
+                    userTokenCookie.Value = token.ToString();
+                    Response.Cookies.Add(userTokenCookie);///
+
                     return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else
@@ -181,94 +258,8 @@ namespace UI.Controllers
             }
         }
 
-        //
-        // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            var token = "";
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };//, Id = token };// , LockoutEndDateUtc = };
-            var result = await UserManager.CreateAsync(user, model.Password);
-
-            if (ModelState.IsValid)
-            {
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:49884");
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
-
-                    if (res.IsSuccessStatusCode == true)
-                    {
-                        token = res.Content.ReadAsAsync<string>().Result;
-                        //user.Id = token;
-                        HttpCookie userTokenCookie = new HttpCookie("UserToken");
-                        userTokenCookie.Value = token.ToString();
-                        Response.Cookies.Add(userTokenCookie);
-
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                        if (result.Succeeded)
-                        {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                            // Send an email with this link
-                            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                            return RedirectToAction("MainPageAfterLogin", "Home", user);
-                        }
-                        AddErrors(result);
-
-                        return Content("result = null");
-                    }
-                    else
-                    {
-                        return Content("res.IsSuccessStatusCode != true");
-                    }
-                }
-            }
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-
-
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };// , LockoutEndDateUtc = };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //                if (result.Succeeded)
-        //                {
-        //                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
-        //                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-        //                    // Send an email with this link
-        //                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //                    return RedirectToAction("MainPageAfterLogin", "Home");
-        //    }
-        //                AddErrors(result);
-        //}
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+      
+        
 
         //
         // GET: /Account/ConfirmEmail

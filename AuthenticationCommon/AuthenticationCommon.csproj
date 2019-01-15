@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AuthenticationCommon</RootNamespace>
     <AssemblyName>AuthenticationCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,7 @@
     <Compile Include="Execeptions\NotMatchException.cs" />
     <Compile Include="ModelsDTO\FacebookUserDTO.cs" />
     <Compile Include="ModelsDTO\ResetPasswordDTO.cs" />
+    <Compile Include="ModelsDTO\UserGraphDTO.cs" />
     <Compile Include="ModelsDTO\UserLoginDTO.cs" />
     <Compile Include="Models\TokenHistory.cs" />
     <Compile Include="Models\User.cs" />
