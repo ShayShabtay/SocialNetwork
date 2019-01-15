@@ -42,8 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\FaildToConnectDbException.cs" />
-    <Compile Include="Exceptions\NotMatchException.cs" />
+    <Compile Include="Models\ClientPost.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\RelationsMap.cs" />
