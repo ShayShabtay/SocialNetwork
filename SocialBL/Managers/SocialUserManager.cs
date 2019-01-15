@@ -1,6 +1,7 @@
 ﻿
 using Newtonsoft.Json.Linq;
 using SocialBL.Interfaces;
+using SocialCommon.Exceptions;
 using SocialCommon.Models;
 using SocialRepository.GraphDB;
 using System;
@@ -13,25 +14,79 @@ using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
-    public class SocialUserManager: ISocialUserManager
+    public class SocialUserManager : ISocialUserManager
     {
         IGraphDB _graphDB;
+
+        //Ctor
         public SocialUserManager()
         {
             _graphDB = new neo4jDB();
         }
 
 
-
+        //Public Methods
         public void AddUser(User user)
         {
-            _graphDB.addUser(user);
+            try
+            {
+                _graphDB.addUser(user);
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
         }
 
-        public void Follow(string SourceUserId,string targetUserId)
+        public void Follow(string SourceUserId, string targetUserId)
         {
-            //_graphDB.Follow(SourceUserId, targetUserId);
-            _graphDB.creatConection(SourceUserId, targetUserId, "Follow");
+            try
+            {
+                _graphDB.creatConection(SourceUserId, targetUserId, "Follow");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public void UnFollow(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                _graphDB.DeleteConection(SourceUserId, targetUserId, "Follow");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public void BlockUser(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                _graphDB.creatConection(SourceUserId, targetUserId, "Block");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+
+            UnFollow(SourceUserId, targetUserId);
+            UnFollow(targetUserId, SourceUserId);
+        }
+
+        public void UnBlockUser(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                _graphDB.DeleteConection(SourceUserId, targetUserId, "Block");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
         }
 
         public string ValidateToken(string token)
@@ -46,12 +101,10 @@ namespace SocialBL.Managers
                 task.Wait();
                 if (task.Result.IsSuccessStatusCode)
                 {
-                    userId =  task.Result.ToString();
+                    userId = task.Result.ToString();
                 }
             }
             return userId;
         }
-
-       
     }
 }

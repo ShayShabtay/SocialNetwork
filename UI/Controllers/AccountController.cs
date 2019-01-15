@@ -161,7 +161,7 @@ namespace UI.Controllers
             }
 
             //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            using (var client = new HttpClient())
+           using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

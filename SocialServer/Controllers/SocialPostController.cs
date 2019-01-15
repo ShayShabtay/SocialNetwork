@@ -49,7 +49,7 @@ namespace SocialServer.Controllers
         {
             string token = Request.Headers.GetValues("x-token").First();
             string UserId = SocialPostManager.ValidateToken(token);
-            List<Post> Posts=null;
+            List<ClientPost> Posts=null;
             if (UserId != null)
             {
                Posts=SocialPostManager.getAllPosts(UserId);
@@ -63,13 +63,24 @@ namespace SocialServer.Controllers
         {
             string token = Request.Headers.GetValues("x-token").First();
             string UserId = SocialPostManager.ValidateToken(token);
-            List<Post> Posts = null;
+            List<ClientPost> Posts = null;
             if (UserId != null)
             {
+                try
+                {
+                //add await here
                 Posts = SocialPostManager.getMyPosts(UserId);
+                return Ok(Posts);
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
 
-            return null;
+            return BadRequest() ;
         }
         [HttpPost]
         [Route("api/SocialPost/addComment")]
@@ -83,8 +94,6 @@ namespace SocialServer.Controllers
                 {
                 SocialPostManager.addComment(comment,UserId,postId);
 
-
-
                 }
                 catch (Exception e)
                 {
@@ -96,12 +105,43 @@ namespace SocialServer.Controllers
         }
         [HttpPost]
         [Route("api/SocialPost/saveImage")]
-        public IHttpActionResult SaveImage()
+        public IHttpActionResult SaveImage([FromBody] string imageString)
         {
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            if ((UserId != null)&&(imageString!=null))
+            {
+                byte[] image = Convert.FromBase64String(imageString);
+                string imageUrl = SocialPostManager.SaveImage(image,UserId);
 
+                return Ok(imageUrl);
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        [Route("api/SocialPost/addLike")]
+        public IHttpActionResult addLike([FromBody] string postId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string UserId = SocialPostManager.ValidateToken(token);
+            if (UserId != null)
+            {
+                try
+                {
+                    SocialPostManager.addLike(UserId, postId);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
 
             return null;
-        }
+        } 
+
+         
 
 
         
