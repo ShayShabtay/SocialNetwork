@@ -98,6 +98,7 @@ namespace UI.Controllers
                     switch (result)
                     {
                         case SignInStatus.Success:
+
                             return RedirectToAction("MainPageAfterLogin", "Home");
                         //return RedirectToLocal(returnUrl);
                         case SignInStatus.LockedOut:

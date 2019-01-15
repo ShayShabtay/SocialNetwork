@@ -29,7 +29,7 @@ namespace SocialCommon.Models
             map.Add("UserComment",new Tuple<string,string,string,string>("User","UserId","Comment","CommentId"));
             map.Add("PostComment",new Tuple<string, string, string, string>("Post","PostId","Comment","CommentId"));
             map.Add("Follow",new Tuple<string, string, string, string>("User","UserId","User","UserId"));
-            map.Add("UnFollow", new Tuple<string, string, string, string>("User", "UserId", "User", "UserId"));
+            map.Add("Block", new Tuple<string, string, string, string>("User", "UserId", "User", "UserId"));
             map.Add("Like",new Tuple<string, string, string, string>("User","UserId","Post","PosrId"));
             map.Add("UnLike", new Tuple<string, string, string, string>("User", "UserId", "Post", "PosrId"));
 

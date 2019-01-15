@@ -16,7 +16,7 @@ namespace SocialServer.Controllers
     {
         ISocialUserManager _sociaUserManager;
 
-
+        //Ctor
         public SocialUserController()
         {
             _sociaUserManager = new SocialUserManager();
@@ -105,7 +105,14 @@ namespace SocialServer.Controllers
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
-            //_socialManager.UnFollow();
+            try
+            {
+                _sociaUserManager.UnFollow(SourceUserId, targetUserId);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
             return Ok();
         }
 
@@ -152,14 +159,67 @@ namespace SocialServer.Controllers
         public IHttpActionResult UnblockUser([FromBody]string targetUserId)
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = _sociaUserManager.ValidateToken(token);
+
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(targetUserId))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string SourceUserId = null;
+
+            try
+            {
+                SourceUserId = _sociaUserManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (SourceUserId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            try
+            {
+                _sociaUserManager.UnBlockUser(SourceUserId, targetUserId);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
 
             return Ok();
         }
 
         [HttpGet]
-        [Route("api/SocialUser/getFollowers")]
-        public IHttpActionResult GetFollowers()
+        [Route("api/SocialUser/getAllUsers")]
+        public IHttpActionResult GetAllUsers()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = null;
+
+            try
+            {
+                SourceUserId = _sociaUserManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (SourceUserId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            return Ok();
+        }
+
+
+        [HttpGet]
+        [Route("api/SocialUser/getFollowing")]
+        public IHttpActionResult GetFollowing()
         {
             string token = Request.Headers.GetValues("x-token").First();
             string SourceUserId = null;
@@ -182,8 +242,34 @@ namespace SocialServer.Controllers
         }
 
         [HttpGet]
-        [Route("api/SocialUser/getFollowing")]
-        public IHttpActionResult GetFollowing()
+        [Route("api/SocialUser/getFollowers")]
+        public IHttpActionResult GetFollowers()
+        {
+            //string SourceUserId = "5c05e797-fb5a-4ef8-b463-e32073f7e4da";
+            //string targetUserId = "c74727fe-d410-4c50-ac78-cc01262a58b8";
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = null;
+
+            try
+            {
+                SourceUserId = _sociaUserManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (SourceUserId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/SocialUser/getBlockUsers")]
+        public IHttpActionResult GetBlockUsers()
         {
             string token = Request.Headers.GetValues("x-token").First();
             string SourceUserId = null;

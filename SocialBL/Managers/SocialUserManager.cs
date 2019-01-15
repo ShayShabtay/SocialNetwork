@@ -50,11 +50,38 @@ namespace SocialBL.Managers
             }
         }
 
+        public void UnFollow(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                _graphDB.DeleteConection(SourceUserId, targetUserId, "Follow");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
         public void BlockUser(string SourceUserId, string targetUserId)
         {
             try
             {
                 _graphDB.creatConection(SourceUserId, targetUserId, "Block");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+
+            UnFollow(SourceUserId, targetUserId);
+            UnFollow(targetUserId, SourceUserId);
+        }
+
+        public void UnBlockUser(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                _graphDB.DeleteConection(SourceUserId, targetUserId, "Block");
             }
             catch (Exception)
             {

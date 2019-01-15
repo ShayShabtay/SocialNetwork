@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ISocialUserManager.cs" />
-    <Compile Include="Managers\ISocialManager.cs" />
     <Compile Include="Managers\SocialUserManager.cs" />
     <Compile Include="Managers\SocialPostManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,18 +10,19 @@ using System.Threading.Tasks;
 
 namespace SocialRepository.GraphDB
 {
-   public class neo4jDB: IGraphDB
+    public class neo4jDB : IGraphDB
     {
         ISession session;
 
         public neo4jDB()
         {
-              session=DbHelper.getSession();  
+            session = DbHelper.getSession();
         }
 
-        public string getUser (User user){
+        public string getUser(User user)
+        {
             string query = $"Match (u:User{{Name:{user.Name}}}) return u.Name";
-            var res=session.Run(query);
+            var res = session.Run(query);
             string uName = res.ToString();
             return uName;
         }
@@ -33,7 +34,7 @@ namespace SocialRepository.GraphDB
             session.Run(query);
         }
 
-       
+
 
         public void addPost(Post post)
         {
@@ -45,18 +46,18 @@ namespace SocialRepository.GraphDB
             string query = $"Create (p:Post{jsonPost})";
             //string q2 = $"Match (u:User),(p:Post) Where ((User u)=> u.Name=={u.Name}) AndWhere (Post p)=> p.postID=={p.postID} Create (u-[:publish]->p Return u)";
             session.Run(query);
-          //  Thread.Sleep(2000);
-         //   session.Run(q2);
+            //  Thread.Sleep(2000);
+            //   session.Run(q2);
             ////////////////////////////////////////
             //string uName = getUser(user);
-           // creatConection(user.Name,post.postID,"publish");
+            // creatConection(user.Name,post.postID,"publish");
         }
 
         public void creatConection(string source, string target, string relation)
         {
-           if (RelationsMap.map.ContainsKey(relation))
+            if (RelationsMap.map.ContainsKey(relation))
             {
-                Tuple<string,string,string,string> values=RelationsMap.map[relation];
+                Tuple<string, string, string, string> values = RelationsMap.map[relation];
                 string q = $"Match (x:{values.Item1}{{{values.Item2}:\"{source}\"}})" +
                            $"Match (y:{values.Item3}{{{values.Item4}:\"{target}\"}})" +
                            $"Merge ((x)-[:{relation}]->(y))";
@@ -70,6 +71,22 @@ namespace SocialRepository.GraphDB
                 throw new KeyNotFoundException();
             }
 
+
+        }
+
+        public void DeleteConection(string source, string target, string relation)
+        {
+            if (RelationsMap.map.ContainsKey(relation))
+            {
+                Tuple<string, string, string, string> values = RelationsMap.map[relation];
+                string q = $"MATCH (:{values.Item1}{{{values.Item2}:\"{source}\"}})-[r:{relation}]->(:{values.Item3}{{{values.Item4}:\"{target}\"}})" +
+                           $"DELETE r";
+                session.Run(q);
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
 
         }
 
@@ -90,22 +107,23 @@ namespace SocialRepository.GraphDB
                            $"Match (u2)-[:Publish]->(p:Post)" +
                            $"Return p";
 
-            IStatementResult posts=session.Run(query);
+            IStatementResult posts = session.Run(query);
             List<Post> postList = new List<Post>();
             foreach (var item in posts)
             {
                 var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
-                postList.Add(JsonConvert.DeserializeObject<Post>(props));    
+                postList.Add(JsonConvert.DeserializeObject<Post>(props));
             }
             return postList;
         }
 
-        public  async Task<bool> addComment(Comment comment)
+        public async Task<bool> addComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
-            var res= session.Run(query);
-            if (res != null) {
+            var res = session.Run(query);
+            if (res != null)
+            {
                 return true;
             }
             return false;
@@ -128,6 +146,7 @@ namespace SocialRepository.GraphDB
             }
             return postList;
         }
+
 
     }
 }
