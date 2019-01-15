@@ -69,7 +69,7 @@ namespace SocialBL.Managers
 
         public void addComment(Comment comment,string userId,string postId)
         {
-            var x=_graphDB.addComment(comment);
+            var x=_graphDB.AddComment(comment);
             if (x.Result)
             {
             _graphDB.creatConection(userId,comment.CommentID, "UserComment");  ///for connect post and comment

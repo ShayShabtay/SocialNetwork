@@ -14,7 +14,7 @@ namespace SocialRepository.GraphDB
         void Follow(string SourceUserId, string targetUserId);
         List<Post> getAllPosts(string userId);
         List<Post> getMyPosts(string userId);
-        Task<bool> addComment(Comment comment);
+        Task<bool> AddComment(Comment comment);
         List<Comment> getCommentsForPost(string postID);
         List<User> getLikesForPost(string postID);
     }

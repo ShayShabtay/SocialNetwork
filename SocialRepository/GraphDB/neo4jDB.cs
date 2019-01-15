@@ -117,7 +117,7 @@ namespace SocialRepository.GraphDB
             return postList;
         }
 
-        public  async Task<bool> addComment(Comment comment)
+        public  async Task<bool> AddComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
@@ -144,6 +144,42 @@ namespace SocialRepository.GraphDB
                 postList.Add(JsonConvert.DeserializeObject<Post>(props));
             }
             return postList;
+        }
+
+     
+
+        public List<Comment> getCommentsForPost(string postID)
+        {
+            List<Comment> commentsList = new List<Comment>();
+            string query = $"Match (p:Post)" +
+                           $"Wehre p.PostID=\"{postID}\"" +
+                           $"Match (p)-[:PostComment]->(c:Comment)" +
+                           $"return c";
+            IStatementResult res = session.Run(query);
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                commentsList.Add(JsonConvert.DeserializeObject<Comment>(props));
+            }
+
+            return commentsList;
+        }
+
+        public List<User> getLikesForPost(string postID)
+        {
+            List<User> likesList = new List<User>();
+            string query = $"Match (p:Post)" +
+                           $"Wehre p.PostID=\"{postID}\"" +
+                           $"Match (p)-[:Like]->(u:User)" +
+                           $"return c";
+            IStatementResult res = session.Run(query);
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                likesList.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return likesList;
         }
 
     }

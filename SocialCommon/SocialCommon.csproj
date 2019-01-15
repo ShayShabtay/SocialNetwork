@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ClientPost.cs" />
+    <Compile Include="Exceptions\FaildToConnectDbException.cs" />
+    <Compile Include="Exceptions\NotMatchException.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\RelationsMap.cs" />
