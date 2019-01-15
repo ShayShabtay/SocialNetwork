@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,6 +39,8 @@ namespace SocialServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
             }
 
+            _sociaUserlManager.AddUser(user);
+
             return Ok();
         }
 
@@ -78,6 +79,7 @@ namespace SocialServer.Controllers
             }
 
             return Ok();
+
         }
 
         [HttpPost]
