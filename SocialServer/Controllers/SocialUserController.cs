@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -34,12 +35,14 @@ namespace SocialServer.Controllers
             {
                 _sociaUserManager.AddUser(user);
             }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
             catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong"));
             }
-
-            _sociaUserlManager.AddUser(user);
 
             return Ok();
         }
@@ -72,6 +75,10 @@ namespace SocialServer.Controllers
             try
             {
                 _sociaUserManager.BlockUser(SourceUserId, targetUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
             }
             catch (Exception)
             {
@@ -111,6 +118,10 @@ namespace SocialServer.Controllers
             {
                 _sociaUserManager.UnFollow(SourceUserId, targetUserId);
             }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
             catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
@@ -147,6 +158,10 @@ namespace SocialServer.Controllers
             try
             {
                 _sociaUserManager.BlockUser(SourceUserId, targetUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
             }
             catch (Exception)
             {
@@ -186,6 +201,10 @@ namespace SocialServer.Controllers
             {
                 _sociaUserManager.UnBlockUser(SourceUserId, targetUserId);
             }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
             catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
@@ -215,7 +234,22 @@ namespace SocialServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            return Ok();
+            List<User> allUsers;
+
+            try
+            {
+                allUsers = _sociaUserManager.GetAllUsers(SourceUserId);
+            }
+            catch(FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(allUsers);
         }
 
 
@@ -240,15 +274,28 @@ namespace SocialServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            return Ok();
+            List<User> following;
+
+            try
+            {
+                following = _sociaUserManager.GetFollowing(SourceUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(following);
         }
 
         [HttpGet]
         [Route("api/SocialUser/getFollowers")]
         public IHttpActionResult GetFollowers()
         {
-            //string SourceUserId = "5c05e797-fb5a-4ef8-b463-e32073f7e4da";
-            //string targetUserId = "c74727fe-d410-4c50-ac78-cc01262a58b8";
             string token = Request.Headers.GetValues("x-token").First();
             string SourceUserId = null;
 
@@ -266,7 +313,22 @@ namespace SocialServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            return Ok();
+            List<User> followers;
+
+            try
+            {
+                followers = _sociaUserManager.GetFollowers(SourceUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(followers);
         }
 
         [HttpGet]
@@ -290,11 +352,22 @@ namespace SocialServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            return Ok();
+            List<User> blockedUsers;
+
+            try
+            {
+                blockedUsers = _sociaUserManager.GetBlockedUsers(SourceUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(blockedUsers);
         }
-
-
     }
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using SocialBL.Interfaces;
 using SocialBL.Managers;
+using SocialCommon.Exceptions;
 using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,12 @@ namespace SocialServer.Controllers
 {
     public class SocialPostController : ApiController
     {
-        ISocialUserManager _socialManager;
-        SocialPostManager SocialPostManager;
+        ISocialPostManager _socialPostManager;
 
+        //Ctor
         public SocialPostController()
         {
-            _socialManager = new SocialUserManager();
-            SocialPostManager = new SocialPostManager();
+            _socialPostManager = new SocialPostManager();
         }
 
         [HttpPost]
@@ -26,129 +26,261 @@ namespace SocialServer.Controllers
         public IHttpActionResult AddPost([FromBody]Post post)
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string SourceUserId = SocialPostManager.ValidateToken(token);
-            if (SourceUserId != null)
-            {
-                try
-                {
-                    SocialPostManager.AddPost(post, SourceUserId);
-                    return Ok("add post ok");
-                }
-                catch (Exception)
-                {
 
-                    return BadRequest();
-                } 
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
             }
-            return null;
+            string SourceUserId = null;
 
-        }
-        [HttpPost]
-        [Route("api/SocialPost/getPosts")]
-        public IHttpActionResult getAllPosts()
-        {
-            string token = Request.Headers.GetValues("x-token").First();
-            string UserId = SocialPostManager.ValidateToken(token);
-            List<ClientPost> Posts=null;
-            if (UserId != null)
+            try
             {
-               Posts=SocialPostManager.getAllPosts(UserId);
+                SourceUserId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-                return Ok(Posts);
-        }
-        [HttpPost]
-        [Route("api/SocialPost/getMyPosts")]
-        public IHttpActionResult getMyPosts()
-        {
-            string token = Request.Headers.GetValues("x-token").First();
-            string UserId = SocialPostManager.ValidateToken(token);
-            List<ClientPost> Posts = null;
-            if (UserId != null)
+            if (SourceUserId == null)
             {
-                try
-                {
-                //add await here
-                Posts = SocialPostManager.getMyPosts(UserId);
-                return Ok(Posts);
-
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            return BadRequest() ;
-        }
-        [HttpPost]
-        [Route("api/SocialPost/addComment")]
-        public IHttpActionResult addComment(Comment comment,string postId)
-        {
-            string token = Request.Headers.GetValues("x-token").First();
-            string UserId = SocialPostManager.ValidateToken(token);
-            if (UserId != null)
+            try
             {
-                try
-                {
-                SocialPostManager.addComment(comment,UserId,postId);
-
-                }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
+                _socialPostManager.AddPost(post, SourceUserId);
             }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
             return Ok();
         }
+
         [HttpPost]
+        [Route("api/SocialPost/addComment")]
+        public IHttpActionResult AddComment(Comment comment, string postId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            try
+            {
+                _socialPostManager.AddComment(comment, userId, postId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialPost/addLike")]
+        public IHttpActionResult AddLike([FromBody] string postId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            try
+            {
+                _socialPostManager.AddLike(userId, postId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/SocialPost/getPosts")]
+        public IHttpActionResult GetAllPosts()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            List<ClientPost> Posts;
+            try
+            {
+                Posts = _socialPostManager.GetAllPosts(userId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(Posts);
+        }
+
+        [HttpGet]
+        [Route("api/SocialPost/getMyPosts")]
+        public IHttpActionResult GetMyPosts()
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            List<ClientPost> Posts = null;
+            try
+            {
+                //add await here
+                Posts = _socialPostManager.GetMyPosts(userId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(Posts);
+        }
+
+        [HttpGet]
         [Route("api/SocialPost/saveImage")]
         public IHttpActionResult SaveImage([FromBody] string imageString)
         {
             string token = Request.Headers.GetValues("x-token").First();
-            string UserId = SocialPostManager.ValidateToken(token);
-            if ((UserId != null)&&(imageString!=null))
-            {
-                byte[] image = Convert.FromBase64String(imageString);
-                string imageUrl = SocialPostManager.SaveImage(image,UserId);
 
-                return Ok(imageUrl);
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(imageString))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
             }
-            return BadRequest();
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            byte[] image = Convert.FromBase64String(imageString);
+            string imageUrl;
+            try
+            {
+                imageUrl = _socialPostManager.SaveImage(image, userId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            if (imageUrl == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(imageUrl);
         }
-        [HttpPost]
-        [Route("api/SocialPost/addLike")]
-        public IHttpActionResult addLike([FromBody] string postId)
-        {
-            string token = Request.Headers.GetValues("x-token").First();
-            string UserId = SocialPostManager.ValidateToken(token);
-            if (UserId != null)
-            {
-                try
-                {
-                    SocialPostManager.addLike(UserId, postId);
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-
-            }
-
-            return null;
-        } 
-
-         
-
-
-        
-
-
-
-
-
     }
 }

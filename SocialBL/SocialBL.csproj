@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ISocialPostManager.cs" />
     <Compile Include="Interfaces\ISocialUserManager.cs" />
     <Compile Include="Managers\SocialUserManager.cs" />
     <Compile Include="Managers\SocialPostManager.cs" />

@@ -21,7 +21,7 @@ namespace SocialBL.Managers
         //Ctor
         public SocialUserManager()
         {
-            _graphDB = new neo4jDB();
+            _graphDB = new Neo4jDB();
         }
 
 
@@ -30,7 +30,7 @@ namespace SocialBL.Managers
         {
             try
             {
-                _graphDB.addUser(user);
+                _graphDB.AddUser(user);
             }
             catch (Exception)
             {
@@ -42,7 +42,7 @@ namespace SocialBL.Managers
         {
             try
             {
-                _graphDB.creatConection(SourceUserId, targetUserId, "Follow");
+                _graphDB.CreateRelationship(SourceUserId, targetUserId, "Follow");
             }
             catch (Exception)
             {
@@ -54,7 +54,7 @@ namespace SocialBL.Managers
         {
             try
             {
-                _graphDB.DeleteConection(SourceUserId, targetUserId, "Follow");
+                _graphDB.DeleteRelationship(SourceUserId, targetUserId, "Follow");
             }
             catch (Exception)
             {
@@ -66,7 +66,7 @@ namespace SocialBL.Managers
         {
             try
             {
-                _graphDB.creatConection(SourceUserId, targetUserId, "Block");
+                _graphDB.CreateRelationship(SourceUserId, targetUserId, "Block");
             }
             catch (Exception)
             {
@@ -81,7 +81,55 @@ namespace SocialBL.Managers
         {
             try
             {
-                _graphDB.DeleteConection(SourceUserId, targetUserId, "Block");
+                _graphDB.DeleteRelationship(SourceUserId, targetUserId, "Block");
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public List<User> GetAllUsers(string userId)
+        {
+            try
+            {
+                return _graphDB.GetAllUsers(userId);
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public List<User> GetFollowers(string userId)
+        {
+            try
+            {
+                return _graphDB.GetFollowers(userId);
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public List<User> GetFollowing(string userId)
+        {
+            try
+            {
+                return _graphDB.GetFollowing(userId);
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
+        public List<User> GetBlockedUsers(string userId)
+        {
+            try
+            {
+                return _graphDB.GetBlockedUsers(userId);
             }
             catch (Exception)
             {
