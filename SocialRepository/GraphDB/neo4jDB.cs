@@ -10,50 +10,17 @@ using System.Threading.Tasks;
 
 namespace SocialRepository.GraphDB
 {
-    public class neo4jDB : IGraphDB
+    public class Neo4jDB : IGraphDB
     {
         ISession session;
 
-        public neo4jDB()
+        //Ctor
+        public Neo4jDB()
         {
             session = DbHelper.getSession();
         }
 
-        public string getUser(User user)
-        {
-            string query = $"Match (u:User{{Name:{user.Name}}}) return u.Name";
-            var res = session.Run(query);
-            string uName = res.ToString();
-            return uName;
-        }
-
-        public void addUser(User user)
-        {
-            var jsonObj = DbHelper.ObjectToJson(user);
-            string query = $"Create (u:User{jsonObj})";
-            session.Run(query);
-        }
-
-
-
-        public void addPost(Post post)
-        {
-            //Post p = new Post("test post2");
-            //User u = new User("omer","carmeli");
-            var jsonPost = DbHelper.ObjectToJson(post);
-            //var jsonUser = DbHelper.ObjectToJson(u);
-            //string query = $"Create (u:User{jsonUser}-[:Publish]->p:Post{jsonPost})";
-            string query = $"Create (p:Post{jsonPost})";
-            //string q2 = $"Match (u:User),(p:Post) Where ((User u)=> u.Name=={u.Name}) AndWhere (Post p)=> p.postID=={p.postID} Create (u-[:publish]->p Return u)";
-            session.Run(query);
-            //  Thread.Sleep(2000);
-            //   session.Run(q2);
-            ////////////////////////////////////////
-            //string uName = getUser(user);
-            // creatConection(user.Name,post.postID,"publish");
-        }
-
-        public void creatConection(string source, string target, string relation)
+        public void CreateRelationship(string source, string target, string relation)
         {
             if (RelationsMap.map.ContainsKey(relation))
             {
@@ -70,11 +37,9 @@ namespace SocialRepository.GraphDB
             {
                 throw new KeyNotFoundException();
             }
-
-
         }
 
-        public void DeleteConection(string source, string target, string relation)
+        public void DeleteRelationship(string source, string target, string relation)
         {
             if (RelationsMap.map.ContainsKey(relation))
             {
@@ -87,16 +52,103 @@ namespace SocialRepository.GraphDB
             {
                 throw new KeyNotFoundException();
             }
-
         }
 
-        public void Follow(string SourceUserId, string targetUserId)
+
+        //User Methods
+        public void AddUser(User user)
         {
-            string query = $"Merge (x:User{{userID:\"{SourceUserId}\"}})-[:Follow]->(y:User{{userID:\"{targetUserId}\"}})";
+            var jsonObj = DbHelper.ObjectToJson(user);
+            string query = $"Create (u:User{jsonObj})";
             session.Run(query);
         }
 
-        public List<Post> getAllPosts(string userId)
+        public List<User> GetAllUsers(string userId)
+        {
+            List<User> allUsers = new List<User>();
+            string query = $"Match(u: User)" +
+                           $"Where Not EXISTS((u) -[:Block] - (:User{{UserId:\"{userId}\"}}))" +
+                           $"AND u.UserId <> \"{userId}\"" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                allUsers.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return allUsers;
+        }
+
+        public List<User> GetFollowers(string userId)
+        {
+            List<User> followers = new List<User>();
+            string query = $"Match(u: User)" +
+                           $"Where((u) -[:Follow] -> (:User{{UserId:\"{userId}\"}}))" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                followers.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return followers;
+        }
+
+        public List<User> GetFollowing(string userId)
+        {
+            List<User> following = new List<User>();
+            string query = $"Match(u: User)" +
+                           $"Where( (:User{{UserId:\"{userId}\"}}) -[:Follow] ->(u))" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                following.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return following;
+        }
+
+        public List<User> GetBlockedUsers(string userId)
+        {
+            List<User> blockedUsers = new List<User>();
+            string query = $"Match(u: User)" +
+                           $"Where( (:User{{UserId:\"{userId}\"}}) -[:Block] ->(u))" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                blockedUsers.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return blockedUsers;
+        }
+
+
+        //Post Methods
+        public void AddPost(Post post)
+        {
+            var jsonPost = DbHelper.ObjectToJson(post);
+            string query = $"Create (p:Post{jsonPost})";
+            session.Run(query);
+        }
+       
+        public  void AddComment(Comment comment)
+        {
+            var jsonObj = DbHelper.ObjectToJson(comment);
+            string query = $"Create (c:Comment{jsonObj})";
+            var res= session.Run(query);
+        }
+
+        public List<Post> GetAllPosts(string userId)
         {
 
             //whos im follow=> what post they published =>limit 20
@@ -117,18 +169,7 @@ namespace SocialRepository.GraphDB
             return postList;
         }
 
-        public  async Task<bool> AddComment(Comment comment)
-        {
-            var jsonObj = DbHelper.ObjectToJson(comment);
-            string query = $"Create (c:Comment{jsonObj})";
-            var res= session.Run(query);
-            if (res != null) {
-                return true;
-            }
-            return false;
-        }
-
-        public List<Post> getMyPosts(string userId)
+        public List<Post> GetMyPosts(string userId)
         {
             List<Post> postList = new List<Post>();
 
@@ -146,9 +187,7 @@ namespace SocialRepository.GraphDB
             return postList;
         }
 
-     
-
-        public List<Comment> getCommentsForPost(string postID)
+        public List<Comment> GetCommentsForPost(string postID)
         {
             List<Comment> commentsList = new List<Comment>();
             string query = $"Match (p:Post)" +
@@ -165,7 +204,7 @@ namespace SocialRepository.GraphDB
             return commentsList;
         }
 
-        public List<User> getLikesForPost(string postID)
+        public List<User> GetLikesForPost(string postID)
         {
             List<User> likesList = new List<User>();
             string query = $"Match (p:Post)" +
@@ -181,6 +220,5 @@ namespace SocialRepository.GraphDB
 
             return likesList;
         }
-
     }
 }

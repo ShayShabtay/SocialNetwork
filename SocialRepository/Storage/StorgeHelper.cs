@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 //using Amazon.S3;
 //using Amazon.S3.Transfer;
-using System;
 using System.IO;
 using Amazon;
 using Amazon.S3;

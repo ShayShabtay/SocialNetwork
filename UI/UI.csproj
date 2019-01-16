@@ -281,10 +281,10 @@
     <Content Include="Views\Home\MainPageAfterLogin.cshtml" />
     <Content Include="Views\Shared\_MainPageLayout.cshtml" />
     <Content Include="Views\Identity\GetUserProfile.cshtml" />
+    <Content Include="Views\Social\FeedView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Social\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -305,6 +305,10 @@
     <ProjectReference Include="..\AuthenticationCommon\AuthenticationCommon.csproj">
       <Project>{3F3AC000-9294-4475-BE56-904F4AB5ECFC}</Project>
       <Name>AuthenticationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialCommon\SocialCommon.csproj">
+      <Project>{49E9F62A-B643-4FDB-B028-AD89D08227CC}</Project>
+      <Name>SocialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

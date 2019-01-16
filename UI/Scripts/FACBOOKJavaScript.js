@@ -3,7 +3,7 @@
 function initFacebook(){
         window.fbAsyncInit = function () {
             FB.init({
-                appId: '305024333477745',
+                appId: '505809253241981',
                 cookie: true,
                 xfbml: true,
                 version: 'V3.2'
@@ -17,7 +17,7 @@ function initFacebook(){
      var js, fjs = d.getElementsByTagName(s)[0];
      if (d.getElementById(id)) {return;}
      js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=305024333477745&autoLogAppEvents=1";
+      js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=505809253241981&autoLogAppEvents=1";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 }
