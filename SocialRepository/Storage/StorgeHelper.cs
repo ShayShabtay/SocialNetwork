@@ -66,7 +66,7 @@ namespace SocialRepository.Storage
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
