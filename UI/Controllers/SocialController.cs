@@ -1,6 +1,9 @@
-﻿using System;
+﻿using SocialCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 
@@ -9,9 +12,28 @@ namespace UI.Controllers
     public class SocialController : Controller
     {
         // GET: Social
-        public ActionResult FeedList()
+        public ActionResult GetFeed()
         {
-            return View();
+            string token = Request.Cookies["UserToken"].Value;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:51639");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("x-token", token);
+
+                var res = client.GetAsync($"api/SocialPost/getPosts").Result;
+                
+                if (res.IsSuccessStatusCode == true)
+                {
+                    // var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+
+                    var posts = res.Content.ReadAsAsync<List<ClientPost>>();
+                    return View(posts);// View(res2);
+                }
+                else
+                    return Content("res.StatusCode = false :/");
+            }
         }
 
         // GET: Social/Details/5
