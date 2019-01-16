@@ -58,11 +58,17 @@ namespace SocialRepository.Storage
                     using (var ms = new MemoryStream(bArray))
                     {
                         request.InputStream = ms;
-                       s3Client.PutObject(request);
-
+                       //s3Client.PutObject(request);
+                       var res= s3Client.PutObjectAsync(request).Result;
+                        if  (res.HttpStatusCode == System.Net.HttpStatusCode.OK) { 
                         //Debug.WriteLine(x.ToString());
                         // var res=await s3Client.PutObjectAsync(request);
-                        return   hostUrl+"/"+bucketName + "/" + userId + "/" + ImageKey;
+                            return hostUrl + "/" + bucketName + "/" + userId + "/" + ImageKey;
+                        }
+                    else {
+                            return null;
+                        }
+
                     }
                 }
             }
