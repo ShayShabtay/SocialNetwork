@@ -6,11 +6,23 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
+using UI.Models;
 
 namespace UI.Controllers
 {
     public class SocialController : Controller
     {
+        //public ActionResult MainPageAfterLogin(UserIdentityModel userModel)
+        //{
+        //    //string UserCookie = Request.Cookies["UserProfile"].Value;
+        //    return View(userModel);
+        //}
+
+        public ActionResult CreatePost()
+        {
+            return View();
+        }
+
         // GET: Social
         public ActionResult GetFeed()
         {

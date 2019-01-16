@@ -75,25 +75,25 @@ namespace AuthenticationBL.Managers
 
         public string LoginFacebook(string facebookToken)
         {
+            string customToken = null;
             FacebookUserDTO facebookUser = _tokenManager.ValidateAuthToken(facebookToken);
 
             if (facebookUser != null)
             {
                 User user = GetUser(facebookUser.FacebookId);
-                string customToken;
-
+             
                 if (user == null)
                 {
                     customToken = Register(new UserLoginDTO() { Email = facebookUser.FacebookId });
-                    return customToken;
+                   
                 }
                 else
                 {
                     customToken = _tokenManager.GenerateToken(user.UserId, user.Email);
-                    return customToken;
+                   
                 }
             }
-            return null;
+            return customToken;
         }
 
         public void ResetPassword(ResetPasswordDTO resetPasswordDTO)
