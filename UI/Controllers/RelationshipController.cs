@@ -27,7 +27,7 @@ namespace UI.Controllers
                 if (res.IsSuccessStatusCode == true)
                 {
                     var res2 = res.Content.ReadAsAsync<List<UserDTO>>().Result;
-                    return View(res2);
+                    return RedirectToAction("_MainPageLayout", res2);
                 }
                 else
                     return Content("res.StatusCode = false :/");
