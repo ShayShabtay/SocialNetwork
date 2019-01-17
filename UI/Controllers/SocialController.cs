@@ -26,7 +26,7 @@ namespace UI.Controllers
             string imageBase64String = null;
             List<string> param = new List<string>();
             using (var client = new HttpClient())
-            {
+            { 
                 client.BaseAddress = new Uri("http://localhost:51639");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Add("x-token", token);
