@@ -39,7 +39,7 @@ namespace UI.Controllers
                     param.Add(imageBase64String);
                 }
                     var res = client.PostAsJsonAsync("api/SocialPost/addPost", param).Result;
-                return View();
+                return PartialView();
             }
         }
 

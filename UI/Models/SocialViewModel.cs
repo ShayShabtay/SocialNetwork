@@ -11,7 +11,6 @@ namespace UI.Models
         public Post Post { get; set; }
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
-        
     }
 
     public class Comment

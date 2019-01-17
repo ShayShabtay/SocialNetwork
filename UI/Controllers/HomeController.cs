@@ -11,7 +11,7 @@ namespace UI.Controllers
         }
 
 
-        public ActionResult MainPageAfterLogin(UserIdentityModel userModel)
+        public ActionResult MainPageAfterLogin(SocialViewModel userModel)
         {
             //string UserCookie = Request.Cookies["UserProfile"].Value;
             return View(userModel);

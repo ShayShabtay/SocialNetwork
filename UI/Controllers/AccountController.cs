@@ -179,7 +179,7 @@ namespace UI.Controllers
 
                     UserIdentityModel userIdentityModel = GetUserInfo(token);
 
-                    return RedirectToAction("MainPageAfterLogin", "Home", userIdentityModel);
+                    return RedirectToAction("MainPageAfterLogin", "Home", new { userModel = userIdentityModel });
                 }
                 else
                     return Content("res.StatusCode = false :/");
