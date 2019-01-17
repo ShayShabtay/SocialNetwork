@@ -11,7 +11,6 @@ namespace UI.Controllers
 {
     public class RelationshipController : Controller
     {
-        [HttpGet]
         public ActionResult GetAllUsers()
         {
             string token = Request.Cookies["UserToken"].Value;
@@ -27,7 +26,9 @@ namespace UI.Controllers
                 if (res.IsSuccessStatusCode == true)
                 {
                     var res2 = res.Content.ReadAsAsync<List<UserDTO>>().Result;
-                    return RedirectToAction("_MainPageLayout", res2);
+                    SocialViewModel s = new SocialViewModel();
+                    s.UserDTO = res2;
+                    return View(s);
                 }
                 else
                     return Content("res.StatusCode = false :/");

@@ -29,9 +29,10 @@ namespace UI.Controllers
                 if (res.IsSuccessStatusCode == true)
                 {
                     var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    SocialViewModel res3 = new SocialViewModel();
+                    res3.UserIdentityModel = res2;
 
-
-                    return View(res2);
+                    return View(res3);
                 }
                 else
                     return Content("res.StatusCode = false :/");
@@ -41,7 +42,7 @@ namespace UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetUserProfile(UserIdentityModel model)
+        public ActionResult GetUserProfile(SocialViewModel model)
         {
             string token = Request.Cookies["UserToken"].Value;
             if (!ModelState.IsValid)
@@ -57,20 +58,22 @@ namespace UI.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Add("x-token", token);
 
-                    var res = client.PostAsJsonAsync($"/api/identity/updateUserProfile", model).Result;
+                    var res = client.PostAsJsonAsync($"/api/identity/updateUserProfile", model.UserIdentityModel).Result;
 
                     if (res.IsSuccessStatusCode == true)
                     {
                         var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
 
+                        SocialViewModel socialViewModel = new SocialViewModel();
+                        socialViewModel.UserIdentityModel = res2;
                         ////set token  in cookie
                         //HttpCookie userTokenCookie = new HttpCookie("UserToken");
                         //userTokenCookie.Value = token.ToString();
                         //Response.Cookies.Add(userTokenCookie);///
 
-                       
+                        TempData.Add("social", socialViewModel);
 
-                        return RedirectToAction("MainPageAfterLogin", "Home", model);
+                        return RedirectToAction("MainPageAfterLogin", "Home");
                     }
                     else
                         return Content("res.StatusCode = false :/");

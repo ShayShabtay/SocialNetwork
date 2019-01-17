@@ -12,7 +12,7 @@ namespace UI.Controllers
 
         public ActionResult MainPageAfterLogin()
         {
-            SocialViewModel socialViewModel = (SocialViewModel)TempData["student"];
+            SocialViewModel socialViewModel = (SocialViewModel)TempData["social"];
 
             return View(socialViewModel);
         }

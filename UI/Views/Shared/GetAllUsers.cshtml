@@ -1,0 +1,21 @@
+﻿@model UI.Models.SocialViewModel
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="~/Content/search.css" rel="stylesheet" />
+    <script src="~/Scripts/Search.js"></script>
+</head>
+<body>
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">@Html.ActionLink("Search", "GetAllUsers", "Relationship")</button>
+        <div id="myDropdown" class="dropdown-content">
+            <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+            @foreach (var item in Model.UserDTO)
+            {
+                <a>@item.Name</a>
+            }
+
+        </div>
+    </div>
+</body>
+</html>
