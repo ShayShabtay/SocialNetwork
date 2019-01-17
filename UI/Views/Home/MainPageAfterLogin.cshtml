@@ -64,19 +64,31 @@
         <div class="panel-footer">
             <div class="row" style="text-align:center">
                 <div class="col-sm-4">
-                    <i class="far fa-thumbs-up btn" style="color:blue">Like!!</i>
+                    <button type="button" class="btn btn-default" style="color:blue">
+                        <i class="far fa-thumbs-up" onclick="AddComment()"></i>&ensp;
+                        <span>Like!!</span>
+                    </button>
                 </div>
                 <div class="col-sm-4">
-                    <i class="far fa-comment btn" style="color:brown" onclick="AddComment()">Comment</i>
+                    <button type="button" class="btn btn-default" onclick="AddComment()" style="color:brown">
+                         <i class="far fa-comment"></i>&ensp;
+                        <span>Comment</span>
+                    </button>
                 </div>
                 <div class="col-sm-4">
                     @*fas fa-ban btn*@
-                    <i class="far fa-ban btn" style="color:red">Block This User</i>
+                    <button type="button" class="btn btn-default" style="color:red">
+                        <i class="fa fa-ban"></i>&ensp;
+                        <span>Block This User</span>
+                    </button>
+                    @*<i class="fa fa-ban" style="color:red">Block This User</i>*@
                 </div>
             </div>
             <div id="writeCommentID" style="display:none">
                 <hr />
-                &emsp;&emsp;&emsp;<input class="col-md-6" placeholder="Write a Comment..." style="background-color:white" />
+                <input class="col-md-6" placeholder="Write a Comment..." style="background-color:white" />&ensp;
+                <button type="submit" class="btn btn-success">Send</button> &ensp;
+                <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
             </div>
         </div>
     </div>
@@ -127,5 +139,8 @@
 
     function AddComment() {
         addComment.style.display = "inline";
+    }
+    function CommentNone() {
+        addComment.style.display = "none";
     }
 </script>

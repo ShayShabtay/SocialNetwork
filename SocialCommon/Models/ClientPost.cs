@@ -19,7 +19,7 @@ namespace SocialCommon.Models
 
         public ClientPost(Post post)
         {
-            this.postID = post.postID;
+            this.postID = post.PostID;
             this.CreationDate = post.CreationDate;
             this.Content = post.Content;
             this.imageUrl = imageUrl;

@@ -141,11 +141,11 @@ namespace SocialRepository.GraphDB
             session.Run(query);
         }
        
-        public  void AddComment(Comment comment)
+        public async void AddComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
-            var res= session.Run(query);
+            await session.RunAsync(query);
         }
 
         public List<Post> GetAllPosts(string userId)

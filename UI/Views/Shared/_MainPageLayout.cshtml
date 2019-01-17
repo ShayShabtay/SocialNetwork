@@ -1,5 +1,5 @@
 ﻿@using UI.Models
-@model UI.Models.UserIdentityModel
+@model UI.Models.SocialViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -110,10 +110,10 @@
                 </h3><hr />
                 @using (Html.BeginForm())
                 {
-                <p><b>Name:</b> @Model.Name </p>
-                <p><b>Age:</b> @Model.Age  </p>
-                <p><b>Address:</b> @Model.Address</p>
-                <p><b>WorkPlace:</b>@Model.WorkPlace</p>
+                <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
+                <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
+                <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
+                <p><b>WorkPlace:</b>@Model.UserIdentityModel.WorkPlace</p>
                 <p><b>Email:</b>@*@Html.EditorFor(model => model.Name)*@ </p>
                 <p><b>Friends:</b> 55 @*@Model.UserId*@</p>
                 <p><b>Iamges:</b> 10</p>

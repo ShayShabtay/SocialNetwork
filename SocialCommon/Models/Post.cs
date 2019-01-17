@@ -8,16 +8,16 @@ namespace SocialCommon.Models
 {
     public class Post
     {
-        public string postID { get; set; }
+        public string PostID { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
-        public string imageUrl { get; set; }
+        public string ImageUrl { get; set; }
         //public List<string> referebce { get; set; }
       
 
         public Post(string content)
         {
-            postID = Guid.NewGuid().ToString();
+            PostID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
             this.Content = content;
         }
