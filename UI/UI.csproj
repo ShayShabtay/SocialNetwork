@@ -207,6 +207,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdentityController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Controllers\SocialController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -215,6 +216,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SocialViewModel.cs" />
+    <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -284,6 +286,9 @@
     <Content Include="Views\Shared\_MainPageLayout.cshtml" />
     <Content Include="Views\Identity\GetUserProfile.cshtml" />
     <Content Include="Views\Social\FeedView.cshtml" />
+    <Content Include="Views\Relationship\GetFollowing.cshtml" />
+    <Content Include="Views\Relationship\GetBlockUsers.cshtml" />
+    <Content Include="Views\Relationship\GetFollowers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

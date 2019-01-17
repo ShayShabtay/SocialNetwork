@@ -105,19 +105,21 @@ namespace SocialBL.Managers
         public string ValidateToken(string token)
         {
             string url = "http://localhost:49884/api/token/validateManualToken";
-            string userId = null;
 
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-token", token);
-                var task = client.GetAsync(url);
-                task.Wait();
-                if (task.Result.IsSuccessStatusCode)
+                var res = client.GetAsync(url).Result;
+
+                if (res.IsSuccessStatusCode)
                 {
-                    userId = task.Result.ToString();
+                    string userId = res.Content.ReadAsStringAsync().Result;
+                    userId = userId.Replace("\"", "");
+
+                    return userId;
                 }
             }
-            return userId;
+            return null;
         }
     }
 }
