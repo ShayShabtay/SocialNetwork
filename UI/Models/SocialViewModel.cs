@@ -11,7 +11,16 @@ namespace UI.Models
         public Post Post { get; set; }
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
-        
+        public IEnumerable<UserDTO> UserDTO { get; set; }
+
+        public SocialViewModel()
+        {
+            UserDTO = new List<UserDTO>();
+            UserIdentityModel = new UserIdentityModel();
+            User = new User();
+            Post = new Post("");
+            Comment = new Comment("");
+        }
     }
 
     public class Comment

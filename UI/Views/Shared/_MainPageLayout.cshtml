@@ -82,16 +82,14 @@
                 </form>
                 @*------*@
                 <div class="dropdown">
-                    @Html.ActionLink("GetAllUsers", "Relationship")
-                    <button onclick="myFunction()" class="dropbtn">Search</button>
+                    <button onclick="myFunction()" class="dropbtn">@Html.ActionLink("search", "GetAllUsers", "Relationship")</button>
                     <div id="myDropdown" class="dropdown-content">
                         <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-                        <a href="#base">Base</a>
-                        <a href="#blog">Blog</a>
-                        <a href="#contact">Contact</a>
-                        <a href="#custom">Custom</a>
-                        <a href="#support">Support</a>
-                        <a href="#tools">Tools</a>
+                        @foreach (var item in Model.UserDTO)
+                        {
+                            <a>@item.Name</a>
+                        }
+
                     </div>
                 </div>
                 @*---------*@
@@ -110,16 +108,16 @@
                 </h3><hr />
                 @using (Html.BeginForm())
                 {
-                <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
-                <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
-                <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
-                <p><b>WorkPlace:</b>@Model.UserIdentityModel.WorkPlace</p>
-                <p><b>Email:</b>@*@Html.EditorFor(model => model.Name)*@ </p>
-                <p><b>Friends:</b> 55 @*@Model.UserId*@</p>
-                <p><b>Iamges:</b> 10</p>
-                @*<p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
-                    <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>*@
-                <br />
+                    <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
+                    <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
+                    <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
+                    <p><b>WorkPlace:</b>@Model.UserIdentityModel.WorkPlace</p>
+                    <p><b>Email:</b>@*@Html.EditorFor(model => model.Name)*@ </p>
+                    <p><b>Friends:</b> 55 @*@Model.UserId*@</p>
+                    <p><b>Iamges:</b> 10</p>
+                    @*<p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
+                        <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>*@
+                    <br />
                 }
                 <h4>@Html.ActionLink("To View/ Edit My Profile", "GetUserProfile", "Identity")</h4>
             </div>

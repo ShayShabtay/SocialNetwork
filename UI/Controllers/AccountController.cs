@@ -127,7 +127,7 @@ namespace UI.Controllers
 
         //
         // GetUserInfo
-        public UserIdentityModel GetUserInfo(string token)
+        public SocialViewModel GetUserInfo(string token)
         {
             using (var client = new HttpClient())
             {
@@ -139,7 +139,10 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                     return res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    UserIdentityModel userIdentityModel = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    SocialViewModel socialViewModel = new SocialViewModel();
+                    socialViewModel.UserIdentityModel = userIdentityModel;
+                    return socialViewModel;
                     
 
                 }
@@ -177,9 +180,9 @@ namespace UI.Controllers
                     userTokenCookie.Value = token.ToString();
                     Response.Cookies.Add(userTokenCookie);///
 
-                    UserIdentityModel userIdentityModel = GetUserInfo(token);
+                    TempData["social"] = GetUserInfo(token);
 
-                    return RedirectToAction("MainPageAfterLogin", "Home", userIdentityModel);
+                    return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else
                     return Content("res.StatusCode = false :/");
