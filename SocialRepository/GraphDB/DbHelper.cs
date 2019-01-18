@@ -12,7 +12,7 @@ namespace SocialRepository.GraphDB
     static public class DbHelper
     {
         private static readonly IDriver _driver;
-        static string uri = "bolt://ec2-34-244-123-17.eu-west-1.compute.amazonaws.com:7687";
+        static string uri = "bolt://ec2-34-243-124-142.eu-west-1.compute.amazonaws.com:7687";
 
 
          static DbHelper()
