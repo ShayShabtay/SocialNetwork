@@ -28,7 +28,7 @@ namespace UI.Controllers
                     var res2 = res.Content.ReadAsAsync<List<UserDTO>>().Result;
                     SocialViewModel s = new SocialViewModel();
                     s.UserDTO = res2;
-                    return View(s);
+                    return PartialView(s);
                 }
                 else
                     return Content("res.StatusCode = false :/");
