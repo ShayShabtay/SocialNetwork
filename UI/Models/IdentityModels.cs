@@ -23,6 +23,13 @@ namespace UI.Models
 
     public class UserIdentityModel
     {
+        public UserIdentityModel()
+        {
+            Name = "";
+            Age = 0;
+            Address = "";
+            WorkPlace = "";
+        }
         [Display(Name ="User Id")]
         [HiddenInput(DisplayValue = true)]
         public string UserId { get; set; }

@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.3.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/Search.js"></script>
+    <link href="~/Content/search.css" rel="stylesheet" />
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
@@ -66,9 +70,9 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { @id = "MenuNavbarID" })</li>
                     <li>@Html.ActionLink("Settings", "Settings", "Home", new { @id = "MenuNavbarID" })</li>
                     <li>@Html.ActionLink("Notifactions", "Notifactions", "Home", new { @id = "NotifactionsMenuNavbarID" })</li>
-                    
+                    @*<i class="fas fa-cogs"></i>*@
                 </ul>
-                <form class="navbar-form navbar-left" action="/action_page.php">
+                @*<form class="navbar-form navbar-left" action="/action_page.php">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="search">
                         <div class="input-group-btn">
@@ -77,9 +81,19 @@
                             </button>
                         </div>
                     </div>
-                </form>
-                @Html.Partial("_LoginPartial", new { @id = "MenuNavbarID" })
-            </div>
+                </form>*@
+
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">
+                        @Ajax.ActionLink("Search", "GetAllUsers", "Relationship", null, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "x", InsertionMode = InsertionMode.Replace }) &nbsp;
+                    </button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                        <div id="x"></div>
+                    </div>
+
+                    @Html.Partial("_LoginPartial", new { @id = "MenuNavbarID" })
+                </div>
         </div>
     </nav>
 
@@ -92,14 +106,11 @@
                 </h3><hr />
                 @using (Html.BeginForm())
                 {
-                <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
-                <p><b>Age:</b> @Model.UserIdentityModel.Age </p>
-                <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
-                <p><b>Work Place:</b>@Model.UserIdentityModel.WorkPlace</p>
-                <p><b>Email:</b>  </p>
-                <p><b>Friends:</b> 55 </p>
-                <p><b>Iamges:</b> 10</p>
-                <br />
+                    <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
+                    <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
+                    <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
+                    <p><b>Work Place:</b>@Model.UserIdentityModel.WorkPlace</p>
+                    <br />
                 }
                 <h4>@Html.ActionLink("To View/ Edit My Profile", "GetUserProfile", "Identity")</h4>
             </div>
@@ -126,7 +137,7 @@
 
 
     <footer class="container-fluid text-center navbar-fixed-bottom">
-        <p>&copy; 2018 - Our Facelook Application - Develop by <b>Shay Shabtay</b>  & <b>Ariel Halevi</b> & <b>Omer Carmeli</b>  </p>
+        <p>&copy; 2018 - Our Facelook Application - Develop by <mark>Shay Shabtay</mark>  & <mark>Ariel Halevi</mark> & <mark>Omer Carmeli</mark>  </p>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")

@@ -287,11 +287,11 @@
     <Content Include="Views\Home\MainPageAfterLogin.cshtml" />
     <Content Include="Views\Shared\_MainPageLayout.cshtml" />
     <Content Include="Views\Identity\GetUserProfile.cshtml" />
+    <Content Include="Views\Social\FeedView.cshtml" />
     <Content Include="Views\Relationship\GetFollowing.cshtml" />
     <Content Include="Views\Relationship\GetBlockUsers.cshtml" />
     <Content Include="Views\Relationship\GetFollowers.cshtml" />
-    <Content Include="Views\Shared\CreatePost.cshtml" />
-    <Content Include="Views\Social\CreatePostDemo.cshtml" />
+    <Content Include="Views\Shared\GetAllUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

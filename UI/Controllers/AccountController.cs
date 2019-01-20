@@ -139,7 +139,8 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                    UserIdentityModel userIdentityModel = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    UserIdentityModel userIdentityModel = new UserIdentityModel();
+                    userIdentityModel = res.Content.ReadAsAsync<UserIdentityModel>().Result;
                     SocialViewModel socialViewModel = new SocialViewModel();
                     socialViewModel.UserIdentityModel = userIdentityModel;
                     return socialViewModel;
