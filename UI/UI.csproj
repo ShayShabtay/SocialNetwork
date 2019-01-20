@@ -287,7 +287,6 @@
     <Content Include="Views\Home\MainPageAfterLogin.cshtml" />
     <Content Include="Views\Shared\_MainPageLayout.cshtml" />
     <Content Include="Views\Identity\GetUserProfile.cshtml" />
-    <Content Include="Views\Social\FeedView.cshtml" />
     <Content Include="Views\Relationship\GetFollowing.cshtml" />
     <Content Include="Views\Relationship\GetBlockUsers.cshtml" />
     <Content Include="Views\Relationship\GetFollowers.cshtml" />

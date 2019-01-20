@@ -17,6 +17,7 @@ namespace UI.Controllers
         public ActionResult GetUserProfile()
         {
             string token = Request.Cookies["UserToken"].Value;
+            SocialViewModel socialViewModel = (SocialViewModel)TempData["social"];
 
             using (var client = new HttpClient())
             {
@@ -28,7 +29,7 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                    var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    var res2 = res.Content.ReadAsAsync<SocialViewModel>().Result;
 
 
                     return View(res2);
@@ -41,9 +42,11 @@ namespace UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetUserProfile(UserIdentityModel model)
+        public ActionResult GetUserProfile(SocialViewModel model)
         {
             string token = Request.Cookies["UserToken"].Value;
+            SocialViewModel socialViewModel = (SocialViewModel)TempData["social"];
+
             if (!ModelState.IsValid)
             {
                 return View(model);
