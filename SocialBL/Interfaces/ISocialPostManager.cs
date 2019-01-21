@@ -17,5 +17,6 @@ namespace SocialBL.Interfaces
         string SaveImage(byte[] image, string userId);
         string ValidateToken(string token);
         void UnLike(string userId, string postId);
+        string GetUserByPostID(string postId);
     }
 }

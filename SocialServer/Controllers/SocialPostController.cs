@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace SocialServer.Controllers
@@ -98,7 +99,8 @@ namespace SocialServer.Controllers
             try
             {
                 _socialPostManager.AddComment(comment, userId, postId);
-            }
+         
+                }
             catch (FaildToConnectDbException)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
@@ -140,6 +142,24 @@ namespace SocialServer.Controllers
             try
             {
                 _socialPostManager.AddLike(userId, postId);
+
+                ///////////////////////////////
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:51446/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                   // string from = userId;
+                    string to = _socialPostManager.GetUserByPostID(postId);
+                   //string postid = postId;
+                    List<string> param = new List<string>();
+                    param.Add(userId);
+                    param.Add(to);
+                    param.Add(postId);
+                    var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
+                }
+
+                ////////////////////////////////////
+
             }
             catch (FaildToConnectDbException)
             {

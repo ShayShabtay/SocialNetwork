@@ -51,6 +51,9 @@
     <Reference Include="AWSSDK, Version=2.3.55.2, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.2.3.55.2\lib\net45\AWSSDK.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.4.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -216,6 +219,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SocialViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\SignalRClient.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +311,10 @@
     <ProjectReference Include="..\AuthenticationCommon\AuthenticationCommon.csproj">
       <Project>{3F3AC000-9294-4475-BE56-904F4AB5ECFC}</Project>
       <Name>AuthenticationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotificationService\NotificationService.csproj">
+      <Project>{41247570-E23F-408D-95CA-2465245BD28A}</Project>
+      <Name>NotificationService</Name>
     </ProjectReference>
     <ProjectReference Include="..\SocialCommon\SocialCommon.csproj">
       <Project>{49E9F62A-B643-4FDB-B028-AD89D08227CC}</Project>

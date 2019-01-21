@@ -125,6 +125,11 @@ namespace SocialBL.Managers
             return userId;
         }
 
-       
+        public string GetUserByPostID(string postId)
+        {
+            string userName=_graphDB.getUserByPostId(postId)
+
+
+        }
     }
 }
