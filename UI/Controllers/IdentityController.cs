@@ -42,12 +42,12 @@ namespace UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetUserProfile(SocialViewModel model)
+        public ActionResult GetUserProfile(SocialViewModel identityModel)
         {
             string token = Request.Cookies["UserToken"].Value;
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(identityModel);
             }
 
             else
@@ -58,103 +58,41 @@ namespace UI.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Add("x-token", token);
 
-                    var res = client.PostAsJsonAsync($"/api/identity/updateUserProfile", model.UserIdentityModel).Result;
+                    var res = client.PostAsJsonAsync($"/api/identity/updateUserProfile", identityModel.UserIdentityModel).Result;
 
                     if (res.IsSuccessStatusCode == true)
                     {
                         var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
 
-                        SocialViewModel socialViewModel = new SocialViewModel();
-                        socialViewModel.UserIdentityModel = res2;
-                        ////set token  in cookie
-                        //HttpCookie userTokenCookie = new HttpCookie("UserToken");
-                        //userTokenCookie.Value = token.ToString();
-                        //Response.Cookies.Add(userTokenCookie);///
+                        //SocialViewModel socialViewModel = new SocialViewModel();
+                        identityModel.UserIdentityModel = res2;
+                      
+                        //save Identity in cookies
+                        HttpCookie NameIdentityProfile = new HttpCookie("My_Name");
+                        NameIdentityProfile.Value = identityModel.UserIdentityModel.Name.ToString();
+                        Response.Cookies.Add(NameIdentityProfile);///
 
-                        TempData.Add("social", socialViewModel);
+                        HttpCookie AgeIdentityProfile = new HttpCookie("My_Age");
+                        AgeIdentityProfile.Value = identityModel.UserIdentityModel.Age.ToString();
+                        Response.Cookies.Add(AgeIdentityProfile);///
 
-                        return RedirectToAction("MainPageAfterLogin", "Home");
+                        HttpCookie AddressIdentityProfile = new HttpCookie("My_Address");
+                        AddressIdentityProfile.Value = identityModel.UserIdentityModel.Address.ToString();
+                        Response.Cookies.Add(AddressIdentityProfile);///
+
+                        HttpCookie WorkPlaceIdentityProfile = new HttpCookie("My_WorkPlace");
+                        WorkPlaceIdentityProfile.Value = identityModel.UserIdentityModel.WorkPlace.ToString();
+                        Response.Cookies.Add(WorkPlaceIdentityProfile);///
+
+                        TempData.Add("social", identityModel);
+
+                        return RedirectToAction("MainPageAfterLogin", "Home", identityModel);
                     }
                     else
                         return Content("res.StatusCode = false :/");
                 }
             }
         }
-
-
-
-
-
-        // GET: Identity/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Identity/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Identity/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Identity/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Identity/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Identity/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Identity/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+     
     }
 }

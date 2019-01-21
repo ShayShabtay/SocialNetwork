@@ -27,8 +27,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("Block", "Edit", new { targetUserId = item.UserId }) |
-                @Html.ActionLink("Follow back", "Details", new { targetUserId = item.UserId }) |
+                <i class="fa fa-ban"></i>&ensp;
+                @Html.ActionLink("Block This User", "GetBlockUsers", new { targetUserId = item.UserId, @class = "btn btn-default", @style = "color:red" }) |
+                @Html.ActionLink("Follow back", "GetFollowing", new { targetUserId = item.UserId }) 
             </td>
         </tr>
         }
@@ -39,3 +40,9 @@ else
 {
     <h2>No one is following you right now.</h2>
 }
+
+
+
+@*<script>
+    document.getElementById("blockBtnID").innerHTML = 
+</script>*@
