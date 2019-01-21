@@ -68,8 +68,8 @@ namespace UI.Controllers
             }
         }
 
-        // GET: Social/Details/5
-        public ActionResult Details(int id)
+        // GET: Social/GetProfileAndFeeds/5
+        public ActionResult GetUsersProfileAndFeeds()
         {
             return View();
         }

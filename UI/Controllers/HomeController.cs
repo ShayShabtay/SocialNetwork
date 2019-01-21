@@ -19,7 +19,6 @@ namespace UI.Controllers
 
         public ActionResult About()
         {
-
             return View();
         }
 
