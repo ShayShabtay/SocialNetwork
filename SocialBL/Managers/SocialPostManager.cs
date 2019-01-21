@@ -4,11 +4,9 @@ using SocialRepository.GraphDB;
 using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
@@ -29,7 +27,7 @@ namespace SocialBL.Managers
         {
             _graphDB.AddPost(post);
             Thread.Sleep(2000);
-            _graphDB.CreateRelationship(userId, post.PostID, "publish");
+            _graphDB.CreateRelationship(userId, post.PostID, "Publish");
         }
 
         public void AddComment(Comment comment,string userId,string postId)
@@ -54,8 +52,6 @@ namespace SocialBL.Managers
 
         public List<ClientPost> GetAllPosts(string userId)
         {
-           // return 
-
             List<Post> posts = _graphDB.GetAllPosts(userId);
             List<ClientPost> postsToClient = new List<ClientPost>();
 
@@ -89,15 +85,15 @@ namespace SocialBL.Managers
             return postsToClient; 
         }
 
-        public string SaveImage(byte[] image,string userId)
+        public string SaveImage(Stream image,string userId)
         {
             StorgeHelper storgeHelper = new StorgeHelper();
 
             string imageKey= Guid.NewGuid().ToString();
             try
             {
-            string imageUrl=storgeHelper.uploadImageToS3(image,userId,imageKey);
-            return imageUrl;
+           // string imageUrl=storgeHelper.uploadImageToS3(image,userId,imageKey);
+            return null;
             }
             catch (Exception)
             {
@@ -110,19 +106,26 @@ namespace SocialBL.Managers
         public string ValidateToken(string token)
         {
             string url = "http://localhost:49884/api/token/validateManualToken";
-            string userId = null;
 
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-token", token);
-                var task = client.GetAsync(url);
-                task.Wait();
-                if (task.Result.IsSuccessStatusCode)
+                var res = client.GetAsync(url).Result;
+
+                if (res.IsSuccessStatusCode)
                 {
-                    userId = task.Result.ToString();
+                    string userId = res.Content.ReadAsStringAsync().Result;
+                    userId = userId.Replace("\"", "");
+
+                    return userId;
                 }
             }
-            return userId;
+            return null;
+        }
+
+        public void GetTemporaryToken()
+        {
+            //TemporaryS3Token.ListObjectsAsync().Wait();
         }
 
         public string GetUserByPostID(string postId)
@@ -130,6 +133,11 @@ namespace SocialBL.Managers
             return _graphDB.getUserByPostId(postId);
 
 
+        }
+
+        public string SaveImage(byte[] image, string userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

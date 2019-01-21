@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-[assembly:OwinStartup(typeof (NotificationService.Startup))]
+[assembly:OwinStartup(typeof (NotificationService.NotificationStartup))]
 namespace NotificationService
 {
-    public class Startup
+    public class NotificationStartup
     {
         public void Configuration(IAppBuilder app)
         {

@@ -118,7 +118,7 @@
     <Compile Include="signalR\NotificationHub.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="signalR\NotificationsService.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="NotificationStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="libman.json" />

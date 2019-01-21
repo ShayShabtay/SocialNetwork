@@ -15,15 +15,15 @@ namespace NotificationService.signalR
             NotificationsService = NotificationsService.GetInstance;
         }
 
-        public void SignIn(string userName)
+        public List<NotificationModel> SignIn(string userName)
         {
             NotificationsService.AddConnectedUser(Context.ConnectionId, userName);
             List<NotificationModel> notifications= NotificationsService.CheckNotification(userName);
             if (notifications!=null)
             {
-                //send to user--invoke func in client
+                return notifications;
             }
-            
+            return null;
         }
         public void GetNotificationsFromServer(string userName)
         {

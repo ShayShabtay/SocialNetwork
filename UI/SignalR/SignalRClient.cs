@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using UI.Models;
 
 namespace UI.SignalR
 {
@@ -12,10 +13,10 @@ namespace UI.SignalR
         public string Url { get; set; }
         public HubConnection Connection { get; set; }
         public IHubProxy Hub { get; set; }
-        //public MainModel model { get; set; }
+        public SocialViewModel model { get; set; }
         public SignalRClient()//Chat Ctor
         {
-            //this.model = model;
+           //this.model = model;
             Connection = new HubConnection("http://localhost:51446/signalr");
             Hub = Connection.CreateHubProxy("NotificationHub");
 
@@ -27,6 +28,7 @@ namespace UI.SignalR
             {
                 foreach (var item in notifications)
                 {
+                    
                    // model.Notifications.Clear();
                    // model.Notifications.Add(item);
                 }
