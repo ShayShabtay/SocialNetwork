@@ -1,4 +1,4 @@
-﻿@model UI.Models.UserIdentityModel
+﻿@model UI.Models.SocialViewModel
 
 @{
     ViewBag.Title = "UserProfile";
@@ -18,34 +18,34 @@
         <hr />
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserIdentityModel.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control is-valid", id = "NameID" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserIdentityModel.Name, new { htmlAttributes = new { @class = "form-control is-valid", id = "NameID" } })
+                @Html.ValidationMessageFor(model => model.UserIdentityModel.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserIdentityModel.Age, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control is-valid", id = "AgeID" } })
-                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserIdentityModel.Age, new { htmlAttributes = new { @class = "form-control is-valid", id = "AgeID" } })
+                @Html.ValidationMessageFor(model => model.UserIdentityModel.Age, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserIdentityModel.Address, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", id = "AddressID" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserIdentityModel.Address, new { htmlAttributes = new { @class = "form-control", id = "AddressID" } })
+                @Html.ValidationMessageFor(model => model.UserIdentityModel.Address, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.WorkPlace, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserIdentityModel.WorkPlace, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
-                @Html.EditorFor(model => model.WorkPlace, new { htmlAttributes = new { @class = "form-control", id = "WorkPlaceID" } })
-                @Html.ValidationMessageFor(model => model.WorkPlace, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserIdentityModel.WorkPlace, new { htmlAttributes = new { @class = "form-control", id = "WorkPlaceID" } })
+                @Html.ValidationMessageFor(model => model.UserIdentityModel.WorkPlace, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -59,10 +59,17 @@
         </div>
     </div>
 }
-
-<div>
+<br /><br /><br />
+<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("To See All My Followers", "GetFollowers", "Relationship",null ,new { @style = "color:white" })</button>
+<button type="button" class="btn btn-warning"> @Html.ActionLink("To See All Users I'm Following", "GetFollowing", "Relationship", null, new { @style = "color:white" })</button>
+<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("To See All Users I was Blocked", "GetBlockUsers", "Relationship", null, new { @style = "color:white;"})</button>
+<br /><br /><br />
+<div style="text-align:center; float:left">
     @Html.ActionLink("Back to Main Page", "MainPageAfterLogin", "Home")
+
 </div>
+<br />
+<br />
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

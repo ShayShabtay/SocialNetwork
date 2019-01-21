@@ -1,12 +1,16 @@
-﻿using SocialBL.Interfaces;
+﻿using Amazon.Runtime;
+using SocialBL.Interfaces;
 using SocialCommon.Models;
 using SocialRepository.GraphDB;
 using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
@@ -92,8 +96,8 @@ namespace SocialBL.Managers
             string imageKey= Guid.NewGuid().ToString();
             try
             {
-           // string imageUrl=storgeHelper.uploadImageToS3(image,userId,imageKey);
-            return null;
+            string imageUrl=storgeHelper.uploadImageToS3(image,userId,imageKey);
+            return imageUrl;
             }
             catch (Exception)
             {
@@ -125,19 +129,7 @@ namespace SocialBL.Managers
 
         public void GetTemporaryToken()
         {
-            //TemporaryS3Token.ListObjectsAsync().Wait();
-        }
-
-        public string GetUserByPostID(string postId)
-        {
-            return _graphDB.getUserByPostId(postId);
-
-
-        }
-
-        public string SaveImage(byte[] image, string userId)
-        {
-            throw new NotImplementedException();
+            TemporaryS3Token.ListObjectsAsync().Wait();
         }
     }
 }

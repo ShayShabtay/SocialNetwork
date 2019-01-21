@@ -1,4 +1,5 @@
-﻿using SocialBL.Interfaces;
+﻿using Amazon.Runtime;
+using SocialBL.Interfaces;
 using SocialBL.Managers;
 using SocialCommon.Exceptions;
 using SocialCommon.Models;
@@ -24,7 +25,7 @@ namespace SocialServer.Controllers
 
         [HttpPost]
         [Route("api/SocialPost/addPost")]
-        public IHttpActionResult AddPost([FromBody]List<string> param)
+        public IHttpActionResult AddPost([FromBody]Post post)
         {
             string token = Request.Headers.GetValues("x-token").First();
 
@@ -50,12 +51,6 @@ namespace SocialServer.Controllers
 
             try
             {
-                byte[] imageAsBytes = Convert.FromBase64String(param[1]);
-
-               string imagePath= _socialPostManager.SaveImage(imageAsBytes, SourceUserId);
-                Post post = new Post(param[0]);
-                post.ImageUrl = imagePath;
-
                 _socialPostManager.AddPost(post, SourceUserId);
             }
             catch (FaildToConnectDbException)
@@ -302,53 +297,128 @@ namespace SocialServer.Controllers
             return Ok(Posts);
         }
 
+        //[HttpGet]
+        //[Route("api/SocialPost/saveImage")]
+        //public IHttpActionResult SaveImage([FromBody] string imageString)
+        //{
+        //    string token = Request.Headers.GetValues("x-token").First();
+
+        //    if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(imageString))
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+        //    }
+        //    string userId = null;
+
+        //    try
+        //    {
+        //        userId = _socialPostManager.ValidateToken(token);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+        //    }
+
+        //    if (userId == null)
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+        //    }
+
+        //    //byte[] image = Convert.FromBase64String(imageString);
+        //    string imageUrl;
+        //    try
+        //    {
+        //        //imageUrl = _socialPostManager.SaveImage(image, userId);
+        //    }
+        //    catch (FaildToConnectDbException)
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+        //    }
+
+        //    //if (imageUrl == null)
+        //    //{
+        //    //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+        //    //}
+
+        //    return Ok(); //imageurl
+        //}
+
+        //[HttpGet]
+        //[Route("api/SocialPost/getS3TemporaryToken")]
+        //public IHttpActionResult GetS3TemporaryToken()
+        //{
+        //    //string token = Request.Headers.GetValues("x-token").First();
+
+        //    //if (string.IsNullOrEmpty(token))
+        //    //{
+        //    //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+        //    //}
+        //    //string SourceUserId = null;
+
+        //    //try
+        //    //{
+        //    //    SourceUserId = _socialPostManager.ValidateToken(token);
+        //    //}
+        //    //catch (Exception)
+        //    //{
+        //    //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+        //    //}
+
+        //    //if (SourceUserId == null)
+        //    //{
+        //    //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+        //    //}
+
+        //    //SessionAWSCredentials temporaryAWSCredentials;
+        //    try
+        //    {
+        //        _socialPostManager.GetTemporaryToken();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+        //    }
+
+        //    //if (temporaryAWSCredentials != null)
+        //    //{
+        //    //    return Ok(temporaryAWSCredentials);
+        //    //}
+        //    //else
+        //    //{
+        //    //    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+        //    //}
+        //    return Ok();
+        //}
+
         [HttpGet]
-        [Route("api/SocialPost/saveImage")]
-        public IHttpActionResult SaveImage([FromBody] string imageString)
+        [Route("api/SocialPost/getUserId")]
+        public IHttpActionResult GetUserId()
         {
             string token = Request.Headers.GetValues("x-token").First();
 
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(imageString))
+            if (string.IsNullOrEmpty(token))
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
             }
-            string userId = null;
+            string SourceUserId = null;
 
             try
             {
-                userId = _socialPostManager.ValidateToken(token);
+                SourceUserId = _socialPostManager.ValidateToken(token);
             }
             catch (Exception)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
 
-            if (userId == null)
+            if (SourceUserId == null)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
             }
-
-            byte[] image = Convert.FromBase64String(imageString);
-            string imageUrl;
-            try
-            {
-                imageUrl = _socialPostManager.SaveImage(image, userId);
-            }
-            catch (FaildToConnectDbException)
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
-            }
-            catch (Exception)
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
-            }
-
-            if (imageUrl == null)
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
-            }
-
-            return Ok(imageUrl);
+            return Ok(SourceUserId);
         }
     }
 }

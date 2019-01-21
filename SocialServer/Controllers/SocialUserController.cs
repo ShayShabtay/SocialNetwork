@@ -74,7 +74,7 @@ namespace SocialServer.Controllers
             }
             try
             {
-                _sociaUserManager.BlockUser(SourceUserId, targetUserId);
+                _sociaUserManager.Follow(SourceUserId, targetUserId);
             }
             catch (FaildToConnectDbException)
             {

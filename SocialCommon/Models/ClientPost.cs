@@ -22,7 +22,11 @@ namespace SocialCommon.Models
             this.postID = post.PostID;
             this.CreationDate = post.CreationDate;
             this.Content = post.Content;
-            this.imageUrl = imageUrl;
+            this.imageUrl = post.ImageUrl;
+        }
+
+        public ClientPost()
+        {
         }
 
 

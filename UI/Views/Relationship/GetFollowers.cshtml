@@ -1,0 +1,48 @@
+﻿@model IEnumerable<UI.Models.UserDTO>
+
+@{
+    ViewBag.Title = "GetFollowers";
+    //Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+}
+
+<h2>My followers list:</h2>
+
+@if (Model != null && Model.Count() != 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Options
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <i class="fa fa-ban"></i>&ensp;
+                @Html.ActionLink("Block This User", "GetBlockUsers", new { targetUserId = item.UserId, @class = "btn btn-default", @style = "color:red" }) |
+                @Html.ActionLink("Follow back", "GetFollowing", new { targetUserId = item.UserId }) 
+            </td>
+        </tr>
+        }
+
+    </table>
+}
+else
+{
+    <h2>No one is following you right now.</h2>
+}
+
+
+
+@*<script>
+    document.getElementById("blockBtnID").innerHTML = 
+</script>*@

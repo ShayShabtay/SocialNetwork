@@ -1,5 +1,5 @@
 ﻿@using UI.Models
-@model UI.Models.UserIdentityModel
+@model UI.Models.SocialViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.3.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/Search.js"></script>
+    <link href="~/Content/search.css" rel="stylesheet" />
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
@@ -61,14 +65,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "MainPageAfterLogin", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("Settings", "Settings", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("Notifactions", "Notifactions", "Home", new { @id = "NotifactionsMenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Home", "MainPageAfterLogin", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Settings", "Settings", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Notifactions", "Notifactions", "Home", null, new { @id = "NotifactionsMenuNavbarID" })</li>
                     @*<i class="fas fa-cogs"></i>*@
                 </ul>
-                <form class="navbar-form navbar-left" action="/action_page.php">
+                @*<form class="navbar-form navbar-left" action="/action_page.php">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="search">
                         <div class="input-group-btn">
@@ -77,8 +81,21 @@
                             </button>
                         </div>
                     </div>
-                </form>
-                @Html.Partial("_LoginPartial", new { @id = "MenuNavbarID" })
+                </form>*@
+
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        @Ajax.ActionLink("Search", "GetAllUsers", "Relationship", null, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "x", InsertionMode = InsertionMode.Replace }) &nbsp;
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                        <div id="x"></div>
+                    </div>
+                </div>
+
+                    @Html.Partial("_LoginPartial", new { @id = "MenuNavbarID" })
+                
             </div>
         </div>
     </nav>
@@ -90,19 +107,30 @@
                     <i class="fas fa-info-circle" style="color:blue;"></i>
                     User Info
                 </h3><hr />
-                @using (Html.BeginForm())
+                @if (Model != null)
                 {
-                <p><b>Name:</b> @Model.Name </p>
-                <p><b>Age:</b> @Model.Age  </p>
-                <p><b>Address:</b> @Model.Address</p>
-                <p><b>WorkPlace:</b>@Model.WorkPlace</p>
-                <p><b>Email:</b>@*@Html.EditorFor(model => model.Name)*@ </p>
-                <p><b>Friends:</b> 55 @*@Model.UserId*@</p>
-                <p><b>Iamges:</b> 10</p>
-                @*<p><b>Authentication Type:</b> @User.Identity.AuthenticationType</p>
-                    <p><b>Is Authenticated:</b> @User.Identity.IsAuthenticated</p>*@
-                <br />
+                    <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
+                    <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
+                    <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
+                    <p><b>Work Place:</b>@Model.UserIdentityModel.WorkPlace</p>
                 }
+                else if (Request.Cookies["My_Name"].Value != null)
+                {
+                    <p><b>Name:</b> @Request.Cookies["My_Name"].Value </p>
+                    <p><b>Age:</b> @Request.Cookies["My_Age"].Value </p>
+                    <p><b>Address:</b> @Request.Cookies["My_Address"].Value </p>
+                    <p><b>Work Place:</b> @Request.Cookies["My_WorkPlace"].Value </p>
+                }
+
+                else
+                {
+                    <p><b>Name:</b></p>
+                    <p><b>Age:</b> </p>
+                    <p><b>Address:</b> </p>
+                    <p><b>Work Place:</b></p>
+                }
+
+             <br /><br />
                 <h4>@Html.ActionLink("To View/ Edit My Profile", "GetUserProfile", "Identity")</h4>
             </div>
             <div class="col-sm-8 text-left">
@@ -125,7 +153,7 @@
             </div>
         </div>
     </div>
-
+  
 
     <footer class="container-fluid text-center navbar-fixed-bottom">
         <p>&copy; 2018 - Our Facelook Application - Develop by <mark>Shay Shabtay</mark>  & <mark>Ariel Halevi</mark> & <mark>Omer Carmeli</mark>  </p>
