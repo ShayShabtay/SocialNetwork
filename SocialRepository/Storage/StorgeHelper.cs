@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Amazon.S3;
-//using Amazon.S3.Transfer;
 using System.IO;
 using Amazon;
 using Amazon.S3;
@@ -21,7 +19,7 @@ namespace SocialRepository.Storage
         // Specify your bucket region (an example region is shown).
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast2;
         //string hostURL = bucketRegion.GetEndpointForService("s3").Hostname;
-        string hostUrl= "https://s3.us-east-2.amazonaws.com";
+        string hostUrl = "https://s3.us-east-2.amazonaws.com";
 
         private static IAmazonS3 s3Client { get; set; }
 
@@ -35,12 +33,12 @@ namespace SocialRepository.Storage
 
         }
 
-        public string uploadImageToS3(byte[] bArray,string userId,string ImageKey)
+        public string uploadImageToS3(Stream inputStream, string userId, string ImageKey)
         {
 
-           // byte[] imageData = File.ReadAllBytes("C://‏‏darkstar.PNG");
+            // byte[] imageData = File.ReadAllBytes("C://‏‏darkstar.PNG");
             //bArray = imageData;
-           // string base64String = Convert.ToBase64String(bArray);
+            // string base64String = Convert.ToBase64String(bArray);
 
             try
             {
@@ -49,26 +47,26 @@ namespace SocialRepository.Storage
                 using (s3Client)
                 {
                     var request = new PutObjectRequest();
-                    request.BucketName = bucketName+"/"+userId;
+                    request.BucketName = bucketName + "/" + userId;
                     //request.ContentType = ;
                     request.Key = ImageKey;
                     request.CannedACL = S3CannedACL.PublicReadWrite;
                     //request.InputStream = file.InputStream;
 
-                    using (var ms = new MemoryStream(bArray))
+                    //using (var ms = new MemoryStream(bArray))
+                    //{
+                    request.InputStream = inputStream;
+                    //s3Client.PutObject(request);
+                    var res = s3Client.PutObject(request);
+                    if (res.HttpStatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        request.InputStream = ms;
-                       //s3Client.PutObject(request);
-                       var res= s3Client.PutObjectAsync(request).Result;
-                        if  (res.HttpStatusCode == System.Net.HttpStatusCode.OK) { 
                         //Debug.WriteLine(x.ToString());
                         // var res=await s3Client.PutObjectAsync(request);
-                            return hostUrl + "/" + bucketName + "/" + userId + "/" + ImageKey;
-                        }
-                    else {
-                            return null;
-                        }
-
+                        return hostUrl + "/" + bucketName + "/" + userId + "/" + ImageKey;
+                    }
+                    else
+                    {
+                        return null;
                     }
                 }
             }
@@ -76,10 +74,10 @@ namespace SocialRepository.Storage
             {
                 throw new Exception();
             }
-          
+
         }
 
 
-        
+
     }
 }

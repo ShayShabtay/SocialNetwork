@@ -1,6 +1,8 @@
-﻿using SocialCommon.Models;
+﻿using Amazon.Runtime;
+using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +16,10 @@ namespace SocialBL.Interfaces
         void AddLike(string userId, string postId);
         List<ClientPost> GetAllPosts(string userId);
         List<ClientPost> GetMyPosts(string userId);
-        string SaveImage(byte[] image, string userId);
+        string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
+        void GetTemporaryToken();
+        //SessionAWSCredentials GetTemporaryToken();
         void UnLike(string userId, string postId);
     }
 }

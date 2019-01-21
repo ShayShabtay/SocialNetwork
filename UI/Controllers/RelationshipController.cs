@@ -11,6 +11,7 @@ namespace UI.Controllers
 {
     public class RelationshipController : Controller
     {
+        [HttpGet]
         public ActionResult GetAllUsers()
         {
             string token = Request.Cookies["UserToken"].Value;

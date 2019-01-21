@@ -1,9 +1,11 @@
-﻿using SocialBL.Interfaces;
+﻿using Amazon.Runtime;
+using SocialBL.Interfaces;
 using SocialCommon.Models;
 using SocialRepository.GraphDB;
 using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -29,7 +31,7 @@ namespace SocialBL.Managers
         {
             _graphDB.AddPost(post);
             Thread.Sleep(2000);
-            _graphDB.CreateRelationship(userId, post.PostID, "publish");
+            _graphDB.CreateRelationship(userId, post.PostID, "Publish");
         }
 
         public void AddComment(Comment comment,string userId,string postId)
@@ -54,8 +56,6 @@ namespace SocialBL.Managers
 
         public List<ClientPost> GetAllPosts(string userId)
         {
-           // return 
-
             List<Post> posts = _graphDB.GetAllPosts(userId);
             List<ClientPost> postsToClient = new List<ClientPost>();
 
@@ -89,7 +89,7 @@ namespace SocialBL.Managers
             return postsToClient; 
         }
 
-        public string SaveImage(byte[] image,string userId)
+        public string SaveImage(Stream image,string userId)
         {
             StorgeHelper storgeHelper = new StorgeHelper();
 
@@ -127,6 +127,9 @@ namespace SocialBL.Managers
             return null;
         }
 
-       
+        public void GetTemporaryToken()
+        {
+            TemporaryS3Token.ListObjectsAsync().Wait();
+        }
     }
 }

@@ -150,12 +150,11 @@ namespace SocialRepository.GraphDB
 
         public List<Post> GetAllPosts(string userId)
         {
-
             //whos im follow=> what post they published =>limit 20
             //change the first line in query for better tuntimr
 
             string query = $"Match (u:User)-[:Follow]->(u2:User) " +
-                           $"Where u.UserID=\"{userId}\" " +
+                           $"Where u.UserId=\"{userId}\" " +
                            $"Match (u2)-[:Publish]->(p:Post)" +
                            $"Return p";
 
@@ -191,7 +190,7 @@ namespace SocialRepository.GraphDB
         {
             List<Comment> commentsList = new List<Comment>();
             string query = $"Match (p:Post)" +
-                           $"Wehre p.PostID=\"{postID}\"" +
+                           $"Where p.PostID=\"{postID}\"" +
                            $"Match (p)-[:PostComment]->(c:Comment)" +
                            $"return c";
             IStatementResult res = session.Run(query);
@@ -208,9 +207,9 @@ namespace SocialRepository.GraphDB
         {
             List<User> likesList = new List<User>();
             string query = $"Match (p:Post)" +
-                           $"Wehre p.PostID=\"{postID}\"" +
-                           $"Match (p)-[:Like]->(u:User)" +
-                           $"return c";
+                           $"Where p.PostID=\"{postID}\"" +
+                           $"Match (u:User)-[:Like]->(p)" +
+                           $"return u";
             IStatementResult res = session.Run(query);
             foreach (var item in res)
             {
