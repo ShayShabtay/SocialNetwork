@@ -127,7 +127,7 @@ namespace SocialBL.Managers
 
         public string GetUserByPostID(string postId)
         {
-            string userName=_graphDB.getUserByPostId(postId)
+            return _graphDB.getUserByPostId(postId);
 
 
         }

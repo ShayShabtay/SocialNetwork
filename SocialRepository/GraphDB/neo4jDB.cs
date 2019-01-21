@@ -220,5 +220,10 @@ namespace SocialRepository.GraphDB
 
             return likesList;
         }
+
+        public string getUserByPostId(string postId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
