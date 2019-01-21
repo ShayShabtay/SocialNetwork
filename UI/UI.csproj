@@ -297,6 +297,7 @@
     <Content Include="Views\Relationship\GetFollowers.cshtml" />
     <Content Include="Views\Shared\GetAllUsers.cshtml" />
     <Content Include="Views\Shared\CreatePost.cshtml" />
+    <Content Include="Views\Social\GetUsersProfileAndFeeds.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

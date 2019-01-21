@@ -79,6 +79,11 @@ namespace UI.Controllers
             }
         }
 
+        public ActionResult GetUsersProfileAndFeeds()
+        {
+            return View();
+        }
+
         private string UploadImageToS3(HttpPostedFileBase picture1)
         {
             string fileKey = DateTime.Now.ToString();
