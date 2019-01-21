@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SocialCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,7 @@ namespace UI.Models
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
         public IEnumerable<UserDTO> UserDTO { get; set; }
+        public IEnumerable<ClientPost> ClientPostFeed { get; set; }
 
         public SocialViewModel()
         {
@@ -20,6 +22,7 @@ namespace UI.Models
             User = new User();
             Post = new Post("");
             Comment = new Comment("");
+            ClientPostFeed = new List<ClientPost>();
         }
     }
 
@@ -41,19 +44,14 @@ namespace UI.Models
 
     public class Post
     {
-        public string postID { get; set; }
-        public DateTime CreationDate { get; set; }
         public string Content { get; set; }
-        public string imageUrl { get; set; }
-        //public List<string> referebce { get; set; }
-
+        public string ImageUrl { get; set; }
+        public HttpPostedFileBase Picture1 { get; set; }
 
         public Post(string content)
         {
-            postID = Guid.NewGuid().ToString();
-            CreationDate = DateTime.UtcNow;
             this.Content = content;
-        }
+    }
     }
 
     public static class RelationsMap

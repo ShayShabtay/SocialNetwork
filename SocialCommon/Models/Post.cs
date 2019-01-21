@@ -12,8 +12,6 @@ namespace SocialCommon.Models
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
-        //public List<string> referebce { get; set; }
-      
 
         public Post(string content)
         {
@@ -21,8 +19,5 @@ namespace SocialCommon.Models
             CreationDate = DateTime.UtcNow;
             this.Content = content;
         }
-
-        
-
     }
 }

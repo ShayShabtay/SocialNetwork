@@ -25,7 +25,7 @@ namespace SocialCommon.Models
 
         private static void init()
         {
-            map.Add("Publish",new Tuple<string,string,string, string>("User","UserId","Post","PostId"));
+            map.Add("Publish",new Tuple<string,string,string, string>("User","UserId","Post","PostID"));
             map.Add("UserComment",new Tuple<string,string,string,string>("User","UserId","Comment","CommentId"));
             map.Add("PostComment",new Tuple<string, string, string, string>("Post","PostId","Comment","CommentId"));
             map.Add("Follow",new Tuple<string, string, string, string>("User","UserId","User","UserId"));
