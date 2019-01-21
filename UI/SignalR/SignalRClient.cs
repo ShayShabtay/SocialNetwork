@@ -13,10 +13,10 @@ namespace UI.SignalR
         public string Url { get; set; }
         public HubConnection Connection { get; set; }
         public IHubProxy Hub { get; set; }
-        public SocialViewModel model { get; set; }
-        public SignalRClient()//Chat Ctor
+        public SocialViewModel Model { get; set; }
+        public SignalRClient(SocialViewModel model)//Chat Ctor
         {
-           //this.model = model;
+           this.Model = model;
             Connection = new HubConnection("http://localhost:51446/signalr");
             Hub = Connection.CreateHubProxy("NotificationHub");
 
@@ -26,11 +26,11 @@ namespace UI.SignalR
             });
             Hub.On("GotNotificationsFromServer", (List<NotificationModel> notifications) =>
             {
+                Model.Notifications.Clear();
                 foreach (var item in notifications)
                 {
                     
-                   // model.Notifications.Clear();
-                   // model.Notifications.Add(item);
+                    model.Notifications.Add(item);
                 }
             });
 

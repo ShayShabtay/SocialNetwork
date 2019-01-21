@@ -131,5 +131,12 @@ namespace SocialBL.Managers
         {
             TemporaryS3Token.ListObjectsAsync().Wait();
         }
+
+        public string GetUserByPostID(string postId)
+        {
+           return _graphDB.getUserByPostId(postId);
+
+
+        }
     }
 }

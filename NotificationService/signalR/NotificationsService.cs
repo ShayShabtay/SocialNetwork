@@ -20,9 +20,15 @@ namespace NotificationService.signalR
         {
             NotificationsList = new Dictionary<string, List<NotificationModel>>();
             ConnectedUsers = new Dictionary<string, string>();
+            seed();
         }
 
-      
+        private void seed()
+        {
+            List<NotificationModel> seedList = new List<NotificationModel>();
+            seedList.Add(new NotificationModel("someOne","testUser","","Follow"));
+            NotificationsList.Add("testUser", seedList);
+        }
 
         public static NotificationsService GetInstance
         {
@@ -61,14 +67,14 @@ namespace NotificationService.signalR
             NotificationsList.Remove(userName);
         }
 
-        public List<NotificationModel> CheckNotification(string connectionId)
+        public bool CheckNotification(string connectionId)
         {
             if (NotificationsList.ContainsKey(connectionId))
             {
-                return NotificationsList[connectionId];
+                return true;
             }
 
-            return null;
+            return false;
         }
 
 

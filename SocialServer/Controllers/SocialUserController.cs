@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using Neo4j.Driver.V1;
 using SocialBL.Interfaces;
@@ -75,6 +76,23 @@ namespace SocialServer.Controllers
             try
             {
                 _sociaUserManager.Follow(SourceUserId, targetUserId);
+                ///////////////////////////////
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:51446/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    // string from = userId;
+                   // string to = _sociaUserManager.GetUserByPostID(postId);
+                    //string postid = postId;
+                    List<string> param = new List<string>();
+                    param.Add(SourceUserId);
+                    param.Add(targetUserId);
+                    param.Add("");
+                    param.Add("Follow");
+                    var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
+                }
+
+                ////////////////////////////////////
             }
             catch (FaildToConnectDbException)
             {

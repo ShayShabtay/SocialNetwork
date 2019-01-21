@@ -94,8 +94,27 @@ namespace SocialServer.Controllers
             try
             {
                 _socialPostManager.AddComment(comment, userId, postId);
-         
+
+                ///////////////////////////////
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:51446/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    // string from = userId;
+                    string to = _socialPostManager.GetUserByPostID(postId);
+                    //string postid = postId;
+                    List<string> param = new List<string>();
+                    param.Add(userId);
+                    param.Add(to);
+                    param.Add(postId);
+                    param.Add("Comment");
+                    var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
                 }
+
+                ////////////////////////////////////
+
+
+            }
             catch (FaildToConnectDbException)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
@@ -150,6 +169,7 @@ namespace SocialServer.Controllers
                     param.Add(userId);
                     param.Add(to);
                     param.Add(postId);
+                    param.Add("Like");
                     var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
                 }
 

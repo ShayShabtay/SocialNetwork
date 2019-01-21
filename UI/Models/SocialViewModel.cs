@@ -1,4 +1,5 @@
-﻿using SocialCommon.Models;
+﻿using NotificationService.signalR;
+using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace UI.Models
 {
     public class SocialViewModel
     {
+        public List<NotificationModel> Notifications { get; set; }
         public Comment Comment { get; set; }
         public Post Post { get; set; }
         public User User { get; set; }
@@ -23,6 +25,8 @@ namespace UI.Models
             Post = new Post("");
             Comment = new Comment("");
             ClientPostFeed = new List<ClientPost>();
+
+            Notifications = new List<NotificationModel>();
         }
     }
 

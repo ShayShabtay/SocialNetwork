@@ -15,19 +15,23 @@ namespace NotificationService.signalR
             NotificationsService = NotificationsService.GetInstance;
         }
 
-        public List<NotificationModel> SignIn(string userName)
+        public void SignIn(string userName)
         {
             NotificationsService.AddConnectedUser(Context.ConnectionId, userName);
-            List<NotificationModel> notifications= NotificationsService.CheckNotification(userName);
-            if (notifications!=null)
+           bool hasNotification= NotificationsService.CheckNotification(userName);
+            if (hasNotification)
             {
-                return notifications;
+                GetNotificationsFromServer(userName);
+                //return notifications;
             }
-            return null;
+            //return null;
         }
         public void GetNotificationsFromServer(string userName)
         {
-            Clients.Client(NotificationsService.ConnectedUsers[userName]).GotNotificationsFromServer(NotificationsService.NotificationsList[userName]);
+           // Clients.Client(NotificationsService.ConnectedUsers[userName]).GotNotificationsFromServer(NotificationsService.NotificationsList[userName]);
+            var userNameKey = NotificationsService.ConnectedUsers.FirstOrDefault(x => x.Value == userName).Key;
+
+            Clients.Client(userNameKey).GotNotificationsFromServer(NotificationsService.NotificationsList[userName]);
         }
 
         public void GotAllNotifications(string userName)

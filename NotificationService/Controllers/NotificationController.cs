@@ -20,12 +20,12 @@ namespace NotificationService.Controllers
         [Route("api/Notification/AddNotification")]
         public IHttpActionResult AddNotification([FromBody]List<string> param)
         {
-            NotificationModel notificationModel = new NotificationModel(param[0], param[1], param[2]);
+            NotificationModel notificationModel = new NotificationModel(param[0], param[1], param[2],param[3]);
             NotificationsService notificationsService = NotificationsService.GetInstance;
             notificationsService.AddNotification(notificationModel);
             context.Clients.Client(notificationsService.ConnectedUsers[param[1]]).GetNotification(param[1]);
 
-            return null;
+            return Ok() ;
         }
 
 
