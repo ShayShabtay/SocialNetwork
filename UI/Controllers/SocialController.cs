@@ -79,6 +79,7 @@ namespace UI.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult GetUsersProfileAndFeeds()
         {
             return View();
