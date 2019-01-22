@@ -22,9 +22,18 @@ namespace NotificationService.signalR
             this.SourceClient = sourceName;
             this.TargetClient = targetName;
             this.PostId = postId;
+            this.type = type;
             this.createdDate = DateTime.UtcNow;
         }
 
+        public override string ToString()
+        {
+            if (type == "Follow")
+            {
 
+            return SourceClient + " " + type + " you";
+            }
+            return SourceClient + " " + type + " your"+ PostId;
+        }
     }
 }

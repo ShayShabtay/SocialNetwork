@@ -3,6 +3,7 @@ using SocialCommon.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace UI.Models
@@ -27,6 +28,10 @@ namespace UI.Models
             ClientPostFeed = new List<ClientPost>();
 
             Notifications = new List<NotificationModel>();
+        }
+            public  void waitForRes()
+        {
+            Thread.Sleep(2000);
         }
     }
 

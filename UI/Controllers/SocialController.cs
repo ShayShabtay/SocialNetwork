@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using UI.Models;
 using Amazon.S3;
 using UI.Storage;
+using System.Threading.Tasks;
+using UI.SignalR;
 
 namespace UI.Controllers
 {
@@ -24,6 +26,24 @@ namespace UI.Controllers
             };
             return PartialView(s);
         }
+
+        //[HttpGet]
+        //public async Task<SocialViewModel> updateList(SocialViewModel socialViewModel)
+        //{
+        //    var model = await this.GetFullList(socialViewModel);
+        //    return View(model);
+        //  //  return "updatelist";
+        //}
+        //private async Task<SocialViewModel> GetFullList(SocialViewModel socialViewModel)
+        //{
+        //    SignalRClient signalRClient= new SignalRClient(socialViewModel);
+        //    await signalRClient.Hub.Invoke("GetNotificationsFromServer", "testUser");
+
+
+        //    return socialViewModel;
+        //}
+
+       
 
         [HttpPost]
         public ActionResult CreatePost(SocialViewModel socialViewModel)
