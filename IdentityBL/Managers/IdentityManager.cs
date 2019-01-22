@@ -22,12 +22,11 @@ namespace IdentityBL.Managers
         }
 
         //Public Methods
-        public UserIdentity UpdateUserIdentity(string userId, UserIdentity updatedUserIdentity)
+        public UserIdentity UpdateUserIdentity(UserIdentity updatedUserIdentity)
         {
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(updatedUserIdentity.UserId))
             {
-                updatedUserIdentity.UserId = userId;
-                UserIdentity currentUserIdentity = _dynamo.GetItem<UserIdentity>(userId);
+                UserIdentity currentUserIdentity = _dynamo.GetItem<UserIdentity>(updatedUserIdentity.UserId);
 
                 if (currentUserIdentity != null)
                 {
@@ -92,7 +91,6 @@ namespace IdentityBL.Managers
 
                 if (foundUserIdentity != null)
                 {
-                    foundUserIdentity.UserId = null;
                     return foundUserIdentity;
                 }
                 else

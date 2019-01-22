@@ -21,8 +21,8 @@ namespace IdentityServer.Controllers
         }
 
         [HttpGet]
-        [Route("api/identity/getUserProfile")]
-        public IHttpActionResult GetUserProfile()
+        [Route("api/identity/getUserProfile/{OtherUserId?}")]
+        public IHttpActionResult GetUserProfile(string OtherUserId="")
         {
             string token = Request.Headers.GetValues("x-token").First();
 
@@ -37,6 +37,10 @@ namespace IdentityServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
             }
 
+            if(!string.IsNullOrEmpty(OtherUserId))
+            {
+                userId = OtherUserId;
+            }
             UserIdentity foundUserIdentity;
             try
             {
@@ -78,11 +82,12 @@ namespace IdentityServer.Controllers
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NonAuthoritativeInformation, "Invalid token"));
             }
 
+            userIdentity.UserId = userId;
             UserIdentity updatedUser;
 
             try
             {
-                updatedUser = _identityManager.UpdateUserIdentity(userId, userIdentity);
+                updatedUser = _identityManager.UpdateUserIdentity(userIdentity);
             }
             catch (FaildToConnectDbException)
             {

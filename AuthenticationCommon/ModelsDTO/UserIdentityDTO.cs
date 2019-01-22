@@ -1,16 +1,13 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IdentityCommon.Models
+namespace AuthenticationCommon.ModelsDTO
 {
-    [DynamoDBTable("UsersIdentity")]
-    public class UserIdentity
+    public class UserIdentityDTO
     {
-        [DynamoDBHashKey]
         public string UserId { get; set; }
 
         public string Email { get; set; }

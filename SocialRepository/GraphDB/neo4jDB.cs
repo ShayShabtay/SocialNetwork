@@ -173,8 +173,8 @@ namespace SocialRepository.GraphDB
             List<Post> postList = new List<Post>();
 
             string query = $"Match (u:User)" +
-                           $"Where u.UserID=\"{userId}\"" +
-                           $"Match (u)-[:publish]->(p:Post)" +
+                           $"Where u.UserId=\"{userId}\"" +
+                           $"Match (u)-[:Publish]->(p:Post)" +
                            $"return p";
 
             IStatementResult posts = session.Run(query);
@@ -208,7 +208,24 @@ namespace SocialRepository.GraphDB
             List<User> likesList = new List<User>();
             string query = $"Match (p:Post)" +
                            $"Where p.PostID=\"{postID}\"" +
-                           $"Match (u:User)-[:Like]->(p)" +
+                           $"Match (u:User)-[:LikePost]->(p)" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                likesList.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return likesList;
+        }
+
+        public List<User> GetLikesForComment(string CommentID)
+        {
+            List<User> likesList = new List<User>();
+            string query = $"Match (p:Post)" +
+                           $"Where p.PostID=\"{CommentID}\"" +
+                           $"Match (u:User)-[:LikeComment]->(p)" +
                            $"return u";
             IStatementResult res = session.Run(query);
             foreach (var item in res)

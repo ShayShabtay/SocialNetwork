@@ -12,6 +12,7 @@ namespace UI.Models
         public Post Post { get; set; }
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
+        public UserIdentityModel OtherUserIdentityModel { get; set; }
         public IEnumerable<UserDTO> UserDTO { get; set; }
         public IEnumerable<ClientPost> ClientPostFeed { get; set; }
 
@@ -19,6 +20,7 @@ namespace UI.Models
         {
             UserDTO = new List<UserDTO>();
             UserIdentityModel = new UserIdentityModel();
+            OtherUserIdentityModel = new UserIdentityModel();
             User = new User();
             Post = new Post("");
             Comment = new Comment("");
@@ -31,8 +33,9 @@ namespace UI.Models
         public string CommentID { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
-        public string imageUrl { get; set; }
-
+        public string ImageUrl { get; set; }
+        public HttpPostedFileBase Picture1 { get; set; }
+        public List<User> UsersLike { get; set; }
 
         public Comment(string content)
         {

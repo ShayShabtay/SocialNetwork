@@ -41,6 +41,8 @@ namespace UI.Models
         public string Address { get; set; }
         [Display(Name = "Work Place")]
         public string WorkPlace { get; set; }
+
+        public string Email { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
