@@ -4,7 +4,7 @@
 
 }
 
-@if (Request.IsAuthenticated)
+@if (Request.Cookies["UserToken"] != null)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -12,9 +12,16 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", id = "UserIdentityID" })
+            @if (Request.Cookies["My_Name"].Value != null)
+            {
+                @Html.ActionLink("Hello " + Request.Cookies["My_Name"].Value + " :)", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", id = "UserIdentityID" })
+            }
+            else
+            {
+                @Html.ActionLink("Hello User"  + " :)", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", id = "UserIdentityID" })
+            }
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()" id="LogOffID">Log off</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()" style="color:whitesmoke">Log off</a></li>
     </ul>
     }
 }

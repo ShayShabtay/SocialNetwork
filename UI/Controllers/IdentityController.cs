@@ -66,7 +66,9 @@ namespace UI.Controllers
 
                         //SocialViewModel socialViewModel = new SocialViewModel();
                         identityModel.UserIdentityModel = res2;
-                      
+
+                        //string space = " ";
+
                         //save Identity in cookies
                         HttpCookie NameIdentityProfile = new HttpCookie("My_Name");
                         NameIdentityProfile.Value = identityModel.UserIdentityModel.Name.ToString();
@@ -93,6 +95,6 @@ namespace UI.Controllers
                 }
             }
         }
-     
+
     }
 }
