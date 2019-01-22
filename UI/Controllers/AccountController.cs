@@ -72,8 +72,7 @@ namespace UI.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             string token = "";
-            //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };//, Id = token };// , LockoutEndDateUtc = };
-            //var result = await UserManager.CreateAsync(user, model.Password);
+            string space = " ";
 
             if (ModelState.IsValid)
             {
@@ -84,27 +83,35 @@ namespace UI.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
-
+                    
                     if (res.IsSuccessStatusCode == true)
                     {
                         token = res.Content.ReadAsAsync<string>().Result;
 
-                        // save to cookie
+                        // save token to cookie
                         HttpCookie userTokenCookie = new HttpCookie("UserToken");
                         userTokenCookie.Value = token.ToString();
                         Response.Cookies.Add(userTokenCookie);//
 
-                        //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        //save Identity in cookies
+                        HttpCookie NameIdentityProfile = new HttpCookie("My_Name");
+                        NameIdentityProfile.Value = model.Email;
+                        Response.Cookies.Add(NameIdentityProfile);///
 
-                        //if (result.Succeeded)
-                        //{
-                        //    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        HttpCookie AgeIdentityProfile = new HttpCookie("My_Age");
+                        AgeIdentityProfile.Value = space;
+                        Response.Cookies.Add(AgeIdentityProfile);///
+
+                        HttpCookie AddressIdentityProfile = new HttpCookie("My_Address");
+                        AddressIdentityProfile.Value = space;
+                        Response.Cookies.Add(AddressIdentityProfile);///
+
+                        HttpCookie WorkPlaceIdentityProfile = new HttpCookie("My_WorkPlace");
+                        WorkPlaceIdentityProfile.Value = space;
+                        Response.Cookies.Add(WorkPlaceIdentityProfile);///
 
                         return RedirectToAction("MainPageAfterLogin", "Home", res);
-                        //}
-                        // AddErrors(result);
-
-                        // return Content("result = null");
+    
                     }
                     else
                     {
