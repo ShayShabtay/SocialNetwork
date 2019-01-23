@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using UI.Models;
 
 namespace UI.Controllers
 {
     public class NotificationsController : Controller
     {
         // GET: Notifications
-        public ActionResult Index()
+        public ActionResult Index(SocialViewModel model)
         {
-            return View();
+            return View(model);
         }
 
         // GET: Notifications/Details/5

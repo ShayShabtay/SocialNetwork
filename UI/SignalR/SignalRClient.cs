@@ -32,8 +32,10 @@ namespace UI.SignalR
                 {
                     
                     Model.Notifications.Add(item);
+
                     //contorller . addNotification{add to notificatin list and notify the view to render}
                 }
+
             });
 
 

@@ -1,0 +1,51 @@
+﻿@model UI.Models.SocialViewModel
+@{
+    Layout = null;
+}
+
+
+
+<div class="col-sm-2 sidenav sidenav">
+    <h3 style="text-align:center">
+        <i class="fas fa-bell" style="color:yellow"></i>
+        Notifications
+    </h3><hr />
+    <div class="well">
+        @*@Html.Action("updateList", "Social", Model);*@
+        <p>You recieve a message</p>
+    </div>
+
+    @{Model.waitForRes();}
+    @{if (Model.Notifications.Count != 0)
+        {
+            foreach (var item in Model.Notifications)
+            {
+                <div @*id="notificationDiv@item.PostId"*@ class="well">
+                    <p @*id="NotificationItem@item.PostId"*@> @item.ToString()</p>
+                </div>
+            }
+        }
+    }
+    
+</div>
+
+<script>
+   //function displayNotification() {
+   //     alert("1");
+   //     var parmas = itemName.split(" ");
+   //     var sourceName = parmas[0];
+   //     var result = sourceName.link("https://www.w3schools.com");
+   //     document.getElementById("NotificationItem"+parmas[3]).innerHtml = result+parmas ;
+   // }
+
+   // function dismissNotification() {
+
+
+   //     document.getElementById("NotificationItem").remove();
+    // }
+    //setTimeout(function () {
+    //    location.reload(1);
+    //}, 5000);
+    
+
+</script>
