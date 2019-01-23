@@ -5,8 +5,10 @@
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
 }
 
-&emsp;&emsp;&emsp; <h1 class="margin">@Model.OtherUserIdentityModel.Name - Facel<img src="https://media.tenor.com/images/a507d6519065e444ce004fa2f37f2689/tenor.gif"
-          width="60" height="60" />k Profile</h1><br />
+&emsp;&emsp;&emsp; <h1 class="margin">
+    @Model.OtherUserIdentityModel.Name - Facel<img src="https://media.tenor.com/images/a507d6519065e444ce004fa2f37f2689/tenor.gif"
+                                                   width="60" height="60" />k Profile
+</h1><br />
 <div class="container-fluid bg-3 text-center">
     <div class="row">
         <div class="col-sm-4">
@@ -20,22 +22,29 @@
             <img src="https://study.com/cimages/videopreview/age_thumb_177423.jpg" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
     </div>
-        <div class="row">
-            <div class="col-sm-5">
-                <h2> Address: </h2>
-                <h4> @Model.OtherUserIdentityModel.Address </h4>
-                <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
-            </div>
-            <div class="col-sm-5">
-                <h2> Work Place: </h2>
-                <h4> @Model.OtherUserIdentityModel.WorkPlace </h4>                
-                <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
-            </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <h2> Address: </h2>
+            <h4> @Model.OtherUserIdentityModel.Address </h4>
+            <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
+        <div class="col-sm-5">
+            <h2> Work Place: </h2>
+            <h4> @Model.OtherUserIdentityModel.WorkPlace </h4>
+            <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+        </div>
+    </div>
     <br />
     <h4 style="text-align:center">
-        <button type="button" onclick="@Html.ActionLink("Block this User!","GetBlockUsers","Relationship",new { targetUserId = Model.OtherUserIdentityModel.UserId })" style="background-color:red; height: 60px;">Block this User!</button> &ensp;
-        <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px; display:none">Follow </button>&ensp;&ensp;
+        <button type="button" style="background-color:red; height: 60px;">@Html.ActionLink("Block this User!", "BlockUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" })</button> &ensp;
+        @if (Model.OtherUserIdentityModel ==null @*.isFollow == true*@)
+        {
+            <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px;">@Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+        }
+        else
+        {
+            <button id="UnFollowButtonID" type="button" style="background-color:orange; height: 60px;">@Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+        }
     </h4>
 </div>
 
@@ -84,7 +93,7 @@
 
     @*}*@
 </div>
-      <br /><br /><br /><br />
+<br /><br /><br /><br />
 
 
 <script>
@@ -99,9 +108,10 @@
 </script>
 
 <style>
-    h4{
-        color:blue;
+    h4 {
+        color: blue;
     }
+
     button {
         width: 130px;
         height: 45px;
