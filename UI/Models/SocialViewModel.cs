@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NotificationService.signalR;
+using SocialCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,23 +9,24 @@ namespace UI.Models
 {
     public class SocialViewModel
     {
+        public List<NotificationModel> Notifications { get; set; }
         public Comment Comment { get; set; }
         public Post Post { get; set; }
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
-        public UserIdentityModel OtherUserIdentityModel { get; set; }
         public IEnumerable<UserDTO> UserDTO { get; set; }
-        //public IEnumerable<ClientPost> ClientPostFeed { get; set; }
+        public IEnumerable<ClientPost> ClientPostFeed { get; set; }
 
         public SocialViewModel()
         {
             UserDTO = new List<UserDTO>();
             UserIdentityModel = new UserIdentityModel();
-            OtherUserIdentityModel = new UserIdentityModel();
             User = new User();
             Post = new Post("");
             Comment = new Comment("");
-       //     ClientPostFeed = new List<ClientPost>();
+            ClientPostFeed = new List<ClientPost>();
+
+            Notifications = new List<NotificationModel>();
         }
     }
 
@@ -32,9 +35,8 @@ namespace UI.Models
         public string CommentID { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
-        public string ImageUrl { get; set; }
-        public HttpPostedFileBase Picture1 { get; set; }
-        public List<User> UsersLike { get; set; }
+        public string imageUrl { get; set; }
+
 
         public Comment(string content)
         {

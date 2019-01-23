@@ -236,5 +236,25 @@ namespace SocialRepository.GraphDB
 
             return likesList;
         }
+
+        public string getUserByPostId(string postId)
+        {
+            string query = $"Match (p:Post)" +
+                           $"Where p.PostID=\"{postId}\"" +
+                           $"Match (u:User)-[:Publish]->(p)" +
+                           $"return u.UserId";
+            IStatementResult res = session.Run(query);
+
+            string s = null ;
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+               s=(JsonConvert.DeserializeObject<string>(props));
+            }
+            return s;
+
+
+
+        }
     }
 }

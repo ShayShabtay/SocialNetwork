@@ -21,6 +21,6 @@ namespace SocialRepository.GraphDB
         void AddComment(Comment comment);
         List<Comment> GetCommentsForPost(string postID);
         List<User> GetLikesForPost(string postID);
-        List<User> GetLikesForComment(string CommentID);
+        string getUserByPostId(string postId);
     }
 }

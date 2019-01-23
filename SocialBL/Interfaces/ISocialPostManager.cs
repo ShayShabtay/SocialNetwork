@@ -13,16 +13,14 @@ namespace SocialBL.Interfaces
     {
         void AddPost(Post post, string userId);
         void AddComment(Comment comment, string userId, string postId);
-        void AddLikeToPost(string userId, string postId);
-        void UnLikePost(string userId, string postId);
-        void AddLikeToComment(string userId, string commentId);
-        void UnLikeComment(string userId, string commentId);
+        void AddLike(string userId, string postId);
         List<ClientPost> GetAllPosts(string userId);
         List<ClientPost> GetMyPosts(string userId);
-
         string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
         void GetTemporaryToken();
         //SessionAWSCredentials GetTemporaryToken();
+        void UnLike(string userId, string postId);
+        string GetUserByPostID(string postId);
     }
 }
