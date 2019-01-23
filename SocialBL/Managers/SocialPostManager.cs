@@ -71,10 +71,12 @@ namespace SocialBL.Managers
             {
                 ClientPost clientPost = new ClientPost(post);
                 clientPost.Comments = _graphDB.GetCommentsForPost(post.PostID);
-                foreach (var comment in clientPost.Comments)
-                {
-                    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
-                }
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                clientPost.IsLike = _graphDB.IsUserLikePost(userId, post.PostID);
+                //foreach (var comment in clientPost.Comments)
+                //{
+                //    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                //}
                 List<User> usersLike = _graphDB.GetLikesForPost(post.PostID);
                 clientPost.UsersLikes = usersLike;
                 clientPost.LikeCount = usersLike.Count;
@@ -93,10 +95,11 @@ namespace SocialBL.Managers
             {
                 ClientPost clientPost = new ClientPost(post);
                 clientPost.Comments = _graphDB.GetCommentsForPost(post.PostID);
-                foreach (var comment in clientPost.Comments)
-                {
-                    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
-                }
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                //foreach (var comment in clientPost.Comments)
+                //{
+                //    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                //}
                 List<User> usersLike=_graphDB.GetLikesForPost(post.PostID);
                 clientPost.UsersLikes = usersLike;
                 clientPost.LikeCount = usersLike.Count;
@@ -147,7 +150,5 @@ namespace SocialBL.Managers
         {
             TemporaryS3Token.ListObjectsAsync().Wait();
         }
-
-      
     }
 }

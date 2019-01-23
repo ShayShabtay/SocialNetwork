@@ -298,6 +298,7 @@
     <Content Include="Views\Shared\GetAllUsers.cshtml" />
     <Content Include="Views\Shared\CreatePost.cshtml" />
     <Content Include="Views\Social\GetUsersProfileAndFeeds.cshtml" />
+    <Content Include="Views\Shared\GetFeed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -321,10 +322,6 @@
     <ProjectReference Include="..\AuthenticationCommon\AuthenticationCommon.csproj">
       <Project>{3F3AC000-9294-4475-BE56-904F4AB5ECFC}</Project>
       <Name>AuthenticationCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SocialCommon\SocialCommon.csproj">
-      <Project>{49E9F62A-B643-4FDB-B028-AD89D08227CC}</Project>
-      <Name>SocialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

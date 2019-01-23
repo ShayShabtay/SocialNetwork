@@ -9,12 +9,14 @@ namespace SocialCommon.Models
     public class ClientPost
     {
         public string postID { get; set; }
+        public User PostOwner { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
         public string imageUrl { get; set; }
         public List<Comment> Comments { get; set; }
         public List<User> UsersLikes { get; set; }
         public int LikeCount { get; set; }
+        public bool IsLike { get; set; }
 
 
         public ClientPost(Post post)

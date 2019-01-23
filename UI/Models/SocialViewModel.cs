@@ -1,5 +1,4 @@
-﻿using SocialCommon.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,11 +30,12 @@ namespace UI.Models
     public class Comment
     {
         public string CommentID { get; set; }
+        public string PostID { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
-        public List<User> UsersLike { get; set; }
+        //public List<User> UsersLike { get; set; }
 
         public Comment(string content)
         {
@@ -48,6 +48,8 @@ namespace UI.Models
     public class Post
     {
         public string Content { get; set; }
+        public string PostID { get; set; }
+        public DateTime CreationDate { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
 
@@ -67,6 +69,33 @@ namespace UI.Models
     {
         public string UserId { get; set; }
         public string Name { get; set; }
+
+    }
+
+    public class ClientPost
+    {
+        public string postID { get; set; }
+        public User PostOwner { get; set; }
+        public DateTime CreationDate { get; set; }
+        public string Content { get; set; }
+        public string imageUrl { get; set; }
+        public List<Comment> Comments { get; set; }
+        public List<User> UsersLikes { get; set; }
+        public int LikeCount { get; set; }
+        public bool IsLike { get; set; }
+
+        public ClientPost(Post post)
+        {
+            this.postID = post.PostID;
+            this.CreationDate = post.CreationDate;
+            this.Content = post.Content;
+            this.imageUrl = post.ImageUrl;
+        }
+
+        public ClientPost()
+        {
+        }
+
 
     }
 }

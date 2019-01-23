@@ -1,5 +1,4 @@
-﻿using SocialCommon.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,8 +61,9 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateComment(string postId, SocialViewModel socialViewModel)
+        public ActionResult CreateComment(SocialViewModel socialViewModel)
         {
+            string postId = socialViewModel.Comment.PostID;
             string token = Request.Cookies["UserToken"].Value;
             string imageURL;
             if (socialViewModel.Comment.Picture1 != null)
@@ -90,7 +90,6 @@ namespace UI.Controllers
         [HttpGet]
         //Get post to main page
         public ActionResult GetFeed()
-
         {
             string token = Request.Cookies["UserToken"].Value;
 
@@ -108,7 +107,7 @@ namespace UI.Controllers
 
                     SocialViewModel socialViewModel = new SocialViewModel();
                     socialViewModel.ClientPostFeed = posts;
-                    return View("MainPageAfterLogin", socialViewModel);
+                    return PartialView("GetFeed", socialViewModel);
                 }
                 else
                     return Content("res.StatusCode = false :/");
@@ -170,8 +169,8 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult AddLikeToPost(string postId)
+        [HttpGet]
+        public bool AddLikeToPost(string postId)
         {
             string token = Request.Cookies["UserToken"].Value;
 
@@ -186,14 +185,14 @@ namespace UI.Controllers
                 var res = task.Result;
                 if (res.IsSuccessStatusCode == true)
                 {
-                    return View(); //need to add which page to return
+                    return true;
                 }
                 else
-                    return Content("res.StatusCode = false :/");
+                    return false;
             }
         }
 
-        [HttpGet] //change to post
+        [HttpGet]
         public ActionResult UnlikePost(string postId)
         {
             string token = Request.Cookies["UserToken"].Value;
@@ -217,7 +216,7 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult AddLikeToComment(string commentId)
         {
             string token = Request.Cookies["UserToken"].Value;
@@ -241,7 +240,7 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult UnlikeComment(string commentId)
         {
             string token = Request.Cookies["UserToken"].Value;

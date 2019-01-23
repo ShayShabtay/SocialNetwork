@@ -23,6 +23,5 @@ namespace SocialBL.Interfaces
         string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
         void GetTemporaryToken();
-        //SessionAWSCredentials GetTemporaryToken();
     }
 }
