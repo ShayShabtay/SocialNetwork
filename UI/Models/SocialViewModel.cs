@@ -33,6 +33,17 @@ namespace UI.Models
         {
             Thread.Sleep(2000);
         }
+
+        public void AddAndNotify(NotificationModel notificationModel)
+        {
+            Notifications.Add(notificationModel);
+            channgeToRedListner();
+        }
+
+        private void channgeToRedListner()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Comment
