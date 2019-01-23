@@ -158,7 +158,7 @@ namespace UI.Controllers
                     socialViewModel.OtherUserIdentityModel = GetUserIdentity(targetUserId);
 
                     socialViewModel.OtherUserIdentityModel.IsFollow = IsUserFollowUser(targetUserId);
-                    return View("complete", socialViewModel);
+                    return View(socialViewModel);
                 }
                 else
                     return Content("res.StatusCode = false :/");
