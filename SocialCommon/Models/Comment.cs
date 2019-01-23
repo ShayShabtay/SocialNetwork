@@ -13,7 +13,7 @@ namespace SocialCommon.Models
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
-        public List<User> UsersLike { get; set; }
+        //public List<User> UsersLike { get; set; }
 
 
         public Comment(string content)

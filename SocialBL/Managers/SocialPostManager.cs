@@ -37,22 +37,30 @@ namespace SocialBL.Managers
         public void AddComment(Comment comment,string userId,string postId)
         {
             _graphDB.AddComment(comment);
-            //if (x.Result)
-            //{
             _graphDB.CreateRelationship(userId,comment.CommentID, "UserComment");  ///for connect post and comment
             _graphDB.CreateRelationship(postId,comment.CommentID,"PostComment");  ///for connect user to comment that he wrote
-           // }
         }
 
-        public void AddLike(string userId, string postId)
+        public void AddLikeToPost(string userId, string postId)
         {
-                _graphDB.CreateRelationship(userId, postId, "Like");  
-        }
-        public void UnLike(string userId, string postId)
-        {
-            _graphDB.DeleteRelationship(userId, postId, "UnLike");
+                _graphDB.CreateRelationship(userId, postId, "LikePost");  
         }
 
+        public void UnLikePost(string userId, string postId)
+        {
+            _graphDB.DeleteRelationship(userId, postId, "LikePost");
+        }
+
+        public void AddLikeToComment(string userId, string commentId)
+        {
+            _graphDB.CreateRelationship(userId, commentId, "LikeComment");
+
+        }
+
+        public void UnLikeComment(string userId, string commentId)
+        {
+            _graphDB.DeleteRelationship(userId, commentId, "LikeComment");
+        }
 
         public List<ClientPost> GetAllPosts(string userId)
         {
@@ -63,6 +71,12 @@ namespace SocialBL.Managers
             {
                 ClientPost clientPost = new ClientPost(post);
                 clientPost.Comments = _graphDB.GetCommentsForPost(post.PostID);
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                clientPost.IsLike = _graphDB.IsUserLikePost(userId, post.PostID);
+                //foreach (var comment in clientPost.Comments)
+                //{
+                //    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                //}
                 List<User> usersLike = _graphDB.GetLikesForPost(post.PostID);
                 clientPost.UsersLikes = usersLike;
                 clientPost.LikeCount = usersLike.Count;
@@ -81,6 +95,11 @@ namespace SocialBL.Managers
             {
                 ClientPost clientPost = new ClientPost(post);
                 clientPost.Comments = _graphDB.GetCommentsForPost(post.PostID);
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                //foreach (var comment in clientPost.Comments)
+                //{
+                //    comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                //}
                 List<User> usersLike=_graphDB.GetLikesForPost(post.PostID);
                 clientPost.UsersLikes = usersLike;
                 clientPost.LikeCount = usersLike.Count;

@@ -3,10 +3,7 @@
 @{
     ViewBag.Title = "MainPageAfterLogin";
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-
 }
-
-
 <h2>
     Facel<img src="https://media.tenor.com/images/a507d6519065e444ce004fa2f37f2689/tenor.gif"
               width="60" height="60" />k - Main page
@@ -16,16 +13,9 @@
     Html.RenderPartial("CreatePost");
 }
 
-
-    
-
-
-@*@foreach (var item in listOfPosts)
-{
-    Html.RenderPartial("GetFeed", Model.ClientPostFeed.ToList());
-}*@
-
-
+@{
+    Html.RenderAction("GetFeed","Social");
+}
 
 <br /><br /><br /><br />
 
@@ -66,21 +56,3 @@
     }
 </style>
 
-<script>
-    var Identity = document.getElementById("IdentityID");
-    var login = document.getElementById("loginID");
-    var logoff = document.getElementById("logoffID");
-
-    var addComment = document.getElementById("writeCommentID");
-
-    function AddComment() {
-        addComment.style.display = "inline";
-    }
-    function CommentNone() {
-        addComment.style.display = "none";
-    }
-
-    onload = function () {
-        alert("Hello " + $.cookie("My_Name") + " :) ");
-    }
-</script>

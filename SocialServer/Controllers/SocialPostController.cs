@@ -66,7 +66,7 @@ namespace SocialServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/SocialPost/addComment")]
+        [Route("api/SocialPost/addComment/{postId}")]
         public IHttpActionResult AddComment(Comment comment, string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
@@ -128,8 +128,8 @@ namespace SocialServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/SocialPost/addLike")]
-        public IHttpActionResult AddLike([FromBody] string postId)
+        [Route("api/SocialPost/addLikeToPost")]
+        public IHttpActionResult AddLikeToPost([FromBody] string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
 
@@ -155,7 +155,8 @@ namespace SocialServer.Controllers
 
             try
             {
-                _socialPostManager.AddLike(userId, postId);
+                _socialPostManager.AddLikeToPost(userId, postId);
+                
 
                 ///////////////////////////////
                 using (var client = new HttpClient())
@@ -189,8 +190,8 @@ namespace SocialServer.Controllers
         }
 
         [HttpPost]
-        [Route("api/SocialPost/addLike")]
-        public IHttpActionResult UnLike([FromBody] string postId)
+        [Route("api/SocialPost/unLikePost")]
+        public IHttpActionResult UnLikePost([FromBody] string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
 
@@ -216,7 +217,111 @@ namespace SocialServer.Controllers
 
             try
             {
-                _socialPostManager.UnLike(userId, postId);
+                _socialPostManager.UnLikePost(userId, postId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialPost/addLikeToComment")]
+        public IHttpActionResult AddLikeToComment([FromBody] string commentId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            try
+            {
+                _socialPostManager.AddLikeToComment(userId, commentId);
+
+                ///////////////////////////////
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:51446/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    // string from = userId;
+                    string to = _socialPostManager.GetUserByPostID(commentId);
+                    //string postid = postId;
+                    List<string> param = new List<string>();
+                    param.Add(userId);
+                    param.Add(to);
+                    param.Add(commentId);
+                    param.Add("Like");
+                    var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
+                }
+            }
+
+            ////////////////////////////////////
+
+
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialPost/unLikeComment")]
+        public IHttpActionResult UnLikeComment([FromBody] string commentId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NoContent, "Sorry, we could not get the token"));
+            }
+            string userId = null;
+
+            try
+            {
+                userId = _socialPostManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (userId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            try
+            {
+                _socialPostManager.UnLikeComment(userId, commentId);
             }
             catch (FaildToConnectDbException)
             {
@@ -274,8 +379,8 @@ namespace SocialServer.Controllers
         }
 
         [HttpGet]
-        [Route("api/SocialPost/getMyPosts")]
-        public IHttpActionResult GetMyPosts()
+        [Route("api/SocialPost/getMyPosts/{OtherUserId?}")]
+        public IHttpActionResult GetMyPosts(string OtherUserId="")
         {
             string token = Request.Headers.GetValues("x-token").First();
 
@@ -300,6 +405,11 @@ namespace SocialServer.Controllers
             }
 
             List<ClientPost> Posts = null;
+            if(!string.IsNullOrEmpty(OtherUserId))
+            {
+                userId = OtherUserId;
+            }
+
             try
             {
                 //add await here

@@ -27,6 +27,8 @@ namespace NotificationService.signalR
         {
             List<NotificationModel> seedList = new List<NotificationModel>();
             seedList.Add(new NotificationModel("someOne","testUser","","Follow"));
+            seedList.Add(new NotificationModel("someOne2", "testUser", "1234", "Like"));
+
             NotificationsList.Add("testUser", seedList);
         }
 

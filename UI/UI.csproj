@@ -213,6 +213,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdentityController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Controllers\SocialController.cs" />
     <Compile Include="Global.asax.cs">
@@ -302,6 +303,8 @@
     <Content Include="Views\Shared\GetAllUsers.cshtml" />
     <Content Include="Views\Shared\CreatePost.cshtml" />
     <Content Include="Views\Social\GetUsersProfileAndFeeds.cshtml" />
+    <Content Include="Views\Shared\GetFeed.cshtml" />
+    <Content Include="Views\Notifications\NotificationView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -325,14 +328,6 @@
     <ProjectReference Include="..\AuthenticationCommon\AuthenticationCommon.csproj">
       <Project>{3F3AC000-9294-4475-BE56-904F4AB5ECFC}</Project>
       <Name>AuthenticationCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NotificationService\NotificationService.csproj">
-      <Project>{41247570-E23F-408D-95CA-2465245BD28A}</Project>
-      <Name>NotificationService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SocialCommon\SocialCommon.csproj">
-      <Project>{49E9F62A-B643-4FDB-B028-AD89D08227CC}</Project>
-      <Name>SocialCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

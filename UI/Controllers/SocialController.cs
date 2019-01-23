@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using UI.Models;
 using Amazon.S3;
 using UI.Storage;
+using System.Threading.Tasks;
+using UI.SignalR;
 
 namespace UI.Controllers
 {
@@ -23,6 +25,24 @@ namespace UI.Controllers
             };
             return PartialView(s);
         }
+
+        //[HttpGet]
+        //public async Task<SocialViewModel> updateList(SocialViewModel socialViewModel)
+        //{
+        //    var model = await this.GetFullList(socialViewModel);
+        //    return View(model);
+        //  //  return "updatelist";
+        //}
+        //private async Task<SocialViewModel> GetFullList(SocialViewModel socialViewModel)
+        //{
+        //    SignalRClient signalRClient= new SignalRClient(socialViewModel);
+        //    await signalRClient.Hub.Invoke("GetNotificationsFromServer", "testUser");
+
+
+        //    return socialViewModel;
+        //}
+
+       
 
         [HttpPost]
         public ActionResult CreatePost(SocialViewModel socialViewModel)
@@ -61,8 +81,9 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateComment(string postId, SocialViewModel socialViewModel)
+        public ActionResult CreateComment(SocialViewModel socialViewModel)
         {
+            string postId = socialViewModel.Comment.PostID;
             string token = Request.Cookies["UserToken"].Value;
             string imageURL;
             if (socialViewModel.Comment.Picture1 != null)
@@ -89,10 +110,8 @@ namespace UI.Controllers
         [HttpGet]
         //Get post to main page
         public ActionResult GetFeed()
-
         {
             string token = Request.Cookies["UserToken"].Value;
-            //List<SocialCommon.Models.ClientPost> listOfPosts = ClientPostFeed.ToList();
 
             using (var client = new HttpClient())
             {
@@ -107,8 +126,8 @@ namespace UI.Controllers
                    // var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
 
                     SocialViewModel socialViewModel = new SocialViewModel();
-                 //   socialViewModel.ClientPostFeed = posts;
-                    return View("MainPageAfterLogin", socialViewModel);
+                    socialViewModel.ClientPostFeed = posts;
+                    return PartialView("GetFeed", socialViewModel);
                 }
                 else
                     return Content("res.StatusCode = false :/");
@@ -134,8 +153,8 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                   // var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
-                  //  socialViewModel.ClientPostFeed = posts;
+                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                    socialViewModel.ClientPostFeed = posts;
                     socialViewModel.OtherUserIdentityModel = GetUserIdentity(userId);
                     return View("complete", socialViewModel);
                 }
@@ -161,8 +180,8 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                 //   var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
-                 //   socialViewModel.ClientPostFeed = posts;
+                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                    socialViewModel.ClientPostFeed = posts;
                     return View("x", socialViewModel); //need to add which page to return
                 }
                 else
@@ -170,8 +189,8 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult AddLikeToPost(string postId)
+        [HttpGet]
+        public bool AddLikeToPost(string postId)
         {
             string token = Request.Cookies["UserToken"].Value;
 
@@ -186,14 +205,14 @@ namespace UI.Controllers
                 var res = task.Result;
                 if (res.IsSuccessStatusCode == true)
                 {
-                    return View(); //need to add which page to return
+                    return true;
                 }
                 else
-                    return Content("res.StatusCode = false :/");
+                    return false;
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult UnlikePost(string postId)
         {
             string token = Request.Cookies["UserToken"].Value;
@@ -217,7 +236,7 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult AddLikeToComment(string commentId)
         {
             string token = Request.Cookies["UserToken"].Value;
@@ -241,7 +260,7 @@ namespace UI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult UnlikeComment(string commentId)
         {
             string token = Request.Cookies["UserToken"].Value;

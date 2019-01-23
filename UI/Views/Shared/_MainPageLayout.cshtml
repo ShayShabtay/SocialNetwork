@@ -50,7 +50,7 @@
         /* On small screens, set height to 'auto' for sidenav and grid */
         @@media screen and (max-width: 767px) {
             .sidenav {
-                height: auto;
+                height: 100%;
                 padding: 15px;
             }
 
@@ -143,23 +143,8 @@
                     <hr />
                 </div>
             </div>
-            <div class="col-sm-2 sidenav sidenav">
-                <h3 style="text-align:center">
-                    <i class="fas fa-bell" style="color:yellow"></i>
-                    Notifications
-                </h3><hr />
-                <div class="well">
-                    <p>You recieve a message</p>
-                    @{ if (Model.Notifications != null) {
-                    @:<p>Model.Notifications[0]</p>
-                        }
-                    }
-                </div>
-                <div class="well">
-                    <p>someone send you a friend request</p>
-                </div>
+           @Html.Partial( "~/Views/Notifications/NotificationView.cshtml" ,Model)
             </div>
-        </div>
     </div>
 
 

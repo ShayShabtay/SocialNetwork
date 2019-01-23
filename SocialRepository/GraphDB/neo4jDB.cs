@@ -132,6 +132,23 @@ namespace SocialRepository.GraphDB
             return blockedUsers;
         }
 
+        public User GetPostOwner(string postID)
+        {
+            string query = $"Match (u:User)-[:Publish]->(p:Post) " +
+                         $"Where p.PostID=\"{postID}\" " +
+                         $"Return u";
+
+            IStatementResult res = session.Run(query);
+
+            User postOwner = null;
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                postOwner = (JsonConvert.DeserializeObject<User>(props));
+            }
+            return postOwner;
+        }
+
 
         //Post Methods
         public void AddPost(Post post)
@@ -140,12 +157,12 @@ namespace SocialRepository.GraphDB
             string query = $"Create (p:Post{jsonPost})";
             session.Run(query);
         }
-       
-        public async void AddComment(Comment comment)
+
+        public void AddComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
-            await session.RunAsync(query);
+            session.Run(query);
         }
 
         public List<Post> GetAllPosts(string userId)
@@ -235,6 +252,27 @@ namespace SocialRepository.GraphDB
             }
 
             return likesList;
+        }
+
+        public bool IsUserLikePost(string userId, string PostID)
+        {
+            string query = $"Match (u:User)-[:LikePost]->(p:Post) " +
+                            $"Where u.UserId=\"{userId}\" " +
+                            $"And p.PostID=\"{PostID}\" " +
+                             $"Return u";
+
+            IStatementResult posts = session.Run(query);
+
+            List<User> users = new List<User>();
+            foreach (var item in posts)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                users.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+            if (users.Count > 0)
+                return true;
+            else
+                return false;
         }
 
         public string getUserByPostId(string postId)

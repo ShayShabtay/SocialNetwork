@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
-using NotificationService.signalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,8 @@ namespace UI.SignalR
         public HubConnection Connection { get; set; }
         public IHubProxy Hub { get; set; }
         public SocialViewModel Model { get; set; }
+
+
         public SignalRClient(SocialViewModel model)//Chat Ctor
         {
            this.Model = model;
@@ -30,7 +31,8 @@ namespace UI.SignalR
                 foreach (var item in notifications)
                 {
                     
-                    model.Notifications.Add(item);
+                    Model.Notifications.Add(item);
+                    //contorller . addNotification{add to notificatin list and notify the view to render}
                 }
             });
 
