@@ -213,6 +213,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdentityController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Controllers\SocialController.cs" />
     <Compile Include="Global.asax.cs">
@@ -303,6 +304,7 @@
     <Content Include="Views\Shared\CreatePost.cshtml" />
     <Content Include="Views\Social\GetUsersProfileAndFeeds.cshtml" />
     <Content Include="Views\Shared\GetFeed.cshtml" />
+    <Content Include="Views\Notifications\NotificationView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
