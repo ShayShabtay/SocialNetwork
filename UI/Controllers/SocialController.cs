@@ -1,5 +1,4 @@
-﻿using SocialCommon.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,6 +92,7 @@ namespace UI.Controllers
 
         {
             string token = Request.Cookies["UserToken"].Value;
+            //List<SocialCommon.Models.ClientPost> listOfPosts = ClientPostFeed.ToList();
 
             using (var client = new HttpClient())
             {
@@ -104,10 +104,10 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                   // var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
 
                     SocialViewModel socialViewModel = new SocialViewModel();
-                    socialViewModel.ClientPostFeed = posts;
+                 //   socialViewModel.ClientPostFeed = posts;
                     return View("MainPageAfterLogin", socialViewModel);
                 }
                 else
@@ -134,8 +134,8 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
-                    socialViewModel.ClientPostFeed = posts;
+                   // var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                  //  socialViewModel.ClientPostFeed = posts;
                     socialViewModel.OtherUserIdentityModel = GetUserIdentity(userId);
                     return View("complete", socialViewModel);
                 }
@@ -161,8 +161,8 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
-                    socialViewModel.ClientPostFeed = posts;
+                 //   var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                 //   socialViewModel.ClientPostFeed = posts;
                     return View("x", socialViewModel); //need to add which page to return
                 }
                 else
@@ -193,7 +193,7 @@ namespace UI.Controllers
             }
         }
 
-        [HttpGet] //change to post
+        [HttpPost]
         public ActionResult UnlikePost(string postId)
         {
             string token = Request.Cookies["UserToken"].Value;

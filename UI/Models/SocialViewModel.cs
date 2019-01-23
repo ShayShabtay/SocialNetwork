@@ -1,5 +1,4 @@
-﻿using SocialCommon.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,7 +13,7 @@ namespace UI.Models
         public UserIdentityModel UserIdentityModel { get; set; }
         public UserIdentityModel OtherUserIdentityModel { get; set; }
         public IEnumerable<UserDTO> UserDTO { get; set; }
-        public IEnumerable<ClientPost> ClientPostFeed { get; set; }
+        //public IEnumerable<ClientPost> ClientPostFeed { get; set; }
 
         public SocialViewModel()
         {
@@ -24,7 +23,7 @@ namespace UI.Models
             User = new User();
             Post = new Post("");
             Comment = new Comment("");
-            ClientPostFeed = new List<ClientPost>();
+       //     ClientPostFeed = new List<ClientPost>();
         }
     }
 
