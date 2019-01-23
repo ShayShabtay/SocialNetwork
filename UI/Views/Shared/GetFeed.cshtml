@@ -16,22 +16,22 @@
         <div class="panel-footer">
             <div class="row" style="text-align:center">
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLike('@item.postID','@item.IsLike');">
+                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToPost('@item.postID');">
 
                         @if (item.IsLike)
                         {
-                            <i class="far fa-thumbs-down"></i>
-                            <span>Unlike!!</span>
+                            <i class="far fa-thumbs-down" id="like_post_thumbs_@item.postID"></i>
+                            <span id="like_post_@item.postID">Unlike</span>
                         }
                         else
                         {
-                            <i class="far fa-thumbs-up"></i>@*&ensp;*@
-                            <span>Like!!</span>
+                            <i class="far fa-thumbs-up" id="like_post_thumbs_@item.postID"></i>@*&ensp;*@
+                            <span id="like_post_@item.postID">Like</span>
                         }
                     </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-default" onclick=AddComment() style="color:brown">
+                    <button type="button" class="btn btn-default" onclick="AddComment();" style="color:brown">
                         <i class="far fa-comment"></i>&ensp;
                         <span>Comment</span>
                     </button>
@@ -45,7 +45,7 @@
                     @*<i class="fa fa-ban" style="color:red">Block This User</i>*@
                 </div>
             </div>
-            <div id="writeCommentID" style="display:none">
+            <div id="writeCommentID" style="display:none;">
                 @foreach (var item2 in item.Comments)
                 {
                     <br />
@@ -53,19 +53,26 @@
                     <div class="panel panel-success" style="width:750px">
                         <div class="panel-heading">
                             <img src="~/Images/MyImage2.png" class="img-circle" alt="Cinque Terre" width="28" height="34">
-                            Post from -need to change this, at @item2.CreationDate
+                            Post from @item2.CommentOwner.Name, at @item2.Comment.CreationDate
                         </div>
-                        <div class="panel-body">@item2.Content</div>
+                        <div class="panel-body">@item2.Comment.Content</div>
                         <div>
-                            <img class="img-responsive" src="@item2.ImageUrl" />
+                            <img class="img-responsive" src="@item2.Comment.ImageUrl" />
                         </div>
                         <div class="panel-footer">
                             <div class="row" style="text-align:center">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToComment('@item2.CommentID');"> @*,'@item.IsLike'*@
-
-                                        <i class="far fa-thumbs-up"></i>
-                                        <span>Like!!</span>
+                                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToComment('@item2.Comment.CommentID');">
+                                        @if (item2.IsLike)
+                                        {
+                                            <i class="far fa-thumbs-down" id="like_comment_thumbs_@item2.Comment.CommentID"></i>
+                                            <span id="like_comment_@item2.Comment.CommentID">Unlike</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-thumbs-up" id="like_comment_thumbs_@item2.Comment.CommentID"></i>@*&ensp;*@
+                                            <span id="like_comment_@item2.Comment.CommentID">Like</span>
+                                        }
                                     </button>
                                 </div>
                             </div>
@@ -92,28 +99,64 @@
 
     var addComment = document.getElementById("writeCommentID");
 
-    function AddLike(commentId, isLike) {
-        if (isLike) {
-            $.get("../Social/AddLikeToComment?PostId=" + commentId, function (response) {
-                console.log(response);
-            });
-        }
-        else {
-            $.get("../Social/UnlikeComment?PostId=" + commentId, function (response) {
-                console.log(response);
-            });
-        }
+
+    function AddComment() {
+        addComment.style.display = "inline";
+    }
+    function CommentNone() {
+        addComment.style.display = "none";
     }
 
-    function AddLikeToComment(PostId, isLike) {
-        if (isLike) {
+    function AddLikeToPost(PostId) {
+        var elem = document.getElementById("like_post_" + PostId)
+        var thumb = document.getElementById("like_post_thumbs_" + PostId)
+
+        if (elem.innerText == "Like") {
             $.get("../Social/AddLikeToPost?PostId=" + PostId, function (response) {
                 console.log(response);
+                if (response) {
+                    elem.innerText = "Unlike";
+                    thumb.classList.remove('fa-thumbs-up')
+                    thumb.classList.add('fa-thumbs-down')
+                }
             });
         }
         else {
             $.get("../Social/UnlikePost?PostId=" + PostId, function (response) {
                 console.log(response);
+                if (response) {
+                    thumb.classList.remove('fa-thumbs-down')
+                    thumb.classList.add('fa-thumbs-up')
+                    elem.innerText = "Like";
+                }
+            });
+        }
+    }
+
+    function AddLikeToComment(commentId) {
+
+        var elem = document.getElementById("like_comment_" + commentId)
+        var thumb = document.getElementById("like_comment_thumbs_" + commentId)
+        if (elem.innerText == "Like") {
+            $.get("../Social/AddLikeToComment?PostId=" + commentId, function (response) {
+                console.log(response);
+
+                if (response) {
+                    elem.innerText = "Unlike";
+                    thumb.classList.remove('fa-thumbs-up');
+                    thumb.classList.add('fa-thumbs-down');
+                }
+            }
+            );
+        }
+        else {
+            $.get("../Social/UnlikeComment?PostId=" + commentId, function (response) {
+                console.log(response);
+                if (response) {
+                    thumb.classList.remove('fa-thumbs-down')
+                    thumb.classList.add('fa-thumbs-up')
+                    elem.innerText = "Like";
+                }
             });
         }
     }
@@ -125,12 +168,6 @@
         });
     }
 
-    function AddComment() {
-        addComment.style.display = "inline";
-    }
-    function CommentNone() {
-        addComment.style.display = "none";
-    }
 
     onload = function () {
         alert("Hello " + $.cookie("My_Name") + " :) ");

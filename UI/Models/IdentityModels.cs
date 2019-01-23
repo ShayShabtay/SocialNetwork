@@ -43,6 +43,7 @@ namespace UI.Models
         public string WorkPlace { get; set; }
 
         public string Email { get; set; }
+        public bool IsFollow { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

@@ -231,6 +231,45 @@ namespace SocialServer.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("api/SocialUser/isUserFollowUser")]
+        public IHttpActionResult IsUserFollowUser([FromBody]string targetUserId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = null;
+
+            try
+            {
+                SourceUserId = _sociaUserManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (SourceUserId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            bool isFollow;
+
+            try
+            {
+                isFollow = _sociaUserManager.IsUserFollowUser(SourceUserId, targetUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(isFollow);
+        }
+
         [HttpGet]
         [Route("api/SocialUser/getAllUsers")]
         public IHttpActionResult GetAllUsers()

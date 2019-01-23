@@ -149,6 +149,18 @@ namespace SocialRepository.GraphDB
             return postOwner;
         }
 
+        public bool IsFollow(string userId, string followedUserId)
+
+        {
+
+            string query = " return exists((: User{ UserId:'" + userId + "'})-[:Follow]->(:User{ UserId:'" + followedUserId + "'})) as isFollow";
+
+            var res = session.Run(query);
+
+            return (bool)res.Single()[0];
+
+        }
+
 
         //Post Methods
         public void AddPost(Post post)
@@ -286,13 +298,51 @@ namespace SocialRepository.GraphDB
             string s = null ;
             foreach (var item in res)
             {
-                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                var props = JsonConvert.SerializeObject(item[0].As<string>());
                s=(JsonConvert.DeserializeObject<string>(props));
             }
             return s;
 
 
 
+        }
+
+        public User GetCommentOwner(string commentID)
+        {
+            string query = $"Match (u:User)-[:UserComment]->(c:Comment) " +
+                        $"Where c.CommentID=\"{commentID}\" " +
+                        $"Return u";
+
+            IStatementResult res = session.Run(query);
+
+            User commentOwner = null;
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                commentOwner = (JsonConvert.DeserializeObject<User>(props));
+            }
+            return commentOwner;
+        }
+
+        public bool IsUserLikeComment(string userId, string commentID)
+        {
+            string query = $"Match (u:User)-[:LikeComment]->(c:Comment) " +
+                            $"Where u.UserId=\"{userId}\" " +
+                            $"And c.CommentID=\"{commentID}\" " +
+                             $"Return u";
+
+            IStatementResult posts = session.Run(query);
+
+            List<User> users = new List<User>();
+            foreach (var item in posts)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                users.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+            if (users.Count > 0)
+                return true;
+            else
+                return false;
         }
     }
 }

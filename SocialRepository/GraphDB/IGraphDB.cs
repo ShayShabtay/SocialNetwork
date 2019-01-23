@@ -14,6 +14,7 @@ namespace SocialRepository.GraphDB
         List<User> GetFollowers(string userId);
         List<User> GetFollowing(string userId);
         List<User> GetBlockedUsers(string userId);
+        bool IsFollow(string userId, string followedUserId);
 
         void AddPost(Post post);
         List<Post> GetAllPosts(string userId);
@@ -25,5 +26,7 @@ namespace SocialRepository.GraphDB
         List<User> GetLikesForComment(string CommentID);
         bool IsUserLikePost(string userId, string PostID);
         string getUserByPostId(string postId);
+        User GetCommentOwner(string commentID);
+        bool IsUserLikeComment(string userId, string commentID);
     }
 }
