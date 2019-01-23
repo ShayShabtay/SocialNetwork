@@ -66,7 +66,7 @@ namespace UI.Controllers
                 var task = client.PostAsJsonAsync("api/SocialPost/addPost", socialViewModel.Post);
                 task.Wait();
                 var res = task.Result;
-                return View("MainPageAfterLogin");
+                return RedirectToAction("MainPageAfterLogin","Home");
             }
         }
 

@@ -5,37 +5,43 @@
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
 }
 
-<h2 class="margin">@*@Model.UserIdentityModel.Name*@John Doe Profile</h2><br />
+&emsp;&emsp;&emsp; <h1 class="margin">@Model.OtherUserIdentityModel.Name - Facel<img src="https://media.tenor.com/images/a507d6519065e444ce004fa2f37f2689/tenor.gif"
+          width="60" height="60" />k Profile</h1><br />
 <div class="container-fluid bg-3 text-center">
     <div class="row">
         <div class="col-sm-4">
             <h2> Name: </h2>
-            <h5>@*@Model.UserIdentityModel.Name*@John Doe</h5>
+            <h4>@Model.OtherUserIdentityModel.Name </h4>
             <img src="http://quizpanorama.com/ledelse/images/employee/big/dummy.jpg" class="img-responsive img-circle" style="width:65%;  float:right; position:relative; left:-10%;" alt="Image">
         </div>
         <div class="col-sm-4">
             <h2> Age: </h2>
-            <h5>@*@Model.UserIdentityModel.Age*@ 33 </h5>
+            <h4>@Model.OtherUserIdentityModel.Age </h4>
             <img src="https://study.com/cimages/videopreview/age_thumb_177423.jpg" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
     </div>
         <div class="row">
             <div class="col-sm-5">
                 <h2> Address: </h2>
-                <h5>@*@Model.UserIdentityModel.Address*@ New York, USA</h5>
+                <h4> @Model.OtherUserIdentityModel.Address </h4>
                 <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
             </div>
             <div class="col-sm-5">
                 <h2> Work Place: </h2>
-                <h5>@*@Model.UserIdentityModel.WorkPlace*@ Facelook Corp, New York </h5>                
+                <h4> @Model.OtherUserIdentityModel.WorkPlace </h4>                
                 <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
             </div>
         </div>
+    <br />
+    <h4 style="text-align:center">
+        <button type="button" onclick="@Html.ActionLink("Block this User!","GetBlockUsers","Relationship",new { targetUserId = Model.OtherUserIdentityModel.UserId })" style="background-color:red; height: 60px;">Block this User!</button> &ensp;
+        <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px; display:none">Follow </button>&ensp;&ensp;
+    </h4>
 </div>
 
 <br /><br />
 <div class="container">
-    <h2 style="text-align:left; color:blueviolet">&emsp;&emsp;&emsp; The Wall Of @*@Model.UserIdentityModel.Name*@John Doe</h2><br />
+    <h2 style="text-align:left; color:blueviolet">&emsp;&emsp;&emsp; The Wall Of @Model.OtherUserIdentityModel.Name</h2><br />
     @*@foreach (var item in Model.Post)
         {*@
     <div class="panel panel-success" style="width:750px">
@@ -91,3 +97,15 @@
         addComment.style.display = "none";
     }
 </script>
+
+<style>
+    h4{
+        color:blue;
+    }
+    button {
+        width: 130px;
+        height: 45px;
+        background-color: green;
+        color: white;
+    }
+</style>
