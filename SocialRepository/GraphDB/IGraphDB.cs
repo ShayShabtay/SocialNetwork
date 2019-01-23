@@ -18,9 +18,12 @@ namespace SocialRepository.GraphDB
         void AddPost(Post post);
         List<Post> GetAllPosts(string userId);
         List<Post> GetMyPosts(string userId);
+        User GetPostOwner(string postID);
         void AddComment(Comment comment);
         List<Comment> GetCommentsForPost(string postID);
         List<User> GetLikesForPost(string postID);
+        List<User> GetLikesForComment(string CommentID);
+        bool IsUserLikePost(string userId, string PostID);
         string getUserByPostId(string postId);
     }
 }

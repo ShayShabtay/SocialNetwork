@@ -10,7 +10,7 @@ namespace IdentityServer.Interfaces
 {
     public interface IIdentityApi
     {
-        IHttpActionResult GetUserProfile();
+        IHttpActionResult GetUserProfile(string OtherUserId);
         IHttpActionResult UpdateUserProfile(UserIdentity userIdentity);
     }
 }

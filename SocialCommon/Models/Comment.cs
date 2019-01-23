@@ -12,7 +12,8 @@ namespace SocialCommon.Models
         public string CommentID { get; set; }
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
-        public string imageUrl { get; set; }
+        public string ImageUrl { get; set; }
+        //public List<User> UsersLike { get; set; }
 
 
         public Comment(string content)
@@ -22,6 +23,4 @@ namespace SocialCommon.Models
             this.Content = content;
         }
     }
-
-
 }

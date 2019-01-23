@@ -132,6 +132,23 @@ namespace SocialRepository.GraphDB
             return blockedUsers;
         }
 
+        public User GetPostOwner(string postID)
+        {
+            string query = $"Match (u:User)-[:Publish]->(p:Post) " +
+                         $"Where p.PostID=\"{postID}\" " +
+                         $"Return u";
+
+            IStatementResult res = session.Run(query);
+
+            User postOwner = null;
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                postOwner = (JsonConvert.DeserializeObject<User>(props));
+            }
+            return postOwner;
+        }
+
 
         //Post Methods
         public void AddPost(Post post)
@@ -140,12 +157,12 @@ namespace SocialRepository.GraphDB
             string query = $"Create (p:Post{jsonPost})";
             session.Run(query);
         }
-       
-        public async void AddComment(Comment comment)
+
+        public void AddComment(Comment comment)
         {
             var jsonObj = DbHelper.ObjectToJson(comment);
             string query = $"Create (c:Comment{jsonObj})";
-            await session.RunAsync(query);
+            session.Run(query);
         }
 
         public List<Post> GetAllPosts(string userId)
@@ -173,8 +190,8 @@ namespace SocialRepository.GraphDB
             List<Post> postList = new List<Post>();
 
             string query = $"Match (u:User)" +
-                           $"Where u.UserID=\"{userId}\"" +
-                           $"Match (u)-[:publish]->(p:Post)" +
+                           $"Where u.UserId=\"{userId}\"" +
+                           $"Match (u)-[:Publish]->(p:Post)" +
                            $"return p";
 
             IStatementResult posts = session.Run(query);
@@ -208,7 +225,7 @@ namespace SocialRepository.GraphDB
             List<User> likesList = new List<User>();
             string query = $"Match (p:Post)" +
                            $"Where p.PostID=\"{postID}\"" +
-                           $"Match (u:User)-[:Like]->(p)" +
+                           $"Match (u:User)-[:LikePost]->(p)" +
                            $"return u";
             IStatementResult res = session.Run(query);
             foreach (var item in res)
@@ -218,6 +235,44 @@ namespace SocialRepository.GraphDB
             }
 
             return likesList;
+        }
+
+        public List<User> GetLikesForComment(string CommentID)
+        {
+            List<User> likesList = new List<User>();
+            string query = $"Match (p:Post)" +
+                           $"Where p.PostID=\"{CommentID}\"" +
+                           $"Match (u:User)-[:LikeComment]->(p)" +
+                           $"return u";
+            IStatementResult res = session.Run(query);
+            foreach (var item in res)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                likesList.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+
+            return likesList;
+        }
+
+        public bool IsUserLikePost(string userId, string PostID)
+        {
+            string query = $"Match (u:User)-[:LikePost]->(p:Post) " +
+                            $"Where u.UserId=\"{userId}\" " +
+                            $"And p.PostID=\"{PostID}\" " +
+                             $"Return u";
+
+            IStatementResult posts = session.Run(query);
+
+            List<User> users = new List<User>();
+            foreach (var item in posts)
+            {
+                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                users.Add(JsonConvert.DeserializeObject<User>(props));
+            }
+            if (users.Count > 0)
+                return true;
+            else
+                return false;
         }
 
         public string getUserByPostId(string postId)

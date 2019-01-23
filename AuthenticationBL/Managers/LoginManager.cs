@@ -44,6 +44,8 @@ namespace AuthenticationBL.Managers
 
                 CreateUserNodeOnGraphDb(userToRegister.UserId,userToRegister.Email);
 
+                CreateUserIdentity(userToRegister.UserId, userToRegister.Email, token);
+
                 return token;
             }
             else
@@ -51,8 +53,6 @@ namespace AuthenticationBL.Managers
                 throw new AlreadyExistException("Email");
             }
         }
-
-
 
         public string LoginManual(UserLoginDTO userLoginDTO)
         {
@@ -173,5 +173,26 @@ namespace AuthenticationBL.Managers
             }
         }
 
+        private void CreateUserIdentity(string userId, string email, string token)
+        {
+            UserIdentityDTO userIdentityDTO = new UserIdentityDTO()
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            string url = "http://localhost:51639/api/identity/updateUserProfile";
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("x-token", token);
+                var result = client.PostAsJsonAsync(url, userIdentityDTO).Result;
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    throw new FaildToConnectDbException();
+                }
+            }
+        }
     }
 }
