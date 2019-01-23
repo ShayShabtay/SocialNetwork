@@ -240,26 +240,27 @@ namespace SocialServer.Controllers
             try
             {
                 _socialPostManager.AddLikeToComment(userId, commentId);
-            
+
                 ///////////////////////////////
-            using (var client = new HttpClient())
+                using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://localhost:51446/");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                   // string from = userId;
-                    string to = _socialPostManager.GetUserByPostID(postId);
-                   //string postid = postId;
+                    // string from = userId;
+                    string to = _socialPostManager.GetUserByPostID(commentId);
+                    //string postid = postId;
                     List<string> param = new List<string>();
                     param.Add(userId);
                     param.Add(to);
-                    param.Add(postId);
+                    param.Add(commentId);
                     param.Add("Like");
                     var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
                 }
+            }
 
-                ////////////////////////////////////
+            ////////////////////////////////////
 
-               
+
             catch (FaildToConnectDbException)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));

@@ -24,7 +24,6 @@ namespace SocialBL.Interfaces
         string ValidateToken(string token);
         void GetTemporaryToken();
         //SessionAWSCredentials GetTemporaryToken();
-        void UnLike(string userId, string postId);
         string GetUserByPostID(string postId);
     }
 }
