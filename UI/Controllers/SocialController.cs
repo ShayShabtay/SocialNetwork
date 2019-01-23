@@ -66,7 +66,7 @@ namespace UI.Controllers
                 var task = client.PostAsJsonAsync("api/SocialPost/addPost", socialViewModel.Post);
                 task.Wait();
                 var res = task.Result;
-                return View("MainPageAfterLogin");
+                return RedirectToAction("MainPageAfterLogin","Home");
             }
         }
 
@@ -123,7 +123,7 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                   // var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
+                    var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
 
                     SocialViewModel socialViewModel = new SocialViewModel();
                     socialViewModel.ClientPostFeed = posts;
@@ -156,7 +156,7 @@ namespace UI.Controllers
                     var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
                     socialViewModel.ClientPostFeed = posts;
                     socialViewModel.OtherUserIdentityModel = GetUserIdentity(userId);
-                    return View("complete", socialViewModel);
+                    return View(socialViewModel);
                 }
                 else
                     return Content("res.StatusCode = false :/");

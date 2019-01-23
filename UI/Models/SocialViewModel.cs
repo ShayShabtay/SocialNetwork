@@ -29,7 +29,7 @@ namespace UI.Models
 
             Notifications = new List<NotificationModel>();
         }
-            public  void waitForRes()
+            public void waitForRes()
         {
             Thread.Sleep(2000);
         }

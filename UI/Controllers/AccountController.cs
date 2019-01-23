@@ -131,10 +131,18 @@ namespace UI.Controllers
             return View();
         }
 
+
+        public void SaveIdentityToCookie()
+        {
+           
+        }
+
         //
         // GetUserInfo
         public SocialViewModel GetUserInfo(string token)
         {
+            string space = " ";
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:51639");
@@ -149,6 +157,55 @@ namespace UI.Controllers
                     userIdentityModel = res.Content.ReadAsAsync<UserIdentityModel>().Result;
                     SocialViewModel socialViewModel = new SocialViewModel();
                     socialViewModel.UserIdentityModel = userIdentityModel;
+
+                    //set MyName  in cookie
+                    HttpCookie MyNameCookie = new HttpCookie("My_Name");
+                    if (userIdentityModel.Name !=  null)
+                    {
+                        MyNameCookie.Value = userIdentityModel.Name.ToString();
+                    }
+                    else
+                    {
+                        MyNameCookie.Value = space.ToString();
+                    }
+                     Response.Cookies.Add(MyNameCookie);///
+
+                    //set MyAge  in cookie
+                    HttpCookie MyAgeCookie = new HttpCookie("My_Age");
+                    if (userIdentityModel.Age != null)
+                    {
+                        MyAgeCookie.Value = userIdentityModel.Age.ToString();
+                    }
+                    else
+                    {
+                        MyAgeCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyAgeCookie);///
+
+                    //set MyAddress  in cookie
+                    HttpCookie MyAddressCookie = new HttpCookie("My_Address");
+                    if (userIdentityModel.Address != null)
+                    {
+                        MyAddressCookie.Value = userIdentityModel.Address.ToString();
+                    }
+                    else
+                    {
+                        MyAddressCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyAddressCookie);///
+
+                    //set MyWorkPlace  in cookie
+                    HttpCookie MyWorkPlaceCookie = new HttpCookie("My_WorkPlace");
+                    if (userIdentityModel.WorkPlace != null)
+                    {
+                        MyWorkPlaceCookie.Value = userIdentityModel.WorkPlace.ToString();
+                    }
+                    else
+                    {
+                        MyWorkPlaceCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyWorkPlaceCookie);///
+
                     return socialViewModel;
                     
 
@@ -186,11 +243,7 @@ namespace UI.Controllers
                     HttpCookie userTokenCookie = new HttpCookie("UserToken");
                     userTokenCookie.Value = token.ToString();
                     Response.Cookies.Add(userTokenCookie);///
-
-                    //set MyName  in cookie
-                    HttpCookie MyNameCookie = new HttpCookie("My_Name");
-                    MyNameCookie.Value = model.Email.ToString();
-                    Response.Cookies.Add(MyNameCookie);///
+                    
 
                     TempData["social"] = GetUserInfo(token);
 

@@ -1,6 +1,5 @@
 ﻿@model UI.Models.SocialViewModel
 
-
 <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
     .navbar {
@@ -51,24 +50,20 @@
     </div>
 
 
-    @{Model.waitForRes();}
-    @{if (Model.Notifications.Count != 0)
+    @*@{
+        Model.waitForRes();
+    if (Model.Notifications.Count != 0)
         {
-            @*@:<p>@Model.Notifications[0].ToString()</p>*@
-
-
             foreach (var item in Model.Notifications)
             {
                 <div class="well">
                     <p>@item.ToString();</p>
                 </div>
 
+                }
             }
+        }*@
 
-
-
-        }
-    }
     <div class="well">
         <p>someone send you a friend request</p>
     </div>
