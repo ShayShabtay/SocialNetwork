@@ -23,12 +23,14 @@ namespace NotificationService.Controllers
             NotificationModel notificationModel = new NotificationModel(param[0], param[1], param[2],param[3]);
             NotificationsService notificationsService = NotificationsService.GetInstance;
             notificationsService.AddNotification(notificationModel);
-            context.Clients.Client(notificationsService.ConnectedUsers[param[1]]).GetNotification(param[1]);
+            var userNameKey = notificationsService.ConnectedUsers.FirstOrDefault(x => x.Value == param[1]).Key;
+            if (userNameKey != null)
+            {
+                context.Clients.Client(notificationsService.ConnectedUsers[userNameKey]).GetNotification(param[1]);
+
+            }
 
             return Ok() ;
         }
-
-
-
     }
 }

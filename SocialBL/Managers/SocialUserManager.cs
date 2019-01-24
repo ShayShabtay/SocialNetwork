@@ -89,6 +89,18 @@ namespace SocialBL.Managers
             }
         }
 
+        public bool IsUserFollowUser(string SourceUserId, string targetUserId)
+        {
+            try
+            {
+                return _graphDB.IsFollow(SourceUserId, targetUserId);
+            }
+            catch (Exception e)
+            {
+                throw new FaildToConnectDbException();
+            }
+        }
+
         public List<User> GetAllUsers(string userId)
         {
             try
@@ -156,5 +168,7 @@ namespace SocialBL.Managers
             }
             return null;
         }
+
+        
     }
 }

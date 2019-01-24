@@ -99,7 +99,7 @@ namespace UI.Models
         public DateTime CreationDate { get; set; }
         public string Content { get; set; }
         public string imageUrl { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<MainComment> Comments { get; set; }
         public List<User> UsersLikes { get; set; }
         public int LikeCount { get; set; }
         public bool IsLike { get; set; }
@@ -152,6 +152,13 @@ namespace UI.Models
             }
             return SourceClient + " " + type + " your" + PostId;
         }
+    }
+
+    public class MainComment
+    {
+        public Comment Comment { get; set; }
+        public User CommentOwner { get; set; }
+        public bool IsLike { get; set; }
     }
 
 
