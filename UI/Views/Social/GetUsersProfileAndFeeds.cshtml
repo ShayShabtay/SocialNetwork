@@ -37,13 +37,15 @@
     <br />
     <h4 style="text-align:center">
         <button type="button" style="background-color:red; height: 60px;">@Html.ActionLink("Block this User!", "BlockUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" })</button> &ensp;
-        @if (Model.OtherUserIdentityModel ==null @*.isFollow == true*@)
+        @if (Model.OtherUserIdentityModel.IsFollow != true)
         {
-            <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px;">@Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+            <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px;">
+             @Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
         }
         else
         {
-            <button id="UnFollowButtonID" type="button" style="background-color:orange; height: 60px;">@Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+            <button id="UnFollowButtonID" type="button" style="background-color:orange; height: 60px;">
+            @Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
         }
     </h4>
 </div>
