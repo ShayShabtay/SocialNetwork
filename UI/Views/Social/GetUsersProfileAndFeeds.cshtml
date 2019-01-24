@@ -49,6 +49,10 @@
 </div>
 
 <br /><br />
+
+@{
+    Html.RenderAction("GetFeed", "Social");
+}
 <div class="container">
     <h2 style="text-align:left; color:blueviolet">&emsp;&emsp;&emsp; The Wall Of @Model.OtherUserIdentityModel.Name</h2><br />
     @*@foreach (var item in Model.Post)
