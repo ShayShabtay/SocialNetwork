@@ -1,0 +1,19 @@
+﻿@model UI.Models.SocialViewModel
+@{
+    Layout = "";
+}
+@{
+    Html.RenderPartial("GetFeed");
+}
+
+<script>
+    var block = document.getElementsByClassName('blockbtn');
+
+    Array.prototype.forEach.call(block, function (el) {
+        el.style.display = "none";
+    });
+   
+</script>
+
+<br/><br/><br/><br/>
+

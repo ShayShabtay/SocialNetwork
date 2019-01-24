@@ -1,5 +1,6 @@
 ﻿using Amazon.Runtime;
 using SocialCommon.Models;
+using SocialCommon.ModelsDTO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,6 @@ namespace SocialBL.Interfaces
         string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
         void GetTemporaryToken();
-        //SessionAWSCredentials GetTemporaryToken();
         string GetUserByPostID(string postId);
     }
 }

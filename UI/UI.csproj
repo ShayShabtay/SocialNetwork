@@ -305,6 +305,7 @@
     <Content Include="Views\Social\GetUsersProfileAndFeeds.cshtml" />
     <Content Include="Views\Shared\GetFeed.cshtml" />
     <Content Include="Views\Notifications\NotificationView.cshtml" />
+    <Content Include="Views\Shared\GetMyPosts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

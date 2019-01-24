@@ -75,6 +75,8 @@ namespace UI.Models
 
         public Post(string content)
         {
+            PostID = Guid.NewGuid().ToString();
+            CreationDate = DateTime.UtcNow;
             this.Content = content;
     }
     }

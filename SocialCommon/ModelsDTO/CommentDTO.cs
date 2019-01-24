@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SocialCommon.ModelsDTO
 {
-    public class PostDTO
+    public class CommentDTO
     {
-        public Post Post { get; set; }
+        public Comment Comment { get; set; }
         public List<string> Tags { get; set; }
     }
 }

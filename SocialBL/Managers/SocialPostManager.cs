@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime;
 using SocialBL.Interfaces;
 using SocialCommon.Models;
+using SocialCommon.ModelsDTO;
 using SocialRepository.GraphDB;
 using SocialRepository.Storage;
 using System;
@@ -18,7 +19,6 @@ namespace SocialBL.Managers
     {
 
         IGraphDB _graphDB;
-        const string bucketName = "omer-buckets";
 
         //Ctor
         public SocialPostManager()
@@ -30,7 +30,6 @@ namespace SocialBL.Managers
         public void AddPost(Post post, string userId)
         {
             _graphDB.AddPost(post);
-            Thread.Sleep(2000);
             _graphDB.CreateRelationship(userId, post.PostID, "Publish");
         }
 

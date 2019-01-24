@@ -32,6 +32,8 @@ namespace SocialCommon.Models
             map.Add("Block", new Tuple<string, string, string, string>("User", "UserId", "User", "UserId"));
             map.Add("LikePost",new Tuple<string, string, string, string>("User","UserId","Post","PostID"));
             map.Add("LikeComment",new Tuple<string, string, string, string>("User","UserId", "Comment", "CommentID"));
+            map.Add("TagPost",new Tuple<string, string, string, string>("Post","PostID", "User", "UserId"));
+            map.Add("TagComment",new Tuple<string, string, string, string>("Comment","CommentID", "User", "UserId"));
         }
     }
 }

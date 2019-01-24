@@ -206,7 +206,7 @@ namespace UI.Controllers
                 {
                     var posts = res.Content.ReadAsAsync<List<ClientPost>>().Result;
                     socialViewModel.ClientPostFeed = posts;
-                    return View("x", socialViewModel); //need to add which page to return
+                    return View(socialViewModel); //need to add which page to return
                 }
                 else
                     return Content("res.StatusCode = false :/");
