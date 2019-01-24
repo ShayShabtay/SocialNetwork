@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime;
 using SocialBL.Interfaces;
 using SocialCommon.Models;
+using SocialCommon.ModelsDTO;
 using SocialRepository.GraphDB;
 using SocialRepository.Storage;
 using System;
@@ -27,18 +28,29 @@ namespace SocialBL.Managers
         }
 
         //Public Methods
-        public void AddPost(Post post, string userId)
+        public void AddPost(PostDTO postDTO, string userId)
         {
-            _graphDB.AddPost(post);
+            _graphDB.AddPost(postDTO.Post);
             Thread.Sleep(2000);
-            _graphDB.CreateRelationship(userId, post.PostID, "Publish");
+            _graphDB.CreateRelationship(userId, postDTO.Post.PostID, "Publish");
+
+            foreach (var item in postDTO.Tags)
+            {
+                _graphDB.CreateRelationship(postDTO.Post.PostID, item, "TagPost");
+            }
         }
 
-        public void AddComment(Comment comment, string userId, string postId)
+        public void AddComment(CommentDTO commentDTO, string userId, string postId)
         {
-            _graphDB.AddComment(comment);
-            _graphDB.CreateRelationship(userId, comment.CommentID, "UserComment");  ///for connect post and comment
-            _graphDB.CreateRelationship(postId, comment.CommentID, "PostComment");  ///for connect user to comment that he wrote
+            _graphDB.AddComment(commentDTO.Comment);
+            _graphDB.CreateRelationship(userId, commentDTO.Comment.CommentID, "UserComment");  ///for connect post and comment
+            _graphDB.CreateRelationship(postId, commentDTO.Comment.CommentID, "PostComment");  ///for connect user to comment that he wrote
+
+            foreach (var item in commentDTO.Tags)
+            {
+                _graphDB.CreateRelationship(commentDTO.Comment.CommentID, item, "TagComment");
+            }
+
         }
 
         public void AddLikeToPost(string userId, string postId)

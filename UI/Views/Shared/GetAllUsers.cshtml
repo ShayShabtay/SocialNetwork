@@ -24,6 +24,6 @@
 
 @foreach (var item in Model.UserDTO)
 {
-    <p> @Html.ActionLink(item.Name, "GetUsersProfileAndFeeds", "Social", routeValues: new { userId = @item.UserId }, htmlAttributes:null);</p>
+    <p> @Html.ActionLink(item.Name, "GetUsersProfileAndFeeds", "Social", routeValues: new { targetUserId = @item.UserId }, htmlAttributes:null);</p>
     
 }

@@ -60,9 +60,9 @@
     </div>
 }
 <br /><br /><br />
-<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("To See All My Followers", "GetFollowers", "Relationship",null ,new { @style = "color:white" })</button>
+<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("To See All My Followers", "GetFollowers", "Relationship", null, new { @style = "color:white" })</button>
 <button type="button" class="btn btn-warning"> @Html.ActionLink("To See All Users I'm Following", "GetFollowing", "Relationship", null, new { @style = "color:white" })</button>
-<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("To See All Users I was Blocked", "GetBlockUsers", "Relationship", null, new { @style = "color:white;"})</button>
+<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("To See All Users I was Blocked", "GetBlockUsers", "Relationship", null, new { @style = "color:white;" })</button>
 <br /><br /><br />
 <div style="text-align:center; float:left">
     @Html.ActionLink("Back to Main Page", "MainPageAfterLogin", "Home")
@@ -71,12 +71,20 @@
 <br />
 <br />
 
+<h3>My Posts</h3>
+
+@{
+    Html.RenderAction("GetMyPosts","Social");
+}
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
 
 
 <script>
+    var footer = document.getElementById("myfooter")
+    footer.style.display = "none";
     var name2 = document.getElementById("NameID");
     var age = document.getElementById("AgeID");
     var address = document.getElementById("AddressID");
