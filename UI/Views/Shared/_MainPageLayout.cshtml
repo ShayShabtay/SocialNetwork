@@ -112,24 +112,25 @@
                     <i class="fas fa-info-circle" style="color:blue;"></i>
                     User Info
                 </h3><hr />
-                @if (Model != null)
+                @if (Request.Cookies["My_Name"] != null && Request.Cookies["My_Age"] != null &&
+                Request.Cookies["My_Address"] != null && Request.Cookies["My_WorkPlace"] != null)
                 {
-                    <p><b>Name:</b> @Model.UserIdentityModel.Name </p>
+                <p><b>Name:</b> @Request.Cookies["My_Name"].Value</p>
+                <p><b>Age:</b> @Request.Cookies["My_Age"].Value </p>
+                <p><b>Address:</b> @Request.Cookies["My_Address"].Value </p>
+                <p><b>Work Place:</b> @Request.Cookies["My_WorkPlace"].Value </p>
+                }
+                else if (Model != null)
+                {
+                    <p><b>Name:</b> @Model.UserIdentityModel.Name</p>
                     <p><b>Age:</b> @Model.UserIdentityModel.Age  </p>
                     <p><b>Address:</b> @Model.UserIdentityModel.Address</p>
                     <p><b>Work Place:</b>@Model.UserIdentityModel.WorkPlace</p>
                 }
-                else if (Request.Cookies["My_Name"].Value != null)
-                {
-                    <p><b>Name:</b> @Request.Cookies["My_Name"].Value </p>
-                    <p><b>Age:</b> @Request.Cookies["My_Age"].Value </p>
-                    <p><b>Address:</b> @Request.Cookies["My_Address"].Value </p>
-                    <p><b>Work Place:</b> @Request.Cookies["My_WorkPlace"].Value </p>
-                }
-
+              
                 else
                 {
-                    <p><b>Name:</b></p>
+                    <p><b>Name:</b> </p>
                     <p><b>Age:</b> </p>
                     <p><b>Address:</b> </p>
                     <p><b>Work Place:</b></p>
