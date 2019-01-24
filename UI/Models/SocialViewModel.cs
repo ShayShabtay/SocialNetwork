@@ -55,6 +55,7 @@ namespace UI.Models
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
+        public List<string> Tags { get; set; }
         //public List<User> UsersLike { get; set; }
 
         public Comment(string content)
@@ -62,6 +63,7 @@ namespace UI.Models
             CommentID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
             this.Content = content;
+            Tags = new List<string>();
         }
     }
 
@@ -72,12 +74,15 @@ namespace UI.Models
         public DateTime CreationDate { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
+        public List<string> Tags { get; set; }
+
 
         public Post(string content)
         {
             PostID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
             this.Content = content;
+            Tags = new List<string>();
     }
     }
 
@@ -162,6 +167,8 @@ namespace UI.Models
         public User CommentOwner { get; set; }
         public bool IsLike { get; set; }
     }
+
+   
 
 
 }

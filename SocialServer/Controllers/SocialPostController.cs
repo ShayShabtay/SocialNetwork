@@ -26,7 +26,7 @@ namespace SocialServer.Controllers
 
         [HttpPost]
         [Route("api/SocialPost/addPost")]
-        public IHttpActionResult AddPost([FromBody]Post post)
+        public IHttpActionResult AddPost([FromBody]PostDTO post)
         {
             string token = Request.Headers.GetValues("x-token").First();
 
