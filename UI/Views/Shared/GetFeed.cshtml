@@ -6,8 +6,8 @@
 {
     <div class="panel panel-success" style="width:750px">
         <div class="panel-heading">
-            <img src="~/Images/MyImage2.png" class="img-circle" alt="Cinque Terre" width="28" height="34">
-            Post from -@item.PostOwner.Name <span style="float:right; margin-top:6px">at @item.CreationDate</span>
+            <img src="~/Images/user.png" class="img-circle" alt="user" width="32" height="32">
+            Post from - @item.PostOwner.Name <span style="float:right; margin-top:6px">at @item.CreationDate</span>
         </div>
         <div class="panel-body">@item.Content</div>
         <div>
@@ -16,6 +16,7 @@
         <div class="panel-footer">
             <div class="row" style="text-align:center">
                 <div class="col-sm-4">
+                    <b style="color:blue">@item.LikeCount Likes</b>
                     <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToPost('@item.postID');">
 
                         @if (item.IsLike)
@@ -44,7 +45,6 @@
                             <span>Block This User</span>
                         </button>
                     </div>
-                    @*<i class="fa fa-ban" style="color:red">Block This User</i>*@
                 </div>
             </div>
             <div id="writeCommentID" style="display:none;">
@@ -52,10 +52,10 @@
                 {
                     <br />
                     <br />
-                    <div class="panel panel-success" style="width:750px">
+                    <div class="panel panel-warning" style="width:750px">
                         <div class="panel-heading">
-                            <img src="~/Images/MyImage2.png" class="img-circle" alt="Cinque Terre" width="28" height="34">
-                            Post from @item2.CommentOwner.Name, at @item2.Comment.CreationDate
+                            <img src="~/Images/user.png" class="img-circle" alt="Cinque Terre" width="28" height="34">
+                            Comment from - @item2.CommentOwner.Name <span style="float:right; margin-top:6px">at @item2.Comment.CreationDate</span>
                         </div>
                         <div class="panel-body">@item2.Comment.Content</div>
                         <div>
@@ -83,21 +83,50 @@
                 }
                 <hr />
                 <form action="~/Social/CreateComment" method="post" enctype="multipart/form-data" role="form">
-                    <input class="col-md-6" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />&ensp;
-                    <input type="file" class="custom-file-input" name=Comment.Picture1 id=Comment.Picture1>
-                    <input type="hidden" name="Comment.PostID" value="@item.postID" />
-                    <button type="submit" class="btn btn-success">Send</button> &ensp;
+                    @*<div class="input-group-btn width100">*@
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input class="col-md-12" type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />
+                                <input type="hidden" name="Comment.PostID" value="@item.postID" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success">Send</button>
+                                <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="file" class="custom-file-input" name=Comment.Picture1 id=Comment.Picture1 style="margin-right:5px" />
+                            </div>
+                        </div>
+                        @*<input type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />
+                        <input type="file" class="custom-file-input" name=Post.Picture1 id=Post.Picture1>
+                        <button type="submit" class="btn btn-primary">Share</button>
+                        <button type="button" class="btn btn-info">Tag Friends</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="float:right;">Close</button>*@
+
+                        @*<input type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />&emsp;&emsp;&emsp;
+                        <input type="hidden" name="Comment.PostID" value="item.postID" />
+                        <button type="submit" class="btn btn-success">Send</button> &ensp;
+                        <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
+                        <input type="file" class="custom-file-input" name=Comment.Picture1 id=Comment.Picture1 style="float:right; margin-right:15px"/>*@ 
+                    @*</div>*@
+
                 </form>
-                <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
+
+                @*<div class="input-group-btn width100">
+                    <input type="file" class="custom-file-input" name=Post.Picture1 id=Post.Picture1>
+                    <button type="submit" class="btn btn-primary">Share</button>
+                    <button type="button" class="btn btn-info">Tag Friends</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="float:right;">Close</button>
+                </div>*@
             </div>
         </div>
     </div>
 }
 
 <script>
-    var Identity = document.getElementById("IdentityID");
-    var login = document.getElementById("loginID");
-    var logoff = document.getElementById("logoffID");
+    //var Identity = document.getElementById("IdentityID");
+    //var login = document.getElementById("loginID");
+    //var logoff = document.getElementById("logoffID");
 
     var addComment = document.getElementById("writeCommentID");
 
@@ -170,9 +199,5 @@
         });
     }
 
-
-    onload = function () {
-        alert("Hello " + $.cookie("My_Name") + " :) ");
-    }
 </script>
 
