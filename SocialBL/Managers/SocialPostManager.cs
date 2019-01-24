@@ -19,7 +19,6 @@ namespace SocialBL.Managers
     {
 
         IGraphDB _graphDB;
-        const string bucketName = "omer-buckets";
 
         //Ctor
         public SocialPostManager()
@@ -28,29 +27,17 @@ namespace SocialBL.Managers
         }
 
         //Public Methods
-        public void AddPost(PostDTO postDTO, string userId)
+        public void AddPost(Post post, string userId)
         {
-            _graphDB.AddPost(postDTO.Post);
-            Thread.Sleep(2000);
-            _graphDB.CreateRelationship(userId, postDTO.Post.PostID, "Publish");
-
-            foreach (var item in postDTO.Tags)
-            {
-                _graphDB.CreateRelationship(postDTO.Post.PostID, item, "TagPost");
-            }
+            _graphDB.AddPost(post);
+            _graphDB.CreateRelationship(userId, post.PostID, "Publish");
         }
 
-        public void AddComment(CommentDTO commentDTO, string userId, string postId)
+        public void AddComment(Comment comment, string userId, string postId)
         {
-            _graphDB.AddComment(commentDTO.Comment);
-            _graphDB.CreateRelationship(userId, commentDTO.Comment.CommentID, "UserComment");  ///for connect post and comment
-            _graphDB.CreateRelationship(postId, commentDTO.Comment.CommentID, "PostComment");  ///for connect user to comment that he wrote
-
-            foreach (var item in commentDTO.Tags)
-            {
-                _graphDB.CreateRelationship(commentDTO.Comment.CommentID, item, "TagComment");
-            }
-
+            _graphDB.AddComment(comment);
+            _graphDB.CreateRelationship(userId, comment.CommentID, "UserComment");  ///for connect post and comment
+            _graphDB.CreateRelationship(postId, comment.CommentID, "PostComment");  ///for connect user to comment that he wrote
         }
 
         public void AddLikeToPost(string userId, string postId)

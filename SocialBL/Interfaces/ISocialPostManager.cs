@@ -12,8 +12,8 @@ namespace SocialBL.Interfaces
 {
     public interface ISocialPostManager
     {
-        void AddPost(PostDTO post, string userId);
-        void AddComment(CommentDTO comment, string userId, string postId);
+        void AddPost(Post post, string userId);
+        void AddComment(Comment comment, string userId, string postId);
         void AddLikeToPost(string userId, string postId);
         void UnLikePost(string userId, string postId);
         void AddLikeToComment(string userId, string commentId);
@@ -24,7 +24,6 @@ namespace SocialBL.Interfaces
         string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
         void GetTemporaryToken();
-        //SessionAWSCredentials GetTemporaryToken();
         string GetUserByPostID(string postId);
     }
 }

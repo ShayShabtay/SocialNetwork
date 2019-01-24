@@ -7,6 +7,13 @@
 }
 
 <script>
-    var block = document.getElementById("blockbtn");
-    block.style.display = "none";
+    var block = document.getElementsByClassName('blockbtn');
+
+    Array.prototype.forEach.call(block, function (el) {
+        el.style.display = "none";
+    });
+   
 </script>
+
+<br/><br/><br/><br/>
+
