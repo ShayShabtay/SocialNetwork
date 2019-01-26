@@ -241,6 +241,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\eyes.gif" />
     <Content Include="Images\MyImage2.png" />
+    <Content Include="Images\user.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">

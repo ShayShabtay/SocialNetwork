@@ -40,14 +40,12 @@
         @if (Model.OtherUserIdentityModel.IsFollow != true)
         {
             <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px;">
-                @Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" })
-            </button><span>&ensp;&ensp;</span>
+             @Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
         }
         else
         {
             <button id="UnFollowButtonID" type="button" style="background-color:orange; height: 60px;">
-                @Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" })
-            </button><span>&ensp;&ensp;</span>
+            @Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
         }
     </h4>
 </div>
@@ -65,6 +63,13 @@
 
 <br /><br /><br /><br /><br /><br /><br /><br />
 
+    function AddComment() {
+        addComment.style.display = "inline";
+    }
+    function CommentNone() {
+        addComment.style.display = "none";
+    }
+</script>
 
 <style>
     h4 {
