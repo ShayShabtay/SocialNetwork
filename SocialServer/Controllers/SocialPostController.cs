@@ -68,7 +68,7 @@ namespace SocialServer.Controllers
 
         [HttpPost]
         [Route("api/SocialPost/addComment/{postId}")]
-        public IHttpActionResult AddComment(Comment comment, string postId)
+        public IHttpActionResult AddComment(CommentDTO comment, string postId)
         {
             string token = Request.Headers.GetValues("x-token").First();
 

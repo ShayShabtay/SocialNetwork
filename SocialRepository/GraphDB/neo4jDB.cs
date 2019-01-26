@@ -179,20 +179,35 @@ namespace SocialRepository.GraphDB
 
         public List<Post> GetAllPosts(string userId)
         {
-            //whos im follow=> what post they published =>limit 20
-            //change the first line in query for better tuntimr
-
-            string query = $"Match (u:User)-[:Follow]->(u2:User) " +
-                           $"Where u.UserId=\"{userId}\" " +
-                           $"Match (u2)-[:Publish]->(p:Post)" +
-                           $"Return p";
+            string query = $"Match(u:User{{UserId:\"{userId}\"}})" +
+                           $"optional match(u)-[:Follow]->(other:User)-[:Publish]->(p1:Post)" +
+                           $"optional match(p2:Post)-[:TagPost]->(u:User)" +
+                           $"optional match(c:Comment)-[:TagComment]->(u:User)" +
+                           $"optional match(p3:Post)-[:PostComment]->(c)" +
+                           $"Return p1, p2, p3";
 
             IStatementResult posts = session.Run(query);
             List<Post> postList = new List<Post>();
+
             foreach (var item in posts)
             {
-                var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
-                postList.Add(JsonConvert.DeserializeObject<Post>(props));
+                if(item[0].As<INode>() != null)
+                {
+                    var props = JsonConvert.SerializeObject(item[0].As<INode>().Properties);
+                    postList.Add(JsonConvert.DeserializeObject<Post>(props));
+                }
+
+                if (item[1].As<INode>() != null)
+                {
+                    var props = JsonConvert.SerializeObject(item[1].As<INode>().Properties);
+                    postList.Add(JsonConvert.DeserializeObject<Post>(props));
+                }
+
+                if (item[2].As<INode>() != null)
+                {
+                    var props = JsonConvert.SerializeObject(item[2].As<INode>().Properties);
+                    postList.Add(JsonConvert.DeserializeObject<Post>(props));
+                }
             }
             return postList;
         }
@@ -347,3 +362,5 @@ namespace SocialRepository.GraphDB
 
     }
 }
+
+

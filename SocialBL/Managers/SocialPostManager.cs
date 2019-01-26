@@ -1,5 +1,6 @@
 ﻿using Amazon.Runtime;
 using SocialBL.Interfaces;
+using SocialCommon.Exceptions;
 using SocialCommon.Models;
 using SocialCommon.ModelsDTO;
 using SocialRepository.GraphDB;
@@ -73,7 +74,16 @@ namespace SocialBL.Managers
 
         public List<ClientPost> GetAllPosts(string userId)
         {
-            List<Post> posts = _graphDB.GetAllPosts(userId);
+            List<Post> posts;
+            try
+            {
+                posts = _graphDB.GetAllPosts(userId);
+            }
+            catch (Exception e)
+            {
+                throw new FaildToConnectDbException();
+            }
+           
             List<ClientPost> postsToClient = new List<ClientPost>();
 
             foreach (var post in posts)

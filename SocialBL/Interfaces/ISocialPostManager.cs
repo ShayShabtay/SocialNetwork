@@ -13,7 +13,7 @@ namespace SocialBL.Interfaces
     public interface ISocialPostManager
     {
         void AddPost(PostDTO post, string userId);
-        void AddComment(Comment comment, string userId, string postId);
+        void AddComment(CommentDTO comment, string userId, string postId);
         void AddLikeToPost(string userId, string postId);
         void UnLikePost(string userId, string postId);
         void AddLikeToComment(string userId, string commentId);
