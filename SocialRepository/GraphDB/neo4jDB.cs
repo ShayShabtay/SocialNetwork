@@ -182,8 +182,10 @@ namespace SocialRepository.GraphDB
             string query = $"Match(u:User{{UserId:\"{userId}\"}})" +
                            $"optional match(u)-[:Follow]->(other:User)-[:Publish]->(p1:Post)" +
                            $"optional match(p2:Post)-[:TagPost]->(u:User)" +
+                           $"where p2.Permission='Public'" +
                            $"optional match(c:Comment)-[:TagComment]->(u:User)" +
                            $"optional match(p3:Post)-[:PostComment]->(c)" +
+                           $"where p3.Permission='Public'" +
                            $"Return p1, p2, p3";
 
             IStatementResult posts = session.Run(query);

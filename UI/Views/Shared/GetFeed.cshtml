@@ -32,7 +32,7 @@
                     </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-default" onclick="AddComment();" style="color:brown">
+                    <button type="button" class="btn btn-default" onclick="AddComment('@item.postID');" style="color:brown">
                         <i class="far fa-comment"></i>&ensp;
                         <span>Comment</span>
                     </button>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div id="writeCommentID" style="display:none;">
+            <div id="show_comment_@item.postID" style="display:none;">
                 @foreach (var item2 in item.Comments)
                 {
                     <br />
@@ -86,15 +86,15 @@
                     @*<div class="input-group-btn width100">*@
                         <div class="row">
                             <div class="col-md-6">
-                                <input class="col-md-12" type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />
-                                <input type="hidden" name="Comment.PostID" value="@item.postID" />
+                                <input class="col-md-12" type="text" name=CommentDTO.Comment.Content placeholder="Write a Comment..." style="background-color:white" />
+                                <input type="hidden" name="CommentDTO.Comment.PostID" value="@item.postID" />
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-success">Send</button>
-                                <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
+                                <button type="button" class="btn btn-danger" onclick="CommentNone('@item.postID')"> Cancel Comment </button>
                             </div>
                             <div class="col-md-2">
-                                <input type="file" class="custom-file-input" name=Comment.Picture1 id=Comment.Picture1 style="margin-right:5px" />
+                                <input type="file" class="custom-file-input" name=CommentDTO.Comment.Picture1 id=CommentDTO.Comment.Picture1 style="margin-right:5px" />
                             </div>
                         </div>
                         @*<input type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />
@@ -128,13 +128,15 @@
     //var login = document.getElementById("loginID");
     //var logoff = document.getElementById("logoffID");
 
-    var addComment = document.getElementById("writeCommentID");
+   
 
 
-    function AddComment() {
+    function AddComment(PostId) {
+        var addComment = document.getElementById("show_comment_" + PostId);
         addComment.style.display = "inline";
     }
-    function CommentNone() {
+    function CommentNone(PostId) {
+        var addComment = document.getElementById("show_comment_" + PostId);
         addComment.style.display = "none";
     }
 

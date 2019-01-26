@@ -10,7 +10,9 @@ namespace UI.Models
     {
         public List<NotificationModel> Notifications { get; set; }
         public Comment Comment { get; set; }
+        public CommentDTO CommentDTO { get; set; }
         public Post Post { get; set; }
+        public PostDTO PostDTO { get; set; }
         public User User { get; set; }
         public UserIdentityModel UserIdentityModel { get; set; }
         public UserIdentityModel OtherUserIdentityModel { get; set; }
@@ -25,11 +27,13 @@ namespace UI.Models
             User = new User();
             Post = new Post("");
             Comment = new Comment("");
+            CommentDTO = new CommentDTO();
+            PostDTO = new PostDTO();
             ClientPostFeed = new List<ClientPost>();
 
             Notifications = new List<NotificationModel>();
         }
-            public void waitForRes()
+        public void waitForRes()
         {
             Thread.Sleep(2000);
         }
@@ -55,7 +59,6 @@ namespace UI.Models
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
-        public List<string> Tags { get; set; }
         //public List<User> UsersLike { get; set; }
 
         public Comment(string content)
@@ -63,9 +66,21 @@ namespace UI.Models
             CommentID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
             this.Content = content;
-            Tags = new List<string>();
         }
     }
+
+    public class CommentDTO
+    {
+        public Comment Comment { get; set; }
+        public List<string> Tags { get; set; }
+
+        public CommentDTO()
+        {
+            Tags = new List<string>();
+            Comment = new Comment("");
+        }
+    }
+
 
     public class Post
     {
@@ -73,8 +88,8 @@ namespace UI.Models
         public string PostID { get; set; }
         public DateTime CreationDate { get; set; }
         public string ImageUrl { get; set; }
+        public string Permission { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
-        public List<string> Tags { get; set; }
 
 
         public Post(string content)
@@ -82,8 +97,19 @@ namespace UI.Models
             PostID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
             this.Content = content;
-            Tags = new List<string>();
+        }
     }
+
+    public class PostDTO
+    {
+        public Post Post { get; set; }
+        public List<string> Tags { get; set; }
+
+        public PostDTO()
+        {
+            Tags = new List<string>();
+            Post = new Post("");
+        }
     }
 
     public static class RelationsMap
@@ -167,8 +193,4 @@ namespace UI.Models
         public User CommentOwner { get; set; }
         public bool IsLike { get; set; }
     }
-
-   
-
-
 }

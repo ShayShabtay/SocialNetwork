@@ -60,9 +60,9 @@
     </div>
 }
 <br /><br /><br />
-<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("To See All My Followers", "GetFollowers", "Relationship", null, new { @style = "color:white" })</button>
-<button type="button" class="btn btn-warning"> @Html.ActionLink("To See All Users I'm Following", "GetFollowing", "Relationship", null, new { @style = "color:white" })</button>
-<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("To See All Users I was Blocked", "GetBlockUsers", "Relationship", null, new { @style = "color:white;" })</button>
+<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("My Followers", "GetFollowers", "Relationship", null, new { @style = "color:white" })</button>
+<button type="button" class="btn btn-warning"> @Html.ActionLink("Following Users", "GetFollowing", "Relationship", null, new { @style = "color:white" })</button>
+<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("Blocked Users", "GetBlockUsers", "Relationship", null, new { @style = "color:white;" })</button>
 <br /><br /><br />
 <div style="text-align:center; float:left">
     @Html.ActionLink("Back to Main Page", "MainPageAfterLogin", "Home")

@@ -21,41 +21,27 @@ namespace UI.Controllers
         {
             SocialViewModel s = new SocialViewModel
             {
-                Post = new Models.Post("")
+                PostDTO = new Models.PostDTO()
             };
             return PartialView(s);
         }
-
-        //[HttpGet]
-        //public async Task<SocialViewModel> updateList(SocialViewModel socialViewModel)
-        //{
-        //    var model = await this.GetFullList(socialViewModel);
-        //    return View(model);
-        //  //  return "updatelist";
-        //}
-        //private async Task<SocialViewModel> GetFullList(SocialViewModel socialViewModel)
-        //{
-        //    SignalRClient signalRClient= new SignalRClient(socialViewModel);
-        //    await signalRClient.Hub.Invoke("GetNotificationsFromServer", "testUser");
-
-
-        //    return socialViewModel;
-        //}
-
-       
 
         [HttpPost]
         public ActionResult CreatePost(SocialViewModel socialViewModel)
         {
             string token = Request.Cookies["UserToken"].Value;
             string imageURL;
-            if (socialViewModel.Post.Picture1 != null)
+            if (socialViewModel.PostDTO.Post.Picture1 != null)
             {
-                imageURL = UploadImageToS3(socialViewModel.Post.Picture1);
-                socialViewModel.Post.ImageUrl = imageURL;
+                imageURL = UploadImageToS3(socialViewModel.PostDTO.Post.Picture1);
+                socialViewModel.PostDTO.Post.ImageUrl = imageURL;
             }
-            socialViewModel.Post.Picture1 = null;
+            socialViewModel.PostDTO.Post.Picture1 = null;
 
+            if(socialViewModel.PostDTO.Post.Permission == null)
+            {
+                socialViewModel.PostDTO.Post.Permission = "Public";
+            }
 
             using (var client = new HttpClient())
             {
@@ -63,7 +49,7 @@ namespace UI.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Add("x-token", token);
 
-                var task = client.PostAsJsonAsync("api/SocialPost/addPost", socialViewModel.Post);
+                var task = client.PostAsJsonAsync("api/SocialPost/addPost", socialViewModel.PostDTO);
                 task.Wait();
                 var res = task.Result;
                 return RedirectToAction("MainPageAfterLogin","Home");
@@ -75,7 +61,7 @@ namespace UI.Controllers
         {
             SocialViewModel s = new SocialViewModel
             {
-                Comment = new Models.Comment("")
+                CommentDTO = new Models.CommentDTO()
             };
             return PartialView(s); //need to add which page to return
         }
@@ -83,15 +69,15 @@ namespace UI.Controllers
         [HttpPost]
         public ActionResult CreateComment(SocialViewModel socialViewModel)
         {
-            string postId = socialViewModel.Comment.PostID;
+            string postId = socialViewModel.CommentDTO.Comment.PostID;
             string token = Request.Cookies["UserToken"].Value;
             string imageURL;
-            if (socialViewModel.Comment.Picture1 != null)
+            if (socialViewModel.CommentDTO.Comment.Picture1 != null)
             {
-                imageURL = UploadImageToS3(socialViewModel.Comment.Picture1);
-                socialViewModel.Comment.ImageUrl = imageURL;
+                imageURL = UploadImageToS3(socialViewModel.CommentDTO.Comment.Picture1);
+                socialViewModel.CommentDTO.Comment.ImageUrl = imageURL;
             }
-            socialViewModel.Comment.Picture1 = null;
+            socialViewModel.CommentDTO.Comment.Picture1 = null;
 
 
             using (var client = new HttpClient())
@@ -100,7 +86,7 @@ namespace UI.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Add("x-token", token);
 
-                var task = client.PostAsJsonAsync($"api/SocialPost/addComment/{postId}", socialViewModel.Comment);
+                var task = client.PostAsJsonAsync($"api/SocialPost/addComment/{postId}", socialViewModel.CommentDTO);
                 task.Wait();
                 var res = task.Result;
                 return RedirectToAction("MainPageAfterLogin", "Home");
