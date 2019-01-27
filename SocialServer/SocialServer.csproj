@@ -112,10 +112,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SocialBL\SocialBL.csproj">
       <Project>{1700bfd1-d704-4846-a4a0-97ae9b1cbb13}</Project>

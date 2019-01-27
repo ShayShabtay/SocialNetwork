@@ -1,24 +1,16 @@
-﻿using Amazon.Runtime;
-using SocialBL.Interfaces;
+﻿using SocialBL.Interfaces;
 using SocialCommon.Exceptions;
 using SocialCommon.Models;
 using SocialCommon.ModelsDTO;
 using SocialRepository.GraphDB;
-using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
     public class SocialPostManager : ISocialPostManager
     {
-
         IGraphDB _graphDB;
 
         //Ctor
@@ -79,7 +71,7 @@ namespace SocialBL.Managers
             {
                 posts = _graphDB.GetAllPosts(userId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new FaildToConnectDbException();
             }
@@ -149,22 +141,11 @@ namespace SocialBL.Managers
             return postsToClient;
         }
 
-        public string SaveImage(Stream image, string userId)
+        public string GetUserByPostID(string postId)
         {
-            StorgeHelper storgeHelper = new StorgeHelper();
+            return _graphDB.getUserByPostId(postId);
 
-            string imageKey = Guid.NewGuid().ToString();
-            try
-            {
-                string imageUrl = storgeHelper.uploadImageToS3(image, userId, imageKey);
-                return imageUrl;
-            }
-            catch (Exception)
-            {
 
-                return null;
-
-            }
         }
 
         public string ValidateToken(string token)
@@ -185,18 +166,6 @@ namespace SocialBL.Managers
                 }
             }
             return null;
-        }
-
-        public void GetTemporaryToken()
-        {
-            TemporaryS3Token.ListObjectsAsync().Wait();
-        }
-
-        public string GetUserByPostID(string postId)
-        {
-            return _graphDB.getUserByPostId(postId);
-
-
         }
     }
 }

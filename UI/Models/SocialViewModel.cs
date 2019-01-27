@@ -33,20 +33,10 @@ namespace UI.Models
 
             Notifications = new List<NotificationModel>();
         }
-        public void waitForRes()
-        {
-            Thread.Sleep(2000);
-        }
 
         public void AddAndNotify(NotificationModel notificationModel)
         {
             Notifications.Add(notificationModel);
-            channgeToRedListner();
-        }
-
-        private void channgeToRedListner()
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -59,13 +49,12 @@ namespace UI.Models
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public HttpPostedFileBase Picture1 { get; set; }
-        //public List<User> UsersLike { get; set; }
 
         public Comment(string content)
         {
             CommentID = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
-            this.Content = content;
+            Content = content;
         }
     }
 
@@ -110,12 +99,6 @@ namespace UI.Models
             Tags = new List<string>();
             Post = new Post("");
         }
-    }
-
-    public static class RelationsMap
-    {
-        public static Dictionary<string, Tuple<string, string, string, string>> map { get; set; }
-
     }
 
     public class User

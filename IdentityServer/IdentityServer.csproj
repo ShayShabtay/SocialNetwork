@@ -104,9 +104,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\IdentityBL\IdentityBL.csproj">
       <Project>{dc17274a-53ba-4aa3-ad30-e2a7fde832cc}</Project>

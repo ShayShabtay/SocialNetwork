@@ -227,7 +227,6 @@ namespace UI.Controllers
                 return View(model);
             }
 
-            //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
            using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
@@ -235,22 +234,26 @@ namespace UI.Controllers
 
                 string token;
                 var res = client.PostAsJsonAsync($"/api/login/loginManual", model).Result;
-                if (res.IsSuccessStatusCode == true)
+
+                if (res.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     token = res.Content.ReadAsAsync<string>().Result;
 
                     //set token  in cookie
                     HttpCookie userTokenCookie = new HttpCookie("UserToken");
                     userTokenCookie.Value = token.ToString();
-                    Response.Cookies.Add(userTokenCookie);///
-                    
+                    Response.Cookies.Add(userTokenCookie);
+
 
                     TempData["social"] = GetUserInfo(token);
 
                     return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else
-                    return Content("res.StatusCode = false :/");
+                {
+                    ViewBag.error = "Invalid Username or password";
+                    return View();
+                }
             }
         }
 

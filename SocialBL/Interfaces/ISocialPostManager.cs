@@ -18,12 +18,11 @@ namespace SocialBL.Interfaces
         void UnLikePost(string userId, string postId);
         void AddLikeToComment(string userId, string commentId);
         void UnLikeComment(string userId, string commentId);
+
         List<ClientPost> GetAllPosts(string userId);
         List<ClientPost> GetMyPosts(string userId);
 
-        string SaveImage(Stream image, string userId);
         string ValidateToken(string token);
-        void GetTemporaryToken();
         string GetUserByPostID(string postId);
     }
 }

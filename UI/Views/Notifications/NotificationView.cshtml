@@ -45,25 +45,8 @@
         Notifications
     </h3><hr />
     <div class="well">
-        @*@Html.Action("updateList", "Social", Model);*@
         <p>You recieve a message</p>
     </div>
-
-
-    @*@{
-        Model.waitForRes();
-    if (Model.Notifications.Count != 0)
-        {
-            foreach (var item in Model.Notifications)
-            {
-                <div class="well">
-                    <p>@item.ToString();</p>
-                </div>
-
-                }
-            }
-        }*@
-
     <div class="well">
         <p>someone send you a friend request</p>
     </div>

@@ -61,8 +61,6 @@
     <Compile Include="GraphDB\IGraphDB.cs" />
     <Compile Include="GraphDB\Neo4jDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Storage\StorgeHelper.cs" />
-    <Compile Include="Storage\TemporaryS3Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

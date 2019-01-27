@@ -20,6 +20,8 @@ namespace SocialRepository.GraphDB
             session = DbHelper.getSession();
         }
 
+
+        //Relationship Methods
         public void CreateRelationship(string source, string target, string relation)
         {
             if (RelationsMap.map.ContainsKey(relation))
@@ -361,7 +363,6 @@ namespace SocialRepository.GraphDB
             else
                 return false;
         }
-
     }
 }
 

@@ -95,7 +95,7 @@ namespace SocialBL.Managers
             {
                 return _graphDB.IsFollow(SourceUserId, targetUserId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new FaildToConnectDbException();
             }
@@ -168,7 +168,5 @@ namespace SocialBL.Managers
             }
             return null;
         }
-
-        
     }
 }

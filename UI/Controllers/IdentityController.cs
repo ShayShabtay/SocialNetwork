@@ -12,7 +12,6 @@ namespace UI.Controllers
 {
     public class IdentityController : Controller
     {
-        // GET: Identity
         [HttpGet]
         public ActionResult GetUserProfile()
         {
@@ -37,7 +36,6 @@ namespace UI.Controllers
                 else
                     return Content("res.StatusCode = false :/");
             }
-
         }
 
         [HttpPost]
@@ -64,10 +62,7 @@ namespace UI.Controllers
                     {
                         var res2 = res.Content.ReadAsAsync<UserIdentityModel>().Result;
 
-                        //SocialViewModel socialViewModel = new SocialViewModel();
                         identityModel.UserIdentityModel = res2;
-
-                        //string space = " ";
 
                         //save Identity in cookies
                         HttpCookie NameIdentityProfile = new HttpCookie("My_Name");
@@ -95,6 +90,5 @@ namespace UI.Controllers
                 }
             }
         }
-
     }
 }

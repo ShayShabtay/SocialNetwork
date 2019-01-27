@@ -26,7 +26,7 @@
                         }
                         else
                         {
-                            <i class="far fa-thumbs-up" id="like_post_thumbs_@item.postID"></i>@*&ensp;*@
+                            <i class="far fa-thumbs-up" id="like_post_thumbs_@item.postID"></i>
                             <span id="like_post_@item.postID">Like</span>
                         }
                     </button>
@@ -38,7 +38,6 @@
                     </button>
                 </div>
                 <div class="col-sm-4">
-                    @*fas fa-ban btn*@
                     <div class="blockbtn">
                         <button id="blockbtn" type="button" class="btn btn-default" style="color:red" onclick="BlockUser('@item.PostOwner.UserId');">
                             <i class="fa fa-ban"></i>&ensp;
@@ -72,7 +71,7 @@
                                         }
                                         else
                                         {
-                                            <i class="far fa-thumbs-up" id="like_comment_thumbs_@item2.Comment.CommentID"></i>@*&ensp;*@
+                                            <i class="far fa-thumbs-up" id="like_comment_thumbs_@item2.Comment.CommentID"></i>
                                             <span id="like_comment_@item2.Comment.CommentID">Like</span>
                                         }
                                     </button>
@@ -83,7 +82,6 @@
                 }
                 <hr />
                 <form action="~/Social/CreateComment" method="post" enctype="multipart/form-data" role="form">
-                    @*<div class="input-group-btn width100">*@
                         <div class="row">
                             <div class="col-md-6">
                                 <input class="col-md-12" type="text" name=CommentDTO.Comment.Content placeholder="Write a Comment..." style="background-color:white" />
@@ -97,40 +95,13 @@
                                 <input type="file" class="custom-file-input" name=CommentDTO.Comment.Picture1 id=CommentDTO.Comment.Picture1 style="margin-right:5px" />
                             </div>
                         </div>
-                        @*<input type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />
-                        <input type="file" class="custom-file-input" name=Post.Picture1 id=Post.Picture1>
-                        <button type="submit" class="btn btn-primary">Share</button>
-                        <button type="button" class="btn btn-info">Tag Friends</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="float:right;">Close</button>*@
-
-                        @*<input type="text" name=Comment.Content placeholder="Write a Comment..." style="background-color:white" />&emsp;&emsp;&emsp;
-                        <input type="hidden" name="Comment.PostID" value="item.postID" />
-                        <button type="submit" class="btn btn-success">Send</button> &ensp;
-                        <button type="button" class="btn btn-danger" onclick="CommentNone()"> Cancel Comment </button>
-                        <input type="file" class="custom-file-input" name=Comment.Picture1 id=Comment.Picture1 style="float:right; margin-right:15px"/>*@ 
-                    @*</div>*@
-
                 </form>
-
-                @*<div class="input-group-btn width100">
-                    <input type="file" class="custom-file-input" name=Post.Picture1 id=Post.Picture1>
-                    <button type="submit" class="btn btn-primary">Share</button>
-                    <button type="button" class="btn btn-info">Tag Friends</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="float:right;">Close</button>
-                </div>*@
             </div>
         </div>
     </div>
 }
 
 <script>
-    //var Identity = document.getElementById("IdentityID");
-    //var login = document.getElementById("loginID");
-    //var logoff = document.getElementById("logoffID");
-
-   
-
-
     function AddComment(PostId) {
         var addComment = document.getElementById("show_comment_" + PostId);
         addComment.style.display = "inline";
@@ -200,6 +171,5 @@
             console.log(response);
         });
     }
-
 </script>
 
