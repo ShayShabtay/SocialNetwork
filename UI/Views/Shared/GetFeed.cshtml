@@ -47,6 +47,9 @@
                     </div>
                 </div>
             </div>
+
+            @*---Write comment---*@
+
             <div id="writeCommentID" style="display:none;">
                 @foreach (var item2 in item.Comments)
                 {
@@ -128,7 +131,7 @@
     //var login = document.getElementById("loginID");
     //var logoff = document.getElementById("logoffID");
 
-    var addComment = document.getElementById("writeCommentID");
+    var addComment = this.document.getElementById("writeCommentID");
 
 
     function AddComment() {
