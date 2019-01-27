@@ -23,6 +23,13 @@ namespace UI.Models
 
     public class UserIdentityModel
     {
+        public UserIdentityModel()
+        {
+            Name = "";
+            Age = 0;
+            Address = "";
+            WorkPlace = "";
+        }
         [Display(Name ="User Id")]
         [HiddenInput(DisplayValue = true)]
         public string UserId { get; set; }
@@ -34,6 +41,9 @@ namespace UI.Models
         public string Address { get; set; }
         [Display(Name = "Work Place")]
         public string WorkPlace { get; set; }
+
+        public string Email { get; set; }
+        public bool IsFollow { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

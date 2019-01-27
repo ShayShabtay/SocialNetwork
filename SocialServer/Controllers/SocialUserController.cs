@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using Neo4j.Driver.V1;
 using SocialBL.Interfaces;
@@ -74,7 +75,24 @@ namespace SocialServer.Controllers
             }
             try
             {
-                _sociaUserManager.BlockUser(SourceUserId, targetUserId);
+                _sociaUserManager.Follow(SourceUserId, targetUserId);
+                ///////////////////////////////
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:51446/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    // string from = userId;
+                   // string to = _sociaUserManager.GetUserByPostID(postId);
+                    //string postid = postId;
+                    List<string> param = new List<string>();
+                    param.Add(SourceUserId);
+                    param.Add(targetUserId);
+                    param.Add("");
+                    param.Add("Follow");
+                    var res = client.PostAsJsonAsync("api/Notification/AddNotification", param);
+                }
+
+                ////////////////////////////////////
             }
             catch (FaildToConnectDbException)
             {
@@ -211,6 +229,45 @@ namespace SocialServer.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/SocialUser/isUserFollowUser")]
+        public IHttpActionResult IsUserFollowUser([FromBody]string targetUserId)
+        {
+            string token = Request.Headers.GetValues("x-token").First();
+            string SourceUserId = null;
+
+            try
+            {
+                SourceUserId = _sociaUserManager.ValidateToken(token);
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            if (SourceUserId == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token"));
+            }
+
+            bool isFollow;
+
+            try
+            {
+                isFollow = _sociaUserManager.IsUserFollowUser(SourceUserId, targetUserId);
+            }
+            catch (FaildToConnectDbException)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+            catch (Exception)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something went wrong"));
+            }
+
+            return Ok(isFollow);
         }
 
         [HttpGet]

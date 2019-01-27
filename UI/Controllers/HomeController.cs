@@ -10,16 +10,15 @@ namespace UI.Controllers
             return View();
         }
 
-
-        public ActionResult MainPageAfterLogin(UserIdentityModel userModel)
+        public ActionResult MainPageAfterLogin()
         {
-            //string UserCookie = Request.Cookies["UserProfile"].Value;
-            return View(userModel);
+            SocialViewModel socialViewModel = (SocialViewModel)TempData["social"];
+
+            return View(socialViewModel);
         }
 
         public ActionResult About()
         {
-
             return View();
         }
 

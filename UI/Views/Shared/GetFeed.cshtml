@@ -1,0 +1,175 @@
+﻿@model UI.Models.SocialViewModel
+
+
+
+@foreach (var item in Model.ClientPostFeed)
+{
+    <div class="panel panel-success" style="width:750px">
+        <div class="panel-heading">
+            <img src="~/Images/user.png" class="img-circle" alt="user" width="32" height="32">
+            Post from - @item.PostOwner.Name <span style="float:right; margin-top:6px">at @item.CreationDate</span>
+        </div>
+        <div class="panel-body">@item.Content</div>
+        <div>
+            <img class="img-responsive" src="@item.imageUrl" />
+        </div>
+        <div class="panel-footer">
+            <div class="row" style="text-align:center">
+                <div class="col-sm-4">
+                    <b style="color:blue">@item.LikeCount Likes</b>
+                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToPost('@item.postID');">
+
+                        @if (item.IsLike)
+                        {
+                            <i class="far fa-thumbs-down" id="like_post_thumbs_@item.postID"></i>
+                            <span id="like_post_@item.postID">Unlike</span>
+                        }
+                        else
+                        {
+                            <i class="far fa-thumbs-up" id="like_post_thumbs_@item.postID"></i>
+                            <span id="like_post_@item.postID">Like</span>
+                        }
+                    </button>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-default" onclick="AddComment('@item.postID');" style="color:brown">
+                        <i class="far fa-comment"></i>&ensp;
+                        <span>Comment</span>
+                    </button>
+                </div>
+                <div class="col-sm-4">
+                    <div class="blockbtn">
+                        <button id="blockbtn" type="button" class="btn btn-default" style="color:red" onclick="BlockUser('@item.PostOwner.UserId');">
+                            <i class="fa fa-ban"></i>&ensp;
+                            <span>Block This User</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="show_comment_@item.postID" style="display:none;">
+                @foreach (var item2 in item.Comments)
+                {
+                    <br />
+                    <br />
+                    <div class="panel panel-warning" style="width:750px">
+                        <div class="panel-heading">
+                            <img src="~/Images/user.png" class="img-circle" alt="Cinque Terre" width="28" height="34">
+                            Comment from - @item2.CommentOwner.Name <span style="float:right; margin-top:6px">at @item2.Comment.CreationDate</span>
+                        </div>
+                        <div class="panel-body">@item2.Comment.Content</div>
+                        <div>
+                            <img class="img-responsive" src="@item2.Comment.ImageUrl" />
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row" style="text-align:center">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-default" style="color:blue" onclick="AddLikeToComment('@item2.Comment.CommentID');">
+                                        @if (item2.IsLike)
+                                        {
+                                            <i class="far fa-thumbs-down" id="like_comment_thumbs_@item2.Comment.CommentID"></i>
+                                            <span id="like_comment_@item2.Comment.CommentID">Unlike</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-thumbs-up" id="like_comment_thumbs_@item2.Comment.CommentID"></i>
+                                            <span id="like_comment_@item2.Comment.CommentID">Like</span>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+                <form action="~/Social/CreateComment" method="post" enctype="multipart/form-data" role="form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input class="col-md-12" type="text" name=CommentDTO.Comment.Content placeholder="Write a Comment..." style="background-color:white" />
+                                <input type="hidden" name="CommentDTO.Comment.PostID" value="@item.postID" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success">Send</button>
+                                <button type="button" class="btn btn-danger" onclick="CommentNone('@item.postID')"> Cancel Comment </button>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="file" class="custom-file-input" name=CommentDTO.Comment.Picture1 id=CommentDTO.Comment.Picture1 style="margin-right:5px" />
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function AddComment(PostId) {
+        var addComment = document.getElementById("show_comment_" + PostId);
+        addComment.style.display = "inline";
+    }
+    function CommentNone(PostId) {
+        var addComment = document.getElementById("show_comment_" + PostId);
+        addComment.style.display = "none";
+    }
+
+    function AddLikeToPost(PostId) {
+        var elem = document.getElementById("like_post_" + PostId)
+        var thumb = document.getElementById("like_post_thumbs_" + PostId)
+
+        if (elem.innerText == "Like") {
+            $.get("../Social/AddLikeToPost?PostId=" + PostId, function (response) {
+                console.log(response);
+                if (response) {
+                    elem.innerText = "Unlike";
+                    thumb.classList.remove('fa-thumbs-up')
+                    thumb.classList.add('fa-thumbs-down')
+                }
+            });
+        }
+        else {
+            $.get("../Social/UnlikePost?PostId=" + PostId, function (response) {
+                console.log(response);
+                if (response) {
+                    thumb.classList.remove('fa-thumbs-down')
+                    thumb.classList.add('fa-thumbs-up')
+                    elem.innerText = "Like";
+                }
+            });
+        }
+    }
+
+    function AddLikeToComment(commentId) {
+
+        var elem = document.getElementById("like_comment_" + commentId)
+        var thumb = document.getElementById("like_comment_thumbs_" + commentId)
+        if (elem.innerText == "Like") {
+            $.get("../Social/AddLikeToComment?PostId=" + commentId, function (response) {
+                console.log(response);
+
+                if (response) {
+                    elem.innerText = "Unlike";
+                    thumb.classList.remove('fa-thumbs-up');
+                    thumb.classList.add('fa-thumbs-down');
+                }
+            }
+            );
+        }
+        else {
+            $.get("../Social/UnlikeComment?PostId=" + commentId, function (response) {
+                console.log(response);
+                if (response) {
+                    thumb.classList.remove('fa-thumbs-down')
+                    thumb.classList.add('fa-thumbs-up')
+                    elem.innerText = "Like";
+                }
+            });
+        }
+    }
+
+    function BlockUser(userId) {
+
+        $.get("../Relationship/BlockUser?targetUserId=" + userId, function (response) {
+            console.log(response);
+        });
+    }
+</script>
+

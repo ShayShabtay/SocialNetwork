@@ -12,17 +12,16 @@ namespace SocialRepository.GraphDB
     static public class DbHelper
     {
         private static readonly IDriver _driver;
-        static string uri = "bolt://ec2-34-244-123-17.eu-west-1.compute.amazonaws.com:7687";
+        static string uri = "bolt://ec2-34-243-124-142.eu-west-1.compute.amazonaws.com:7687";
 
-
-         static DbHelper()
+        static DbHelper()
         {
-        _driver = GraphDatabase.Driver(uri, AuthTokens.Basic("neo4j", "skay1414"));
-
+            _driver = GraphDatabase.Driver(uri, AuthTokens.Basic("neo4j", "skay1414"));
         }
 
-        public  static ISession getSession() {
-           return _driver.Session();
+        public static ISession getSession()
+        {
+            return _driver.Session();
         }
 
         /// <summary>
@@ -40,22 +39,5 @@ namespace SocialRepository.GraphDB
             }
             return stringWriter.ToString();
         }
-
     }
-
-    //public class User
-    //{
-    //    public string Name { get; set; }
-    //    public string lastName { get; set; }
-    //    public User()
-    //    {
-
-    //    }
-    //    public User(string name,string lastName)
-    //    {
-    //        this.Name = name;
-    //        this.lastName = lastName;
-    //    }
-    //}
-
 }

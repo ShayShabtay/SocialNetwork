@@ -3,15 +3,11 @@ using AuthenticationCommon.Models;
 using AuthenticationCommon.ModelsDTO;
 using AuthenticationRepository.DynamoDb;
 using Jose;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 
 namespace AuthenticationBL.Managers
 {
@@ -24,7 +20,6 @@ namespace AuthenticationBL.Managers
         {
             _dynamo = new DynamoService();
         }
-
 
         //Public Methods
         internal string GenerateToken(string userId, string email)
@@ -79,7 +74,6 @@ namespace AuthenticationBL.Managers
             {
                 return null;
             }
-
         }
 
 
@@ -151,13 +145,11 @@ namespace AuthenticationBL.Managers
                 var x = settings[name];
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return false;
             }
-
         }
     }
-
 }
 

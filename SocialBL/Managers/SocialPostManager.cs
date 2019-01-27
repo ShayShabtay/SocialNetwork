@@ -1,23 +1,18 @@
 ﻿using SocialBL.Interfaces;
+using SocialCommon.Exceptions;
 using SocialCommon.Models;
+using SocialCommon.ModelsDTO;
 using SocialRepository.GraphDB;
-using SocialRepository.Storage;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocialBL.Managers
 {
     public class SocialPostManager : ISocialPostManager
     {
-
         IGraphDB _graphDB;
-        const string bucketName = "omer-buckets";
-        
+
         //Ctor
         public SocialPostManager()
         {
@@ -25,99 +20,152 @@ namespace SocialBL.Managers
         }
 
         //Public Methods
-        public void AddPost(Post post, string userId)
+        public void AddPost(PostDTO postDTO, string userId)
         {
-            _graphDB.AddPost(post);
-            Thread.Sleep(2000);
-            _graphDB.CreateRelationship(userId, post.postID, "publish");
+            _graphDB.AddPost(postDTO.Post);
+            _graphDB.CreateRelationship(userId, postDTO.Post.PostID, "Publish");
+
+            foreach (var item in postDTO.Tags)
+            {
+                _graphDB.CreateRelationship(postDTO.Post.PostID, item, "TagPost");
+            }
         }
 
-        public void AddComment(Comment comment,string userId,string postId)
+        public void AddComment(CommentDTO commentDTO, string userId, string postId)
         {
-            //var x= _graphDB.AddComment(comment);
-            //if (x.Result)
-            //{
-            _graphDB.CreateRelationship(userId,comment.CommentID, "UserComment");  ///for connect post and comment
-            _graphDB.CreateRelationship(postId,comment.CommentID,"PostComment");  ///for connect user to comment that he wrote
-           // }
+            _graphDB.AddComment(commentDTO.Comment);
+            _graphDB.CreateRelationship(userId, commentDTO.Comment.CommentID, "UserComment");  ///for connect post and comment
+            _graphDB.CreateRelationship(postId, commentDTO.Comment.CommentID, "PostComment");  ///for connect user to comment that he wrote
+
+            foreach (var item in commentDTO.Tags)
+            {
+                _graphDB.CreateRelationship(commentDTO.Comment.CommentID, item, "TagComment");
+            }
         }
 
-        public void AddLike(string userId, string postId)
+        public void AddLikeToPost(string userId, string postId)
         {
-                _graphDB.CreateRelationship(userId, postId, "Like");  
+            _graphDB.CreateRelationship(userId, postId, "LikePost");
+        }
+
+        public void UnLikePost(string userId, string postId)
+        {
+            _graphDB.DeleteRelationship(userId, postId, "LikePost");
+        }
+
+        public void AddLikeToComment(string userId, string commentId)
+        {
+            _graphDB.CreateRelationship(userId, commentId, "LikeComment");
+
+        }
+
+        public void UnLikeComment(string userId, string commentId)
+        {
+            _graphDB.DeleteRelationship(userId, commentId, "LikeComment");
         }
 
         public List<ClientPost> GetAllPosts(string userId)
         {
-           // return 
-
-            List<Post> posts = _graphDB.GetAllPosts(userId);
+            List<Post> posts;
+            try
+            {
+                posts = _graphDB.GetAllPosts(userId);
+            }
+            catch (Exception)
+            {
+                throw new FaildToConnectDbException();
+            }
+           
             List<ClientPost> postsToClient = new List<ClientPost>();
 
             foreach (var post in posts)
             {
                 ClientPost clientPost = new ClientPost(post);
-                clientPost.Comments = _graphDB.GetCommentsForPost(post.postID);
-                List<User> usersLike = _graphDB.GetLikesForPost(post.postID);
-                clientPost.UsersLikes = usersLike;
+                List<Comment> postComments = _graphDB.GetCommentsForPost(post.PostID);
+                List<MainComment> mainComments = new List<MainComment>();
+                foreach (var comment in postComments)
+                {
+                    MainComment mainComment = new MainComment
+                    {
+                        Comment = comment,
+                        CommentOwner = _graphDB.GetCommentOwner(comment.CommentID),
+                        IsLike = _graphDB.IsUserLikeComment(userId, comment.CommentID)
+                    };
+
+                    mainComments.Add(mainComment);
+                    //comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                }
+                clientPost.Comments = mainComments;
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                clientPost.IsLike = _graphDB.IsUserLikePost(userId, post.PostID);
+
+                List<User> usersLike = _graphDB.GetLikesForPost(post.PostID);
+                clientPost.UsersLikes = _graphDB.GetLikesForPost(post.PostID);
                 clientPost.LikeCount = usersLike.Count;
                 postsToClient.Add(clientPost);
             }
             return postsToClient;
-
         }
 
         public List<ClientPost> GetMyPosts(string userId)
         {
-            List<Post> posts=_graphDB.GetMyPosts(userId);
+            List<Post> posts = _graphDB.GetMyPosts(userId);
             List<ClientPost> postsToClient = new List<ClientPost>();
 
             foreach (var post in posts)
             {
                 ClientPost clientPost = new ClientPost(post);
-                clientPost.Comments = _graphDB.GetCommentsForPost(post.postID);
-                List<User> usersLike=_graphDB.GetLikesForPost(post.postID);
-                clientPost.UsersLikes = usersLike;
+                List<Comment> postComments = _graphDB.GetCommentsForPost(post.PostID);
+                List<MainComment> mainComments = new List<MainComment>();
+                foreach (var comment in postComments)
+                {
+                    MainComment mainComment = new MainComment
+                    {
+                        Comment = comment,
+                        CommentOwner = _graphDB.GetCommentOwner(comment.CommentID),
+                        IsLike = _graphDB.IsUserLikeComment(userId, comment.CommentID)
+                    };
+
+                    mainComments.Add(mainComment);
+                    //comment.UsersLike = _graphDB.GetLikesForComment(comment.CommentID);
+                }
+                clientPost.Comments = mainComments;
+                clientPost.PostOwner = _graphDB.GetPostOwner(post.PostID);
+                clientPost.IsLike = _graphDB.IsUserLikePost(userId, post.PostID);
+
+                List<User> usersLike = _graphDB.GetLikesForPost(post.PostID);
+                clientPost.UsersLikes = _graphDB.GetLikesForPost(post.PostID);
                 clientPost.LikeCount = usersLike.Count;
                 postsToClient.Add(clientPost);
             }
-            return postsToClient; 
+            return postsToClient;
         }
 
-        public string SaveImage(byte[] image,string userId)
+        public string GetUserByPostID(string postId)
         {
-            StorgeHelper storgeHelper = new StorgeHelper();
+            return _graphDB.getUserByPostId(postId);
 
-            string imageKey= Guid.NewGuid().ToString();
-            try
-            {
-            string imageUrl=storgeHelper.uploadImageToS3(image,userId,imageKey);
-            return imageUrl;
-            }
-            catch (Exception)
-            {
 
-            return null;
-            
-            }
         }
 
         public string ValidateToken(string token)
         {
             string url = "http://localhost:49884/api/token/validateManualToken";
-            string userId = null;
 
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-token", token);
-                var task = client.GetAsync(url);
-                task.Wait();
-                if (task.Result.IsSuccessStatusCode)
+                var res = client.GetAsync(url).Result;
+
+                if (res.IsSuccessStatusCode)
                 {
-                    userId = task.Result.ToString();
+                    string userId = res.Content.ReadAsStringAsync().Result;
+                    userId = userId.Replace("\"", "");
+
+                    return userId;
                 }
             }
-            return userId;
+            return null;
         }
     }
 }

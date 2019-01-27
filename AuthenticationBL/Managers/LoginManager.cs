@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using AuthenticationCommon.Execeptions;
 using AuthenticationCommon.Models;
 using AuthenticationCommon.ModelsDTO;
 using AuthenticationRepository.DynamoDb;
-using Jose;
 
 namespace AuthenticationBL.Managers
 {
@@ -41,8 +36,8 @@ namespace AuthenticationBL.Managers
                 }
 
                 token = _tokenManager.GenerateToken(userToRegister.UserId, userToRegister.Email);
-
                 CreateUserNodeOnGraphDb(userToRegister.UserId,userToRegister.Email);
+                CreateUserIdentity(userToRegister.UserId, userToRegister.Email, token);
 
                 return token;
             }
@@ -51,8 +46,6 @@ namespace AuthenticationBL.Managers
                 throw new AlreadyExistException("Email");
             }
         }
-
-
 
         public string LoginManual(UserLoginDTO userLoginDTO)
         {
@@ -67,7 +60,6 @@ namespace AuthenticationBL.Managers
             {
                 throw new NotMatchException("Password");
             }
-
             token = _tokenManager.GenerateToken(foundUser.UserId, foundUser.Email);
 
             return token;
@@ -90,7 +82,6 @@ namespace AuthenticationBL.Managers
                 else
                 {
                     customToken = _tokenManager.GenerateToken(user.UserId, user.Email);
-                   
                 }
             }
             return customToken;
@@ -110,7 +101,6 @@ namespace AuthenticationBL.Managers
             }
 
             foundUser.Password = resetPasswordDTO.NewPassword;
-
             try
             {
                 _dynamo.UpdateItem(foundUser);
@@ -173,5 +163,26 @@ namespace AuthenticationBL.Managers
             }
         }
 
+        private void CreateUserIdentity(string userId, string email, string token)
+        {
+            UserIdentityDTO userIdentityDTO = new UserIdentityDTO()
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            string url = "http://localhost:51639/api/identity/updateUserProfile";
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("x-token", token);
+                var result = client.PostAsJsonAsync(url, userIdentityDTO).Result;
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    throw new FaildToConnectDbException();
+                }
+            }
+        }
     }
 }

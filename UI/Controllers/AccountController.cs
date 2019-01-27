@@ -10,7 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using UI.Models;
 using System.Net.Http.Headers;
-using AuthenticationCommon.Models;
 using static System.Net.WebRequestMethods;
 using System.Net.Http;
 
@@ -72,8 +71,7 @@ namespace UI.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             string token = "";
-            //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };//, Id = token };// , LockoutEndDateUtc = };
-            //var result = await UserManager.CreateAsync(user, model.Password);
+            string space = " ";
 
             if (ModelState.IsValid)
             {
@@ -84,27 +82,35 @@ namespace UI.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var res = client.PostAsJsonAsync($"/api/login/register", model).Result;
-
+                    
                     if (res.IsSuccessStatusCode == true)
                     {
                         token = res.Content.ReadAsAsync<string>().Result;
 
-                        // save to cookie
+                        // save token to cookie
                         HttpCookie userTokenCookie = new HttpCookie("UserToken");
                         userTokenCookie.Value = token.ToString();
                         Response.Cookies.Add(userTokenCookie);//
 
-                        //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        //save Identity in cookies
+                        HttpCookie NameIdentityProfile = new HttpCookie("My_Name");
+                        NameIdentityProfile.Value = model.Email;
+                        Response.Cookies.Add(NameIdentityProfile);///
 
-                        //if (result.Succeeded)
-                        //{
-                        //    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        HttpCookie AgeIdentityProfile = new HttpCookie("My_Age");
+                        AgeIdentityProfile.Value = space;
+                        Response.Cookies.Add(AgeIdentityProfile);///
+
+                        HttpCookie AddressIdentityProfile = new HttpCookie("My_Address");
+                        AddressIdentityProfile.Value = space;
+                        Response.Cookies.Add(AddressIdentityProfile);///
+
+                        HttpCookie WorkPlaceIdentityProfile = new HttpCookie("My_WorkPlace");
+                        WorkPlaceIdentityProfile.Value = space;
+                        Response.Cookies.Add(WorkPlaceIdentityProfile);///
 
                         return RedirectToAction("MainPageAfterLogin", "Home", res);
-                        //}
-                        // AddErrors(result);
-
-                        // return Content("result = null");
+    
                     }
                     else
                     {
@@ -125,10 +131,18 @@ namespace UI.Controllers
             return View();
         }
 
+
+        public void SaveIdentityToCookie()
+        {
+           
+        }
+
         //
         // GetUserInfo
-        public UserIdentityModel GetUserInfo(string token)
+        public SocialViewModel GetUserInfo(string token)
         {
+            string space = " ";
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:51639");
@@ -139,7 +153,60 @@ namespace UI.Controllers
 
                 if (res.IsSuccessStatusCode == true)
                 {
-                     return res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    UserIdentityModel userIdentityModel = new UserIdentityModel();
+                    userIdentityModel = res.Content.ReadAsAsync<UserIdentityModel>().Result;
+                    SocialViewModel socialViewModel = new SocialViewModel();
+                    socialViewModel.UserIdentityModel = userIdentityModel;
+
+                    //set MyName  in cookie
+                    HttpCookie MyNameCookie = new HttpCookie("My_Name");
+                    if (userIdentityModel.Name !=  null)
+                    {
+                        MyNameCookie.Value = userIdentityModel.Name.ToString();
+                    }
+                    else
+                    {
+                        MyNameCookie.Value = space.ToString();
+                    }
+                     Response.Cookies.Add(MyNameCookie);///
+
+                    //set MyAge  in cookie
+                    HttpCookie MyAgeCookie = new HttpCookie("My_Age");
+                    if (userIdentityModel.Age != null)
+                    {
+                        MyAgeCookie.Value = userIdentityModel.Age.ToString();
+                    }
+                    else
+                    {
+                        MyAgeCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyAgeCookie);///
+
+                    //set MyAddress  in cookie
+                    HttpCookie MyAddressCookie = new HttpCookie("My_Address");
+                    if (userIdentityModel.Address != null)
+                    {
+                        MyAddressCookie.Value = userIdentityModel.Address.ToString();
+                    }
+                    else
+                    {
+                        MyAddressCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyAddressCookie);///
+
+                    //set MyWorkPlace  in cookie
+                    HttpCookie MyWorkPlaceCookie = new HttpCookie("My_WorkPlace");
+                    if (userIdentityModel.WorkPlace != null)
+                    {
+                        MyWorkPlaceCookie.Value = userIdentityModel.WorkPlace.ToString();
+                    }
+                    else
+                    {
+                        MyWorkPlaceCookie.Value = space.ToString();
+                    }
+                    Response.Cookies.Add(MyWorkPlaceCookie);///
+
+                    return socialViewModel;
                     
 
                 }
@@ -160,7 +227,6 @@ namespace UI.Controllers
                 return View(model);
             }
 
-            //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
            using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:49884");
@@ -168,21 +234,26 @@ namespace UI.Controllers
 
                 string token;
                 var res = client.PostAsJsonAsync($"/api/login/loginManual", model).Result;
-                if (res.IsSuccessStatusCode == true)
+
+                if (res.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     token = res.Content.ReadAsAsync<string>().Result;
 
                     //set token  in cookie
                     HttpCookie userTokenCookie = new HttpCookie("UserToken");
                     userTokenCookie.Value = token.ToString();
-                    Response.Cookies.Add(userTokenCookie);///
+                    Response.Cookies.Add(userTokenCookie);
 
-                    UserIdentityModel userIdentityModel = GetUserInfo(token);
 
-                    return RedirectToAction("MainPageAfterLogin", "Home", userIdentityModel);
+                    TempData["social"] = GetUserInfo(token);
+
+                    return RedirectToAction("MainPageAfterLogin", "Home");
                 }
                 else
-                    return Content("res.StatusCode = false :/");
+                {
+                    ViewBag.error = "Invalid Username or password";
+                    return View();
+                }
             }
         }
 
@@ -214,6 +285,46 @@ namespace UI.Controllers
             }
         }
 
+
+        //
+        // POST: /Account/LogOff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                var c = new HttpCookie("UserToken");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
+            if (Request.Cookies["My_Name"] != null)
+            {
+                var c = new HttpCookie("My_Name");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
+            if (Request.Cookies["My_Age"] != null)
+            {
+                var c = new HttpCookie("My_Age");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
+            if (Request.Cookies["My_Address"] != null)
+            {
+                var c = new HttpCookie("My_Address");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
+            if (Request.Cookies["My_WorkPlace"] != null)
+            {
+                var c = new HttpCookie("My_WorkPlace");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
 
         //
         // GET: /Account/VerifyCode
@@ -474,21 +585,6 @@ namespace UI.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            if (Request.Cookies["UserToken"] != null)
-            {
-                var c = new HttpCookie("UserToken");
-                c.Expires = DateTime.Now.AddDays(-1);
-                Response.Cookies.Add(c);
-            }
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
-        }
 
         //
         // GET: /Account/ExternalLoginFailure

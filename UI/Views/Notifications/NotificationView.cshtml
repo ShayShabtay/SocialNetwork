@@ -1,0 +1,53 @@
+﻿@model UI.Models.SocialViewModel
+
+<style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .navbar {
+        margin-bottom: 0;
+        border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {
+        height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+        padding-top: 20px;
+        background-color: lightgray;
+        height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+        background-color: royalblue;
+        color: white;
+        padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @@media screen and (max-width: 767px) {
+        .sidenav {
+            height: 100%;
+            padding: 15px;
+        }
+
+        .row.content {
+            height: auto;
+        }
+    }
+</style>
+
+<div class="col-sm-2 sidenav sidenav">
+    <h3 style="text-align:center">
+        <i class="fas fa-bell" style="color:yellow"></i>
+        Notifications
+    </h3><hr />
+    <div class="well">
+        <p>You recieve a message</p>
+    </div>
+    <div class="well">
+        <p>someone send you a friend request</p>
+    </div>
+</div>

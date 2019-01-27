@@ -1,4 +1,4 @@
-﻿@model UI.Models.UserIdentityModel
+﻿@model UI.Models.SocialViewModel
 
 @{
     ViewBag.Title = "UserProfile";
@@ -13,56 +13,70 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
-    <div id="FormProfileID" class="form-horizontal">
-        <hr />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control is-valid", id = "NameID" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-2">
-                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control is-valid", id = "AgeID" } })
-                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", id = "AddressID" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.WorkPlace, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.EditorFor(model => model.WorkPlace, new { htmlAttributes = new { @class = "form-control", id = "WorkPlaceID" } })
-                @Html.ValidationMessageFor(model => model.WorkPlace, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
+    
         <div class="form-horizontal">
-            <div class="col-md-offset-4 col-md-6">
-                <input id="EditProfileID" onclick="EditMode()" type="button" value="Edit Profile" class="btn btn-info" />
-                <input id="SaveProfileID" type="submit" value="Save" class="btn btn-primary" />
-                <input id="clearProfileID" type="reset" value="Clear" class="btn btn-danger" />
-                <input id="onlyViewProfileID" onclick="ViewMode()" type="button" value="Back to View Mode" class="btn btn-success" />
+            <hr />
+            <form id="FormProfileID">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserIdentityModel.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.UserIdentityModel.Name, new { htmlAttributes = new { @class = "form-control is-valid", id = "NameID" } })
+                        @Html.ValidationMessageFor(model => model.UserIdentityModel.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserIdentityModel.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.UserIdentityModel.Age, new { htmlAttributes = new { @class = "form-control is-valid", id = "AgeID" } })
+                        @Html.ValidationMessageFor(model => model.UserIdentityModel.Age, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserIdentityModel.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.UserIdentityModel.Address, new { htmlAttributes = new { @class = "form-control", id = "AddressID" } })
+                        @Html.ValidationMessageFor(model => model.UserIdentityModel.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserIdentityModel.WorkPlace, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.UserIdentityModel.WorkPlace, new { htmlAttributes = new { @class = "form-control", id = "WorkPlaceID" } })
+                        @Html.ValidationMessageFor(model => model.UserIdentityModel.WorkPlace, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </form>
+            <div class="form-horizontal">
+                <div class="col-md-offset-4 col-md-6">
+                    <input id="EditProfileID" onclick="EditMode()" type="button" value="Edit Profile" class="btn btn-info" />
+                    <input id="SaveProfileID" type="submit" value="Save" class="btn btn-primary" />
+                    <input id="clearProfileID" onclick="ClearForm()" type="button" value="Clear" class="btn btn-danger" />
+                    <input id="onlyViewProfileID" onclick="ViewMode()" type="button" value="Back to View Mode" class="btn btn-success" />
+                </div>
             </div>
         </div>
-    </div>
-}
 
-<div>
+}
+<br /><br /><br />
+<button type="button" class="btn btn-info" style="color:white"> @Html.ActionLink("My Followers", "GetFollowers", "Relationship", null, new { @style = "color:white" })</button>
+<button type="button" class="btn btn-warning"> @Html.ActionLink("Following Users", "GetFollowing", "Relationship", null, new { @style = "color:white" })</button>
+<button type="button" class="btn btn-dark" style="background-color:black;">@Html.ActionLink("Blocked Users", "GetBlockUsers", "Relationship", null, new { @style = "color:white;" })</button>
+<br /><br /><br />
+<div style="text-align:center; float:left">
     @Html.ActionLink("Back to Main Page", "MainPageAfterLogin", "Home")
+
 </div>
+<br />
+<br />
+
+<h3>My Posts</h3>
+    @{
+        Html.RenderAction("GetMyPosts", "Social");
+    }
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -70,6 +84,7 @@
 
 
 <script>
+
     var name2 = document.getElementById("NameID");
     var age = document.getElementById("AgeID");
     var address = document.getElementById("AddressID");
@@ -117,6 +132,18 @@
         viewButton.style.visibility = "visible";
         editButton.style.visibility = "hidden";
 
+        name2.required = true;
+        age.required = true;
+        address.required = true;
+        workPlace.required = true;
+
     }
 
+
+    function ClearForm() {
+        name2.value = "";
+        age.value = "0";
+        address.value = "";
+        workPlace.value = "";
+    }
 </script>

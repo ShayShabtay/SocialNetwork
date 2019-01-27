@@ -1,0 +1,77 @@
+﻿@model UI.Models.SocialViewModel
+
+@{
+    ViewBag.Title = "GetUsersProfileAndFeeds";
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+}
+
+&emsp;&emsp;&emsp; <h1 class="margin">
+    @Model.OtherUserIdentityModel.Name - Facel<img src="https://media.tenor.com/images/a507d6519065e444ce004fa2f37f2689/tenor.gif"
+                                                   width="60" height="60" />k Profile
+</h1><br />
+<div class="container-fluid bg-3 text-center">
+    <div class="row">
+        <div class="col-sm-4">
+            <h2> Name: </h2>
+            <h4>@Model.OtherUserIdentityModel.Name </h4>
+            <img src="http://quizpanorama.com/ledelse/images/employee/big/dummy.jpg" class="img-responsive img-circle" style="width:65%;  float:right; position:relative; left:-10%;" alt="Image">
+        </div>
+        <div class="col-sm-4">
+            <h2> Age: </h2>
+            <h4>@Model.OtherUserIdentityModel.Age </h4>
+            <img src="https://study.com/cimages/videopreview/age_thumb_177423.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <h2> Address: </h2>
+            <h4> @Model.OtherUserIdentityModel.Address </h4>
+            <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+        </div>
+        <div class="col-sm-5">
+            <h2> Work Place: </h2>
+            <h4> @Model.OtherUserIdentityModel.WorkPlace </h4>
+            <img src="http://gpivisa.com/wp-content/uploads/2018/05/newyork.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+        </div>
+    </div>
+    <br />
+    <h4 style="text-align:center">
+        <button type="button" style="background-color:red; height: 60px;">@Html.ActionLink("Block this User!", "BlockUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" })</button> &ensp;
+        @if (Model.OtherUserIdentityModel.IsFollow != true)
+        {
+            <button id="FollowButtonID" type="button" style="background-color:blue; height: 60px;">
+             @Html.ActionLink("Follow this User!", "FollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+        }
+        else
+        {
+            <button id="UnFollowButtonID" type="button" style="background-color:orange; height: 60px;">
+            @Html.ActionLink("UnFollow this User!", "UnFollowUser", "Relationship", new { targetUserId = Model.OtherUserIdentityModel.UserId }, htmlAttributes: new { @style = "color: white" }) </button><span>&ensp;&ensp;</span>
+        }
+    </h4>
+</div>
+
+<br /><br />
+<div class="container">
+    <h2 style="text-align:left; color:blueviolet">&emsp;&emsp;&emsp; The Wall Of @Model.OtherUserIdentityModel.Name</h2><br />
+
+</div>
+<br /><br /><br /><br />
+
+@{
+    Html.RenderPartial("GetFeed", Model);
+}
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+
+<style>
+    h4 {
+        color: blue;
+    }
+
+    button {
+        width: 130px;
+        height: 45px;
+        background-color: green;
+        color: white;
+    }
+</style>

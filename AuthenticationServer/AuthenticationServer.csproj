@@ -106,9 +106,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationBL\AuthenticationBL.csproj">
       <Project>{34d3034b-54cc-4359-966f-4471a8ba8cce}</Project>
