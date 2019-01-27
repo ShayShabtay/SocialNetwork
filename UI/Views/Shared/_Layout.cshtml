@@ -21,9 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { @id = "MenuNavbarID" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", null, new { @id = "MenuNavbarID" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @id = "MenuNavbarID" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial", new { @id = "MenuNavbarID" })
             </div>

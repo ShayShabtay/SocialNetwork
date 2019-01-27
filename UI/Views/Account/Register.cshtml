@@ -14,24 +14,25 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" , @id= "EmailInputId"})
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "PasswordInputId" })
+            <div class="col-md-10 text-danger" id="passwordsError"></div>
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "ConfirmPasswordInputId" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" onclick="Validation()" class="btn btn-default" value="Register" />
         </div>
     </div>
 }
@@ -39,3 +40,27 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+    var email = document.getElementById("EmailInputId");
+    var password = document.getElementById("PasswordInputId");
+    var confirmPassword = document.getElementById("ConfirmPasswordInputId");
+
+    var passwordsError = document.getElementById("passwordsError");
+
+    function Validation() {
+        if (password.value != confirmPassword.value) {
+            passwordsError.innerHTML = "Your passwords do not match each other";
+        }
+        else if (password.value.length < 6) {
+            passwordsError.innerHTML = "Your password is too short, please insert at least 6 characters";
+        }
+        else if (password.value.length > 30) {
+            passwordsError.innerHTML = "Your password is too long...please insert until 30 characters";
+        }
+        //else if (password.value.Contains = "0" || "1" || "3" || "4" || "5" || "6" || "7" || "8" || "9"){
+        //    passwordsError.innerHTML = "password must contains numbers";
+        //}
+
+    }
+</script>
